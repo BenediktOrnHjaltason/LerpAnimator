@@ -31,6 +31,7 @@ public class LerpAnimatorEditor : Editor
 
         EditorGUILayout.PropertyField(serializedObject.FindProperty("TransformsToActOn"), true);
 
+        GUILayout.BeginHorizontal("Box");
         if (GUILayout.Button("Sample"))
         {
             SampleStartState();
@@ -49,18 +50,20 @@ public class LerpAnimatorEditor : Editor
             }
         }
 
+        GUILayout.EndHorizontal();
+
 
 
         GUILayout.Label("Segments");
 
         int numberOfSegments = serializedObject.FindProperty("Segments").arraySize;
 
+        GUILayout.BeginHorizontal("Box");
         if (GUILayout.Button("Add segment"))
         {
             Debug.Log("Pressed Add segment");
             AddSegment();
             justModifiedSegmentsNumer = true;
-            
         }
 
         if (GUILayout.Button("Remove segment"))
@@ -71,29 +74,35 @@ public class LerpAnimatorEditor : Editor
             RemoveSegment();
             justModifiedSegmentsNumer = true;
         }
+        GUILayout.EndHorizontal();
 
         //EditorGUILayout.PropertyField(serializedObject.FindProperty("Segments"));
 
         
         if (!justModifiedSegmentsNumer)
         {
-            
 
             for (int i = 0; i < numberOfSegments; i++)
             {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("Segments").GetArrayElementAtIndex(i));
 
+
+                GUILayout.BeginHorizontal("Box");
                 if (GUILayout.Button("Sample"))
                 {
+                    Debug.Log("You pressed sample on segment" + i);
                 }
 
                 if (GUILayout.Button("Apply"))
                 {
+                    Debug.Log("You pressed apply on segment " + i);
                 }
 
                 if (GUILayout.Button("Play from here"))
                 {
+                    Debug.Log("You pressed Play from here on segment " + i);
                 }
+                GUILayout.EndHorizontal();
             }
 
             
