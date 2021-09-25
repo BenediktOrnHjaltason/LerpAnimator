@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [System.Serializable]
-public struct TransformData
+public class TransformData
 {
     public TransformData(Vector3 pPosition, Vector3 pRotation, Vector3 pScale) { position = pPosition; rotation = pRotation; scale = pScale; }
 
@@ -16,7 +16,7 @@ public struct TransformData
 [System.Serializable]
 public class Segment
 {
-    [HideInInspector] public Dictionary<Transform, TransformData> toTransformData;
+    [HideInInspector] public List<TransformData> toTransformData;
 
     public float duration;
     public AnimationCurve curve;
@@ -33,14 +33,12 @@ public enum EEditorOrGame
 [System.Serializable]
 public class LerpAnimator : MonoBehaviour
 {
-    EEditorOrGame editorOrGame = EEditorOrGame.EDITOR;
-
     public List<Transform> TransformsToActOn;
 
     /// <summary>
     /// Start states of the chosen transforms
     /// </summary>
-    public Dictionary<Transform,TransformData> startStates;
+    public List<TransformData> StartStates;
 
     /// <summary>
     /// Individual segments of complete sequence
@@ -50,26 +48,32 @@ public class LerpAnimator : MonoBehaviour
 
     public UnityAction OnSequenceEnd;
 
-    public void EnsureTransformsAndDataConsistency()
+
+    public void ApplyFromDatastore(int index)
     {
-        List<Transform> transformsToRemove = new List<Transform>();
 
-        //If data store contains data for removed transform, remove from data store
-        foreach(KeyValuePair<Transform, TransformData> pair in startStates)
-        {
-            if (!TransformsToActOn.Contains(pair.Key)) transformsToRemove.Add(pair.Key);
-        }
-
-        foreach (Transform transform in transformsToRemove)
-        {
-            startStates.Remove(transform);
-            
-            foreach(Segment segment in Segments)
-            {
-                segment.toTransformData.Remove(transform);
-            }
-        }
     }
 
-    //EditorApplication.timeSinceStartup
+    public void SampleFromScene(int index)
+    {
+
+    }
+
+    #region Validation
+
+    public List<int> GetDeletedTransformsIndexes()
+    {
+        List<int> invalidTransformsIndexes = new List<int>();
+
+        for (int i = 0; i < TransformsToActOn.Count; i++)
+        {
+            if (TransformsToActOn[i] == null)
+                invalidTransformsIndexes.Add(i);
+        }
+
+        return invalidTransformsIndexes;
+    }
+
+    #endregion
+
 }
