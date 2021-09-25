@@ -12,7 +12,7 @@ public class LerpAnimatorEditor : Editor
 
     static List<Transform> previousTransforms;
 
-    int previousTransformsCount;
+    int previousTransformsArrayCount;
 
     private void OnEnable()
     {
@@ -23,19 +23,7 @@ public class LerpAnimatorEditor : Editor
 
         RemoveInvalidReferencesAndTheirData();
 
-        previousTransformsCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
-
-        previousTransforms = new List<Transform>();
-
-        for (int i = 0; i < previousTransformsCount; i++)
-        {
-            previousTransforms.Add(serializedObject.FindProperty("TransformsToActOn").GetArrayElementAtIndex(i).objectReferenceValue as Transform);
-        }
-
-        foreach(Transform transform in previousTransforms)
-        {
-            if (transform != null) Debug.Log("previousTransforms contains valid transform reference to object" + transform.gameObject.name);
-        }
+        CollectTransformsReferences();
     }
 
     private void OnDisable()
@@ -46,77 +34,33 @@ public class LerpAnimatorEditor : Editor
 
     }
 
+    private void CollectTransformsReferences()
+    {
+        previousTransformsArrayCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
+
+        previousTransforms = new List<Transform>();
+
+        for (int i = 0; i < previousTransformsArrayCount; i++)
+        {
+            previousTransforms.Add(serializedObject.FindProperty("TransformsToActOn").GetArrayElementAtIndex(i).objectReferenceValue as Transform);
+        }
+
+        foreach (Transform transform in previousTransforms)
+        {
+            if (transform != null) Debug.Log("previousTransforms contains valid transform reference to object" + transform.gameObject.name);
+        }
+    }
+
 
     private void OnHierarchyChanged()
     {
         Debug.Log("OnHierarchyChanged");
     }
 
-    private void RemoveInvalidReferencesAndTheirData()
-    {
-        if (animator)
-        {
-            int numberOfTransformsToActOn = serializedObject.FindProperty("TransformsToActOn").arraySize;
-            List<int> deletedTransformsIndexes = new List<int>();
-
-            for (int i = numberOfTransformsToActOn -1; i >=0; i--)
-            {
-
-                if (serializedObject.FindProperty("TransformsToActOn").GetArrayElementAtIndex(i).objectReferenceValue == null)
-                {
-                    Debug.Log("Found missing or null object reference");
-                    deletedTransformsIndexes.Add(i);
-                }
-            }
-
-            foreach (int index in deletedTransformsIndexes)
-            {
-                Debug.Log("Attempting to delete array element");
-                //serializedObject.FindProperty("TransformsToActOn").objectReferenceValue = null;
-                //serializedObject.ApplyModifiedProperties();
-
-                int transformsArrayCountBefore = serializedObject.FindProperty("TransformsToActOn").arraySize;
-
-                serializedObject.FindProperty("TransformsToActOn").DeleteArrayElementAtIndex(index);
-                serializedObject.ApplyModifiedProperties();
-
-                int transformsArrayCountAfter = serializedObject.FindProperty("TransformsToActOn").arraySize;
-
-                //If the property mas missing, delete again to ensure array element removed
-                if (transformsArrayCountBefore == transformsArrayCountAfter)
-                {
-                    serializedObject.FindProperty("TransformsToActOn").DeleteArrayElementAtIndex(index);
-                    serializedObject.ApplyModifiedProperties();
-                }
-
-                serializedObject.Update();
-                    
-
-                //serializedObject.FindProperty("StartStates").DeleteArrayElementAtIndex(index);
-            }
-            
-
-            /*
-            int numberOfSegments = serializedObject.FindProperty("Segments").arraySize;
-
-            for (int i = 0; i < numberOfSegments; i++)
-            {
-                foreach (int index in deletedTransformsIndexes)
-                {
-                    serializedObject.FindProperty("Segments").GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").DeleteArrayElementAtIndex(index);
-                }
-            }
-            */
-
-            //serializedObject.ApplyModifiedProperties();
-
-        }
-        else Debug.Log("LerpAnimatorEditor::OnHierarchyChanged: animator reference is not valid");
-    }
+    
 
     bool justModifiedSegmentsNumer = false;
     bool OnGUIChangedCalled = false;
-    bool detectedUserDeletedArrayElement = false;
 
     #region GUI
     public override void OnInspectorGUI()
@@ -218,28 +162,129 @@ public class LerpAnimatorEditor : Editor
 
         serializedObject.ApplyModifiedProperties();
 
+        #region User transforms array action detection
+
         if (GUI.changed)
         {
             OnGUIChanged();
             OnGUIChangedCalled = true;
         }
         else OnGUIChangedCalled = false;
-        
-        if (!OnGUIChangedCalled && serializedObject.FindProperty("TransformsToActOn").arraySize != previousTransformsCount)
+
+        int currentTransformsArraySize = serializedObject.FindProperty("TransformsToActOn").arraySize;
+
+        //If user deletes array element completely
+        if (!OnGUIChangedCalled && currentTransformsArraySize != previousTransformsArrayCount)
         {
             Debug.Log("Detected user deleted array element");
             //detectedUserDeletedArrayElement = true;
 
-            previousTransformsCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
+            previousTransformsArrayCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
         }
+
+        #endregion
+
     }
     #endregion
 
     private void OnGUIChanged()
     {
         Debug.Log("OnGUIChanged");
-        previousTransformsCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
+
+        //If user adjusts array count
+        int currentTransformsArrayCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
+
+        if (previousTransforms.Count != currentTransformsArrayCount)
+        {
+            if (currentTransformsArrayCount > previousTransforms.Count)
+            {
+                Debug.Log("User increased array count");
+
+                CollectTransformsReferences();
+
+            }
+            else
+            {
+                Debug.Log("User decreased array count");
+                CollectTransformsReferences();
+            }
+        }
+
+        previousTransformsArrayCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
     }
+
+    #region Data consistency
+
+    private void RemoveInvalidReferencesAndTheirData()
+    {
+        if (animator)
+        {
+            int numberOfTransformsToActOn = serializedObject.FindProperty("TransformsToActOn").arraySize;
+            List<int> deletedTransformsIndexes = new List<int>();
+
+            for (int i = numberOfTransformsToActOn - 1; i >= 0; i--)
+            {
+
+                if (serializedObject.FindProperty("TransformsToActOn").GetArrayElementAtIndex(i).objectReferenceValue == null)
+                {
+                    Debug.Log("Found missing or null object reference");
+                    deletedTransformsIndexes.Add(i);
+                }
+            }
+
+            foreach (int index in deletedTransformsIndexes)
+            {
+                Debug.Log("Attempting to delete array element");
+                //serializedObject.FindProperty("TransformsToActOn").objectReferenceValue = null;
+                //serializedObject.ApplyModifiedProperties();
+
+                int transformsArrayCountBefore = serializedObject.FindProperty("TransformsToActOn").arraySize;
+
+                serializedObject.FindProperty("TransformsToActOn").DeleteArrayElementAtIndex(index);
+                serializedObject.ApplyModifiedProperties();
+
+                int transformsArrayCountAfter = serializedObject.FindProperty("TransformsToActOn").arraySize;
+
+                //If the property mas missing, delete again to ensure array element removed
+                if (transformsArrayCountBefore == transformsArrayCountAfter)
+                {
+                    serializedObject.FindProperty("TransformsToActOn").DeleteArrayElementAtIndex(index);
+                    serializedObject.ApplyModifiedProperties();
+                }
+
+                serializedObject.Update();
+
+
+                //serializedObject.FindProperty("StartStates").DeleteArrayElementAtIndex(index);
+            }
+
+
+            /*
+            int numberOfSegments = serializedObject.FindProperty("Segments").arraySize;
+
+            for (int i = 0; i < numberOfSegments; i++)
+            {
+                foreach (int index in deletedTransformsIndexes)
+                {
+                    serializedObject.FindProperty("Segments").GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").DeleteArrayElementAtIndex(index);
+                }
+            }
+            */
+
+            //serializedObject.ApplyModifiedProperties();
+
+        }
+        else Debug.Log("LerpAnimatorEditor::OnHierarchyChanged: animator reference is not valid");
+    }
+
+    private void AdjustToUserSettingArraySize()
+    {
+
+    }
+
+    #endregion
+
+    
 
     private void AddSegment()
     {
