@@ -10,21 +10,46 @@ public class LerpAnimatorEditor : Editor
 {
     LerpAnimator animator;
 
+    static List<Transform> previousTransforms;
+
+    int previousTransformsCount;
+
     private void OnEnable()
     {
         animator = (LerpAnimator)target;
 
         EditorApplication.update += OnEditorUpdate;
-        //EditorApplication.hierarchyChanged += OnHierarchyChanged;
+        EditorApplication.hierarchyChanged += OnHierarchyChanged;
 
         RemoveInvalidReferencesAndTheirData();
+
+        previousTransformsCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
+
+        previousTransforms = new List<Transform>();
+
+        for (int i = 0; i < previousTransformsCount; i++)
+        {
+            previousTransforms.Add(serializedObject.FindProperty("TransformsToActOn").GetArrayElementAtIndex(i).objectReferenceValue as Transform);
+        }
+
+        foreach(Transform transform in previousTransforms)
+        {
+            if (transform != null) Debug.Log("previousTransforms contains valid transform reference to object" + transform.gameObject.name);
+        }
     }
 
     private void OnDisable()
     {
         //ApplyStartState();
         EditorApplication.update -= OnEditorUpdate;
-        //EditorApplication.hierarchyChanged -= OnHierarchyChanged;
+        EditorApplication.hierarchyChanged -= OnHierarchyChanged;
+
+    }
+
+
+    private void OnHierarchyChanged()
+    {
+        Debug.Log("OnHierarchyChanged");
     }
 
     private void RemoveInvalidReferencesAndTheirData()
@@ -90,6 +115,8 @@ public class LerpAnimatorEditor : Editor
     }
 
     bool justModifiedSegmentsNumer = false;
+    bool OnGUIChangedCalled = false;
+    bool detectedUserDeletedArrayElement = false;
 
     #region GUI
     public override void OnInspectorGUI()
@@ -186,10 +213,33 @@ public class LerpAnimatorEditor : Editor
         }
         justModifiedSegmentsNumer = false;
 
+        EditorGUI.BeginChangeCheck();
+        if (EditorGUI.EndChangeCheck()) Debug.Log("A change was made");
+
         serializedObject.ApplyModifiedProperties();
+
+        if (GUI.changed)
+        {
+            OnGUIChanged();
+            OnGUIChangedCalled = true;
+        }
+        else OnGUIChangedCalled = false;
+        
+        if (!OnGUIChangedCalled && serializedObject.FindProperty("TransformsToActOn").arraySize != previousTransformsCount)
+        {
+            Debug.Log("Detected user deleted array element");
+            //detectedUserDeletedArrayElement = true;
+
+            previousTransformsCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
+        }
     }
     #endregion
 
+    private void OnGUIChanged()
+    {
+        Debug.Log("OnGUIChanged");
+        previousTransformsCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
+    }
 
     private void AddSegment()
     {
