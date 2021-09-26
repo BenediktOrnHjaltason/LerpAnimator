@@ -42,7 +42,9 @@ public class LerpAnimatorEditor : Editor
 
         for (int i = 0; i < previousTransformsArrayCount; i++)
         {
-            previousTransforms.Add(serializedObject.FindProperty("TransformsToActOn").GetArrayElementAtIndex(i).objectReferenceValue as Transform);
+            Transform transform = serializedObject.FindProperty("TransformsToActOn").GetArrayElementAtIndex(i).objectReferenceValue as Transform;
+
+            if (transform != null) previousTransforms.Add(transform);
         }
 
         foreach (Transform transform in previousTransforms)
@@ -196,17 +198,12 @@ public class LerpAnimatorEditor : Editor
                 Debug.Log("User increased array count");
 
                 OnUserIncreasedTransformsArrayCount();
-
-                CollectTransformsReferences();
-
             }
             else
             {
                 Debug.Log("User decreased array count");
 
                 OnUserDecreasedTransformsArrayCount();
-
-                CollectTransformsReferences();
             }
         }
 
@@ -297,11 +294,15 @@ public class LerpAnimatorEditor : Editor
                 serializedObject.ApplyModifiedProperties();
             }
         }
+
+        CollectTransformsReferences();
     }
 
     private void OnUserDecreasedTransformsArrayCount()
     {
+        CollectTransformsReferences();
 
+        Debug.Log("transforms count after user decreased array size: " + previousTransforms.Count);
     }
 
     #endregion
