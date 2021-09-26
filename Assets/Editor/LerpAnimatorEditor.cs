@@ -353,6 +353,7 @@ public class LerpAnimatorEditor : Editor
 
         Debug.Log("First segment contains toTranformData for " + serializedObject.FindProperty("Segments").GetArrayElementAtIndex(0).FindPropertyRelative("toTransformData").arraySize + " transforms");
 
+        serializedObject.ApplyModifiedProperties();
     }
 
     private bool CalculatingInterpolationStep(double startTime, double duration, out double step)
