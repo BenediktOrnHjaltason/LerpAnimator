@@ -243,9 +243,10 @@ public class LerpAnimatorEditor : Editor
     //
     private void OnUserIncreasedTransformsArrayCount()
     {
-        int numberOElements = serializedObject.FindProperty("TransformsToActOn").arraySize;
+        int newElementsCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
+        int difference = newElementsCount - editorTransformsArray.Count;
 
-        for (int i = numberOElements -1; i > 0; i--)
+        for (int i = newElementsCount - 1; i > 0; i--)
         {
             Transform higherIndexTransform = (Transform)serializedObject.FindProperty("TransformsToActOn").GetArrayElementAtIndex(i).objectReferenceValue;
             Transform lowerIndexTransform = (Transform)serializedObject.FindProperty("TransformsToActOn").GetArrayElementAtIndex(i - 1).objectReferenceValue;
@@ -260,7 +261,9 @@ public class LerpAnimatorEditor : Editor
             }
         }
 
+
         CollectTransformsReferences();
+        AddDataElementsForNewlyAddedTransformsElements(difference);
     }
 
     private void OnUserDecreasedTransformsArrayCount()
@@ -311,6 +314,44 @@ public class LerpAnimatorEditor : Editor
 
     public void SampleFromScene(int index)
     {
+
+    }
+
+    private void AddDataElementsForNewlyAddedTransformsElements(int difference)
+    {
+
+        for (int i = 0; i < difference; i++)
+        {
+            serializedObject.FindProperty("StartStates").arraySize++;
+
+            int newStartStatesCount = serializedObject.FindProperty("StartStates").arraySize;
+
+            //--- Add states, initialized to object added
+            //StartStates
+            serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(newStartStatesCount - 1).FindPropertyRelative("position").vector3Value =  Vector3.zero;
+            serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(newStartStatesCount - 1).FindPropertyRelative("rotation").vector3Value =  Vector3.zero;
+            serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(newStartStatesCount - 1).FindPropertyRelative("scale").vector3Value =  Vector3.zero;
+
+            //Segments
+            //toTransformData amounts should be the same as start states amount
+
+            //TODO: This will only add data to existing segments. What happens if new segments are added after transforms are added?
+
+            int segmentsCount = serializedObject.FindProperty("Segments").arraySize;
+
+            for (int j = 0; j < segmentsCount; j++)
+            {
+                serializedObject.FindProperty("Segments").GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").arraySize++;
+
+                int newToTransformDataCount = serializedObject.FindProperty("Segments").GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").arraySize;
+
+                serializedObject.FindProperty("Segments").GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(newToTransformDataCount - 1).FindPropertyRelative("position").vector3Value =  Vector3.zero;
+                serializedObject.FindProperty("Segments").GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(newToTransformDataCount - 1).FindPropertyRelative("rotation").vector3Value = Vector3.zero;
+                serializedObject.FindProperty("Segments").GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(newToTransformDataCount - 1).FindPropertyRelative("scale").vector3Value = Vector3.zero;
+            }
+        }
+
+        Debug.Log("First segment contains toTranformData for " + serializedObject.FindProperty("Segments").GetArrayElementAtIndex(0).FindPropertyRelative("toTransformData").arraySize + " transforms");
 
     }
 
