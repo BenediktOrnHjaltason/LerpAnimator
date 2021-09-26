@@ -59,7 +59,7 @@ public class LerpAnimatorEditor : Editor
 
     
 
-    bool justModifiedSegmentsNumer = false;
+    bool justModifiedSegmentsNumber = false;
     bool OnGUIChangedCalled = false;
 
     #region GUI
@@ -109,14 +109,14 @@ public class LerpAnimatorEditor : Editor
 
             Debug.Log("Pressed Remove segment");
             RemoveSegment();
-            justModifiedSegmentsNumer = true;
+            justModifiedSegmentsNumber = true;
         }
 
         if (GUILayout.Button("Add segment"))
         {
             Debug.Log("Pressed Add segment");
             AddSegment();
-            justModifiedSegmentsNumer = true;
+            justModifiedSegmentsNumber = true;
         }
 
         GUILayout.EndHorizontal();
@@ -124,7 +124,7 @@ public class LerpAnimatorEditor : Editor
         //EditorGUILayout.PropertyField(serializedObject.FindProperty("Segments"));
 
         
-        if (!justModifiedSegmentsNumer)
+        if (!justModifiedSegmentsNumber)
         {
 
             for (int i = 0; i < numberOfSegments; i++)
@@ -136,8 +136,6 @@ public class LerpAnimatorEditor : Editor
                 if (GUILayout.Button("Sample"))
                 {
                     Debug.Log("You pressed sample on segment" + i);
-                    
-
                 }
 
                 if (GUILayout.Button("Preview"))
@@ -155,14 +153,13 @@ public class LerpAnimatorEditor : Editor
 
             
         }
-        justModifiedSegmentsNumer = false;
+        justModifiedSegmentsNumber = false;
 
         EditorGUI.BeginChangeCheck();
         if (EditorGUI.EndChangeCheck()) Debug.Log("A change was made");
 
         serializedObject.ApplyModifiedProperties();
 
-        #region User transforms array action detection
 
         if (GUI.changed)
         {
@@ -181,12 +178,10 @@ public class LerpAnimatorEditor : Editor
 
             previousTransformsArrayCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
         }
-
-        #endregion
-
     }
     #endregion
 
+    #region Data consistency
     private void OnGUIChanged()
     {
         Debug.Log("OnGUIChanged");
@@ -200,12 +195,17 @@ public class LerpAnimatorEditor : Editor
             {
                 Debug.Log("User increased array count");
 
+                OnUserIncreasedTransformsArrayCount();
+
                 CollectTransformsReferences();
 
             }
             else
             {
                 Debug.Log("User decreased array count");
+
+                OnUserDecreasedTransformsArrayCount();
+
                 CollectTransformsReferences();
             }
         }
@@ -213,7 +213,7 @@ public class LerpAnimatorEditor : Editor
         previousTransformsArrayCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
     }
 
-    #region Data consistency
+    
 
     private void RemoveInvalidReferencesAndTheirData()
     {
@@ -273,18 +273,40 @@ public class LerpAnimatorEditor : Editor
 
             //serializedObject.ApplyModifiedProperties();
 
+            CollectTransformsReferences();
+
         }
         else Debug.Log("LerpAnimatorEditor::OnHierarchyChanged: animator reference is not valid");
     }
 
-    private void AdjustToUserSettingArraySize()
+    private void OnUserIncreasedTransformsArrayCount()
+    {
+        int numberOElements = serializedObject.FindProperty("TransformsToActOn").arraySize;
+
+        for (int i = numberOElements -1; i > 0; i--)
+        {
+            Transform higherIndexTransform = (Transform)serializedObject.FindProperty("TransformsToActOn").GetArrayElementAtIndex(i).objectReferenceValue;
+            Transform lowerIndexTransform = (Transform)serializedObject.FindProperty("TransformsToActOn").GetArrayElementAtIndex(i - 1).objectReferenceValue;
+
+            if (higherIndexTransform != null && lowerIndexTransform != null && higherIndexTransform == lowerIndexTransform)
+            {
+                Debug.Log("Detected duplicate");
+
+                serializedObject.FindProperty("TransformsToActOn").GetArrayElementAtIndex(i).objectReferenceValue = null;
+
+                serializedObject.ApplyModifiedProperties();
+            }
+        }
+    }
+
+    private void OnUserDecreasedTransformsArrayCount()
     {
 
     }
 
     #endregion
 
-    
+
 
     private void AddSegment()
     {

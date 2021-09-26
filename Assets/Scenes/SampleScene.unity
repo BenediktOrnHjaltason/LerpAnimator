@@ -511,7 +511,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eefb4c63eaf94f41a70a97adcf74538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TransformsToActOn: []
+  TransformsToActOn:
+  - {fileID: 1848429920}
+  - {fileID: 717827792}
+  - {fileID: 1160346379}
   StartStates: []
   Segments:
   - toTransformData: []
