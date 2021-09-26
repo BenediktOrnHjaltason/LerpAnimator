@@ -10,9 +10,10 @@ public class LerpAnimatorEditor : Editor
 {
     LerpAnimator animator;
 
-    static List<Transform> previousTransforms;
+    static List<Transform> editorTransformsArray;
 
-    int previousTransformsArrayCount;
+    int serializedArrayCount;
+
 
     private void OnEnable()
     {
@@ -21,8 +22,6 @@ public class LerpAnimatorEditor : Editor
         EditorApplication.update += OnEditorUpdate;
         EditorApplication.hierarchyChanged += OnHierarchyChanged;
 
-        RemoveInvalidReferencesAndTheirData();
-
         CollectTransformsReferences();
     }
 
@@ -30,34 +29,30 @@ public class LerpAnimatorEditor : Editor
     {
         //ApplyStartState();
         EditorApplication.update -= OnEditorUpdate;
-        EditorApplication.hierarchyChanged -= OnHierarchyChanged;
-
     }
-
-    private void CollectTransformsReferences()
-    {
-        previousTransformsArrayCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
-
-        previousTransforms = new List<Transform>();
-
-        for (int i = 0; i < previousTransformsArrayCount; i++)
-        {
-            Transform transform = serializedObject.FindProperty("TransformsToActOn").GetArrayElementAtIndex(i).objectReferenceValue as Transform;
-
-            if (transform != null) previousTransforms.Add(transform);
-        }
-
-        foreach (Transform transform in previousTransforms)
-        {
-            if (transform != null) Debug.Log("previousTransforms contains valid transform reference to object" + transform.gameObject.name);
-        }
-    }
-
 
     private void OnHierarchyChanged()
     {
         Debug.Log("OnHierarchyChanged");
     }
+
+    private void CollectTransformsReferences()
+    {
+        serializedArrayCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
+
+        editorTransformsArray = new List<Transform>();
+
+        for (int i = 0; i < serializedArrayCount; i++)
+        {
+            Transform transform = serializedObject.FindProperty("TransformsToActOn").GetArrayElementAtIndex(i).objectReferenceValue as Transform;
+
+            editorTransformsArray.Add(transform);
+        }
+
+        serializedArrayCount = editorTransformsArray.Count;
+    }
+
+
 
     
 
@@ -75,14 +70,14 @@ public class LerpAnimatorEditor : Editor
         GUILayout.Label("Start state");
 
         GUILayout.BeginHorizontal("Box");
-        if (GUILayout.Button("Sample"))
+        if (GUILayout.Button("Sample scene"))
         {
-            animator.SampleFromScene(-1);
+            SampleFromScene(-1);
         }
 
-        if (GUILayout.Button("Preview"))
+        if (GUILayout.Button("Select"))
         {
-           animator.ApplyFromDatastore(-1);
+           ApplyFromDatastore(-1);
         }
 
         if (animator == null) Debug.Log("LAE: animator is null");
@@ -133,17 +128,16 @@ public class LerpAnimatorEditor : Editor
             {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("Segments").GetArrayElementAtIndex(i));
 
-
                 GUILayout.BeginHorizontal("Box");
-                if (GUILayout.Button("Sample"))
-                {
-                    Debug.Log("You pressed sample on segment" + i);
-                }
-
-                if (GUILayout.Button("Preview"))
+                if (GUILayout.Button("Select"))
                 {
                     Debug.Log("You pressed Preview on segment " + i);
-                    animator.ApplyFromDatastore(i);
+                    ApplyFromDatastore(i);
+                }
+
+                if (GUILayout.Button("Sample scene"))
+                {
+                    Debug.Log("You pressed sample on segment" + i);
                 }
 
                 if (GUILayout.Button("Play from here"))
@@ -173,12 +167,13 @@ public class LerpAnimatorEditor : Editor
         int currentTransformsArraySize = serializedObject.FindProperty("TransformsToActOn").arraySize;
 
         //If user deletes array element completely
-        if (!OnGUIChangedCalled && currentTransformsArraySize != previousTransformsArrayCount)
+        if (!OnGUIChangedCalled && currentTransformsArraySize != serializedArrayCount)
         {
             Debug.Log("Detected user deleted array element");
-            //detectedUserDeletedArrayElement = true;
 
-            previousTransformsArrayCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
+            OnUserDeletedElementDirectly();
+
+            serializedArrayCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
         }
     }
     #endregion
@@ -188,12 +183,13 @@ public class LerpAnimatorEditor : Editor
     {
         Debug.Log("OnGUIChanged");
 
-        //If user adjusts array count
+        
         int currentTransformsArrayCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
 
-        if (previousTransforms.Count != currentTransformsArrayCount)
+        //If user adjusts array count
+        if (editorTransformsArray.Count != currentTransformsArrayCount)
         {
-            if (currentTransformsArrayCount > previousTransforms.Count)
+            if (currentTransformsArrayCount > editorTransformsArray.Count)
             {
                 Debug.Log("User increased array count");
 
@@ -205,77 +201,46 @@ public class LerpAnimatorEditor : Editor
 
                 OnUserDecreasedTransformsArrayCount();
             }
-        }
 
-        previousTransformsArrayCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
-    }
-
-    
-
-    private void RemoveInvalidReferencesAndTheirData()
-    {
-        if (animator)
-        {
-            int numberOfTransformsToActOn = serializedObject.FindProperty("TransformsToActOn").arraySize;
-            List<int> deletedTransformsIndexes = new List<int>();
-
-            for (int i = numberOfTransformsToActOn - 1; i >= 0; i--)
-            {
-
-                if (serializedObject.FindProperty("TransformsToActOn").GetArrayElementAtIndex(i).objectReferenceValue == null)
-                {
-                    Debug.Log("Found missing or null object reference");
-                    deletedTransformsIndexes.Add(i);
-                }
-            }
-
-            foreach (int index in deletedTransformsIndexes)
-            {
-                Debug.Log("Attempting to delete array element");
-                //serializedObject.FindProperty("TransformsToActOn").objectReferenceValue = null;
-                //serializedObject.ApplyModifiedProperties();
-
-                int transformsArrayCountBefore = serializedObject.FindProperty("TransformsToActOn").arraySize;
-
-                serializedObject.FindProperty("TransformsToActOn").DeleteArrayElementAtIndex(index);
-                serializedObject.ApplyModifiedProperties();
-
-                int transformsArrayCountAfter = serializedObject.FindProperty("TransformsToActOn").arraySize;
-
-                //If the property mas missing, delete again to ensure array element removed
-                if (transformsArrayCountBefore == transformsArrayCountAfter)
-                {
-                    serializedObject.FindProperty("TransformsToActOn").DeleteArrayElementAtIndex(index);
-                    serializedObject.ApplyModifiedProperties();
-                }
-
-                serializedObject.Update();
-
-
-                //serializedObject.FindProperty("StartStates").DeleteArrayElementAtIndex(index);
-            }
-
-
-            /*
-            int numberOfSegments = serializedObject.FindProperty("Segments").arraySize;
-
-            for (int i = 0; i < numberOfSegments; i++)
-            {
-                foreach (int index in deletedTransformsIndexes)
-                {
-                    serializedObject.FindProperty("Segments").GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").DeleteArrayElementAtIndex(index);
-                }
-            }
-            */
-
-            //serializedObject.ApplyModifiedProperties();
+            //TODO: Delete corresponding data array elements also
 
             CollectTransformsReferences();
+        }
+
+        else
+        {
+            //Check if user overrided array element
+
+            for (int i = 0; i < serializedArrayCount; i++)
+            {
+                Transform serializedTransform = serializedObject.FindProperty("TransformsToActOn").GetArrayElementAtIndex(i).objectReferenceValue as Transform;
+
+                if (serializedTransform != editorTransformsArray[i])
+                {
+                    if (serializedTransform != null)
+                    {
+                        Debug.Log("User set array element value");
+
+                        //TODO: Add 
+                    }
+
+                    else Debug.Log("User nulled array element");
+                }
+            }
+
 
         }
-        else Debug.Log("LerpAnimatorEditor::OnHierarchyChanged: animator reference is not valid");
+
+        serializedArrayCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
     }
 
+    private void OnUserDeletedElementDirectly()
+    {
+
+    }
+
+
+    //
     private void OnUserIncreasedTransformsArrayCount()
     {
         int numberOElements = serializedObject.FindProperty("TransformsToActOn").arraySize;
@@ -302,7 +267,9 @@ public class LerpAnimatorEditor : Editor
     {
         CollectTransformsReferences();
 
-        Debug.Log("transforms count after user decreased array size: " + previousTransforms.Count);
+        //TODO: Delete data elements for the deleted elements
+
+        Debug.Log("transforms count after user decreased array size: " + editorTransformsArray.Count);
     }
 
     #endregion
@@ -323,7 +290,7 @@ public class LerpAnimatorEditor : Editor
 
     private void ApplyStartState(int index = -1)
     {
-        animator.ApplyFromDatastore(index);
+        ApplyFromDatastore(index);
     }
 
     double startTime;
@@ -334,75 +301,18 @@ public class LerpAnimatorEditor : Editor
 
         startTime = EditorApplication.timeSinceStartup;
     }
-    /*
-    private bool running = false;
 
-    int fromIndex = 0;
-    int toIndex = 0;
-    public void RunSequence(int pFromIndex = -1)
+    #region Data management
+    public void ApplyFromDatastore(int index)
     {
-        if (animator.Segments.Count == 0) return;
-
-        startTime = EditorApplication.timeSinceStartup;
-
-        //If Starting from start states
-        if (pFromIndex == -1)
-        {
-            fromIndex = 0; toIndex = 0;
-
-            animator.Segments[0].OnSegmentStart?.Invoke();
-
-            while (CalculatingInterpolationStep(startTime, animator.Segments[0].duration, out step))
-            {
-                for (int i = 0; i < animator.TransformsToActOn.Count; i++)
-                {
-                    animator.TransformsToActOn[i].localPosition =
-                        Vector3.LerpUnclamped(animator.startStates[animator.TransformsToActOn[i]].position, animator.Segments[0].toTransformData[animator.TransformsToActOn[i]].position,
-                        animator.Segments[0].curve.Evaluate((float)step));
-
-                    animator.TransformsToActOn[i].localRotation =
-                        Quaternion.Euler(Vector3.LerpUnclamped(animator.startStates[animator.TransformsToActOn[i]].rotation, animator.Segments[0].toTransformData[animator.TransformsToActOn[i]].rotation,
-                        animator.Segments[0].curve.Evaluate((float)step)));
-
-                    animator.TransformsToActOn[i].localScale =
-                        Vector3.LerpUnclamped(animator.startStates[animator.TransformsToActOn[i]].scale, animator.Segments[0].toTransformData[animator.TransformsToActOn[i]].scale,
-                        animator.Segments[0].curve.Evaluate((float)step));
-                }
-
-                yield return null;
-            }
-        }
-        //If starting from any sequence
-        else
-        {
-            if (fromIndex + 2 >= animator.Segments.Count) yield break;
-
-            fromIndex = pFromIndex;
-            toIndex = pFromIndex + 1;
-
-            while (CalculatingInterpolationStep(startTime, animator.Segments[fromIndex].duration, out step))
-            {
-                for (int i = 0; i < animator.TransformsToActOn.Count; i++)
-                {
-                    animator.TransformsToActOn[i].localPosition =
-                        Vector3.LerpUnclamped(animator.Segments[fromIndex].toTransformData[animator.TransformsToActOn[i]].position, animator.Segments[toIndex].toTransformData[animator.TransformsToActOn[i]].position,
-                        animator.Segments[0].curve.Evaluate((float)step));
-
-                    animator.TransformsToActOn[i].localRotation =
-                        Quaternion.Euler(Vector3.LerpUnclamped(animator.Segments[fromIndex].toTransformData[animator.TransformsToActOn[i]].rotation, animator.Segments[toIndex].toTransformData[animator.TransformsToActOn[i]].rotation,
-                        animator.Segments[0].curve.Evaluate((float)step)));
-
-                    animator.TransformsToActOn[i].localScale =
-                        Vector3.LerpUnclamped(animator.Segments[fromIndex].toTransformData[animator.TransformsToActOn[i]].scale, animator.Segments[0].toTransformData[animator.TransformsToActOn[i]].scale,
-                        animator.Segments[0].curve.Evaluate((float)step));
-                }
-
-                yield return null;
-            }
-        }
+        
     }
+    #endregion
 
-    */
+    public void SampleFromScene(int index)
+    {
+
+    }
 
     private bool CalculatingInterpolationStep(double startTime, double duration, out double step)
     {
@@ -413,6 +323,6 @@ public class LerpAnimatorEditor : Editor
 
     private void OnEditorUpdate()
     {
-
+        //Debug.Log("OnEditorUpdate");
     }
 }

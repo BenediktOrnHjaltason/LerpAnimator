@@ -49,16 +49,6 @@ public class LerpAnimator : MonoBehaviour
     public UnityAction OnSequenceEnd;
 
 
-    public void ApplyFromDatastore(int index)
-    {
-
-    }
-
-    public void SampleFromScene(int index)
-    {
-
-    }
-
     #region Validation
 
     public List<int> GetDeletedTransformsIndexes()
