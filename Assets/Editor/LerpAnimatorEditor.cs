@@ -264,12 +264,35 @@ public class LerpAnimatorEditor : Editor
         CollectTransformsReferences();
         AddDataElementsForNewlyAddedTransformsElements(difference);
     }
-
+    
     private void OnUserDecreasedTransformsArrayCount()
     {
-        CollectTransformsReferences();
 
-        //TODO: Delete data elements for the deleted elements
+        int serializedTransformsArrayCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
+        int editorTransformsArrayCount = editorTransformsArray.Count;
+        int difference = editorTransformsArrayCount - serializedTransformsArrayCount;
+
+        //Remove from end from all collections
+        for (int i = 0; i < difference; i++ )
+        {
+            editorTransformsArray.RemoveAt(editorTransformsArray.Count - 1);
+
+            serializedObject.FindProperty("StartStates").arraySize--;
+
+
+            int numberOfSegments = serializedObject.FindProperty("Segments").arraySize;
+
+            for (int j = 0; j < numberOfSegments; j++)
+            {
+                Debug.Log("Removing from end of segments toTransformData lists");
+
+                serializedObject.FindProperty("Segments").GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").arraySize--;
+            }
+        }
+
+        serializedObject.ApplyModifiedProperties();
+
+        CollectTransformsReferences();
 
         Debug.Log("transforms count after user decreased array size: " + editorTransformsArray.Count);
     }
@@ -327,7 +350,6 @@ public class LerpAnimatorEditor : Editor
 
             //--- Add states, initialized to object added
             //StartStates
-            if (editorTransformsArray[newStartStatesCount - 1]) Debug.Log("Was not invalid?");
 
             serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(newStartStatesCount - 1).FindPropertyRelative("position").vector3Value = editorTransformsArray[newStartStatesCount - 1] == null ? Vector3.zero : editorTransformsArray[newStartStatesCount - 1].localPosition;
             serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(newStartStatesCount - 1).FindPropertyRelative("rotation").vector3Value = editorTransformsArray[newStartStatesCount - 1] == null ? Vector3.zero : editorTransformsArray[newStartStatesCount - 1].localRotation.eulerAngles;

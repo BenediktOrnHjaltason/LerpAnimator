@@ -511,31 +511,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eefb4c63eaf94f41a70a97adcf74538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TransformsToActOn:
-  - {fileID: 717827792}
-  - {fileID: 1848429920}
-  - {fileID: 1160346379}
-  StartStates:
-  - position: {x: -2.662, y: 8.362433, z: 6.559355}
-    rotation: {x: 0, y: 0, z: 0}
-    scale: {x: 0.30816, y: 0.30816, z: 0.30816}
-  - position: {x: -2.024, y: 8.362433, z: 6.559355}
-    rotation: {x: 0, y: 0, z: 0}
-    scale: {x: 0.30816, y: 0.30816, z: 0.30816}
-  - position: {x: -3.294, y: 8.362433, z: 6.559355}
-    rotation: {x: 0, y: 0, z: 0}
-    scale: {x: 0.30816, y: 0.30816, z: 0.30816}
+  TransformsToActOn: []
+  StartStates: []
   Segments:
-  - toTransformData:
-    - position: {x: -2.662, y: 8.362433, z: 6.559355}
-      rotation: {x: 0, y: 0, z: 0}
-      scale: {x: 0.30816, y: 0.30816, z: 0.30816}
-    - position: {x: -2.024, y: 8.362433, z: 6.559355}
-      rotation: {x: 0, y: 0, z: 0}
-      scale: {x: 0.30816, y: 0.30816, z: 0.30816}
-    - position: {x: -3.294, y: 8.362433, z: 6.559355}
-      rotation: {x: 0, y: 0, z: 0}
-      scale: {x: 0.30816, y: 0.30816, z: 0.30816}
+  - toTransformData: []
+    duration: 0
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    OnSegmentStart:
+      m_PersistentCalls:
+        m_Calls: []
+  - toTransformData: []
     duration: 0
     curve:
       serializedVersion: 2
