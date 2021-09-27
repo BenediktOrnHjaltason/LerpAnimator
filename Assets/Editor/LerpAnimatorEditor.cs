@@ -166,6 +166,7 @@ public class LerpAnimatorEditor : Editor
             Debug.Log("Detected user deleted array element");
 
             OnUserDeletedElementDirectly();
+            
 
             serializedArrayCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
         }
@@ -234,7 +235,46 @@ public class LerpAnimatorEditor : Editor
 
     private void OnUserDeletedElementDirectly()
     {
+        Debug.Log("OnUserDeletedElementDirectly called");
 
+        //remove at index for editor transforms array and data
+        for (int i = 0; i < editorTransformsArray.Count; i++)
+        {
+            if (serializedObject.FindProperty("TransformsToActOn").arraySize == 0)
+            {
+                editorTransformsArray.Clear();
+
+                serializedObject.FindProperty("StartStates").ClearArray();
+
+                int numberOfSegments = serializedObject.FindProperty("Segments").arraySize;
+                for (int j = 0; j < numberOfSegments; j++)
+                {
+                    serializedObject.FindProperty("Segments").GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").ClearArray();
+                }
+
+                serializedObject.ApplyModifiedProperties();
+                return;
+            }
+
+            if (editorTransformsArray[i] != serializedObject.FindProperty("TransformsToActOn").GetArrayElementAtIndex(i).objectReferenceValue)
+            {
+                Debug.Log("OnUserDeletedElementDirectly: Found index " + i);
+
+                editorTransformsArray.RemoveAt(i);
+
+                serializedObject.FindProperty("StartStates").DeleteArrayElementAtIndex(i);
+
+                int numberOfSegments = serializedObject.FindProperty("Segments").arraySize;
+                for (int j = 0; j < numberOfSegments; j++)
+                {
+                    serializedObject.FindProperty("Segments").GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").DeleteArrayElementAtIndex(i);
+                }
+
+                serializedObject.ApplyModifiedProperties();
+
+                return;
+            }
+        }
     }
 
 
