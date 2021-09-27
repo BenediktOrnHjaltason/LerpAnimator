@@ -210,8 +210,30 @@ public class LerpAnimatorEditor : Editor
             {
                 Transform serializedTransform = serializedObject.FindProperty("TransformsToActOn").GetArrayElementAtIndex(i).objectReferenceValue as Transform;
 
+                //Insert data for new element
                 if (serializedTransform != editorTransformsArray[i])
                 {
+                    //First check if no duplicate exists elsewhere
+                    int serializedArraySize = serializedObject.FindProperty("TransformsToActOn").arraySize;
+                    for (int j = 0; j < serializedArraySize; j++)
+                    {
+
+                        if (j != i && serializedTransform == serializedObject.FindProperty("TransformsToActOn").GetArrayElementAtIndex(j).objectReferenceValue as Transform) 
+                        {
+                            Debug.LogWarning("Lerp Animator: You inserted a duplicate transform into the array. Not Allowed. Nulling values");
+
+                            //Null serialized element
+                            serializedObject.FindProperty("TransformsToActOn").GetArrayElementAtIndex(i).objectReferenceValue = null;
+                            serializedObject.ApplyModifiedProperties();
+
+                            CollectTransformsReferences();
+                            InsertDataForNewlyOverriddenTransform(i);
+
+                            return;
+                        }
+                    }
+
+
                     if (serializedTransform != null)
                     {
                         Debug.Log("User set array element value");
@@ -220,7 +242,7 @@ public class LerpAnimatorEditor : Editor
 
                         InsertDataForNewlyOverriddenTransform(i);
 
-                        break;
+                        return;
                     }
 
                     else Debug.Log("User nulled array element");
@@ -422,22 +444,24 @@ public class LerpAnimatorEditor : Editor
         if (editorTransformsArray[index] == null) Debug.Log("InsertDataForNewly... element is null");
 
         //Start states
-        serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(index).FindPropertyRelative("position").vector3Value = editorTransformsArray[index].localPosition;
-        serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(index).FindPropertyRelative("rotation").vector3Value = editorTransformsArray[index].localRotation.eulerAngles;
-        serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(index).FindPropertyRelative("scale").vector3Value = editorTransformsArray[index].localScale;
+        serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(index).FindPropertyRelative("position").vector3Value = editorTransformsArray[index] == null ? Vector3.zero :  editorTransformsArray[index].localPosition;
+        serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(index).FindPropertyRelative("rotation").vector3Value = editorTransformsArray[index] == null ? Vector3.zero : editorTransformsArray[index].localRotation.eulerAngles;
+        serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(index).FindPropertyRelative("scale").vector3Value = editorTransformsArray[index] == null ? Vector3.zero : editorTransformsArray[index].localScale;
 
         //Segments
         int segmentsCount = serializedObject.FindProperty("Segments").arraySize;
 
         for (int i = 0; i < segmentsCount; i++)
         {
-            serializedObject.FindProperty("Segments").GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(index).FindPropertyRelative("position").vector3Value = editorTransformsArray[index].localPosition;
-            serializedObject.FindProperty("Segments").GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(index).FindPropertyRelative("rotation").vector3Value = editorTransformsArray[index].localRotation.eulerAngles;
-            serializedObject.FindProperty("Segments").GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(index).FindPropertyRelative("scale").vector3Value = editorTransformsArray[index].localScale;
+            serializedObject.FindProperty("Segments").GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(index).FindPropertyRelative("position").vector3Value = editorTransformsArray[index] == null ? Vector3.zero : editorTransformsArray[index].localPosition;
+            serializedObject.FindProperty("Segments").GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(index).FindPropertyRelative("rotation").vector3Value = editorTransformsArray[index] == null ? Vector3.zero : editorTransformsArray[index].localRotation.eulerAngles;
+            serializedObject.FindProperty("Segments").GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(index).FindPropertyRelative("scale").vector3Value = editorTransformsArray[index] == null ? Vector3.zero : editorTransformsArray[index].localScale;
         }
 
         serializedObject.ApplyModifiedProperties();
     }
+
+
 
     private bool CalculatingInterpolationStep(double startTime, double duration, out double step)
     {
