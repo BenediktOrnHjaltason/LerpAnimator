@@ -16,7 +16,7 @@ public class TransformData
 [System.Serializable]
 public class Segment
 {
-    [HideInInspector] public List<TransformData> toTransformData;
+    public List<TransformData> toTransformData;
 
     public float duration;
     public AnimationCurve curve;

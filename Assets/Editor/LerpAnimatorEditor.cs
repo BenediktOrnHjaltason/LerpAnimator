@@ -70,15 +70,15 @@ public class LerpAnimatorEditor : Editor
         GUILayout.Label("Start state");
 
         GUILayout.BeginHorizontal("Box");
+        if (GUILayout.Button("Select"))
+        {
+            ApplyFromDatastore(-1);
+        }
         if (GUILayout.Button("Sample scene"))
         {
             SampleFromScene(-1);
         }
 
-        if (GUILayout.Button("Select"))
-        {
-           ApplyFromDatastore(-1);
-        }
 
         if (animator == null) Debug.Log("LAE: animator is null");
 
@@ -328,9 +328,9 @@ public class LerpAnimatorEditor : Editor
 
             //--- Add states, initialized to object added
             //StartStates
-            serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(newStartStatesCount - 1).FindPropertyRelative("position").vector3Value =  Vector3.zero;
-            serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(newStartStatesCount - 1).FindPropertyRelative("rotation").vector3Value =  Vector3.zero;
-            serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(newStartStatesCount - 1).FindPropertyRelative("scale").vector3Value =  Vector3.zero;
+            serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(newStartStatesCount - 1).FindPropertyRelative("position").vector3Value = editorTransformsArray[newStartStatesCount - 1] == null ? Vector3.zero : editorTransformsArray[newStartStatesCount - 1].localPosition;
+            serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(newStartStatesCount - 1).FindPropertyRelative("rotation").vector3Value = editorTransformsArray[newStartStatesCount - 1] == null ? Vector3.zero : editorTransformsArray[newStartStatesCount - 1].localRotation.eulerAngles;
+            serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(newStartStatesCount - 1).FindPropertyRelative("scale").vector3Value = editorTransformsArray[newStartStatesCount - 1] == null ? Vector3.zero : editorTransformsArray[newStartStatesCount - 1].localScale;
 
             //Segments
             //toTransformData amounts should be the same as start states amount
@@ -345,13 +345,11 @@ public class LerpAnimatorEditor : Editor
 
                 int newToTransformDataCount = serializedObject.FindProperty("Segments").GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").arraySize;
 
-                serializedObject.FindProperty("Segments").GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(newToTransformDataCount - 1).FindPropertyRelative("position").vector3Value =  Vector3.zero;
-                serializedObject.FindProperty("Segments").GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(newToTransformDataCount - 1).FindPropertyRelative("rotation").vector3Value = Vector3.zero;
-                serializedObject.FindProperty("Segments").GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(newToTransformDataCount - 1).FindPropertyRelative("scale").vector3Value = Vector3.zero;
+                serializedObject.FindProperty("Segments").GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(newToTransformDataCount - 1).FindPropertyRelative("position").vector3Value = editorTransformsArray[newToTransformDataCount - 1] == null ?  Vector3.zero : editorTransformsArray[newToTransformDataCount - 1].localPosition;
+                serializedObject.FindProperty("Segments").GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(newToTransformDataCount - 1).FindPropertyRelative("rotation").vector3Value = editorTransformsArray[newToTransformDataCount - 1] == null ? Vector3.zero : editorTransformsArray[newToTransformDataCount - 1].localRotation.eulerAngles;
+                serializedObject.FindProperty("Segments").GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(newToTransformDataCount - 1).FindPropertyRelative("scale").vector3Value = editorTransformsArray[newToTransformDataCount - 1] == null ? Vector3.zero : editorTransformsArray[newToTransformDataCount - 1].localScale;
             }
         }
-
-        Debug.Log("First segment contains toTranformData for " + serializedObject.FindProperty("Segments").GetArrayElementAtIndex(0).FindPropertyRelative("toTransformData").arraySize + " transforms");
 
         serializedObject.ApplyModifiedProperties();
     }
