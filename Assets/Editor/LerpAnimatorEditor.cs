@@ -367,6 +367,42 @@ public class LerpAnimatorEditor : Editor
     {
         serializedObject.FindProperty("Segments").arraySize++;
         serializedObject.ApplyModifiedProperties();
+
+        //Insert data for transforms allready in array
+
+        int indexAdded_Segments = serializedObject.FindProperty("Segments").arraySize -1;
+
+        int numberOfTransforms = serializedObject.FindProperty("TransformsToActOn").arraySize;
+
+        Debug.Log("AddSegment: numberOfTransforms = " + numberOfTransforms);
+
+        //Clear pre filled array elements
+        serializedObject.FindProperty("Segments").GetArrayElementAtIndex(indexAdded_Segments).FindPropertyRelative("toTransformData").ClearArray();
+
+        for (int i = 0; i < numberOfTransforms; i++)
+        {
+            
+            serializedObject.FindProperty("Segments").GetArrayElementAtIndex(indexAdded_Segments).FindPropertyRelative("toTransformData").arraySize++;
+            
+
+
+            Debug.Log("AddSegment: Adding toTransformsData to segment");
+
+            serializedObject.ApplyModifiedProperties();
+
+            int indexAdded_Data = serializedObject.FindProperty("Segments").GetArrayElementAtIndex(indexAdded_Segments).FindPropertyRelative("toTransformData").arraySize - 1;
+
+            serializedObject.FindProperty("Segments").GetArrayElementAtIndex(indexAdded_Segments).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(indexAdded_Data).FindPropertyRelative("position").vector3Value =
+                serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value;
+
+            serializedObject.FindProperty("Segments").GetArrayElementAtIndex(indexAdded_Segments).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(indexAdded_Data).FindPropertyRelative("rotation").vector3Value =
+                serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(i).FindPropertyRelative("rotation").vector3Value;
+
+            serializedObject.FindProperty("Segments").GetArrayElementAtIndex(indexAdded_Segments).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(indexAdded_Data).FindPropertyRelative("scale").vector3Value =
+                serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value;
+
+            serializedObject.ApplyModifiedProperties();
+        }
     }
 
     private void RemoveSegment()
