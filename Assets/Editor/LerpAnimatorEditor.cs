@@ -26,6 +26,9 @@ public class LerpAnimatorEditor : Editor
 
         CollectEditorTransformsReferences();
         CollectEditorStartStates();
+        CollectEditorSegmentsData();
+
+        Debug.Log("EditorTransformsArray size = " + editorTransformsArray.Count);
     }
 
     private void OnDisable()
@@ -63,6 +66,8 @@ public class LerpAnimatorEditor : Editor
             Vector3 scale = serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value;
 
             editorStartStates.Add(new TransformData(position, rotation, scale));
+
+            //Debug.Log("Collected start position : " + position);
         }
     }
 
@@ -87,6 +92,8 @@ public class LerpAnimatorEditor : Editor
                 Vector3 scale = serializedObject.FindProperty("Segments").GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(j).FindPropertyRelative("scale").vector3Value;
 
                 toTransformData.Add(new TransformData(position, rotation, scale));
+
+                //Debug.Log("Collected segment to-position : " + position);
             }
 
             segment.toTransformData = toTransformData;
@@ -130,7 +137,13 @@ public class LerpAnimatorEditor : Editor
         {
             if (GUILayout.Button("Play from start"))
             {
-                //ApplyStartState();
+                ApplyFromDatastore(-1);
+                StartPlayback(-1);
+            }
+
+            if (GUILayout.Button("STOP"))
+            {
+                playbackRunning = false;
             }
         }
 
@@ -164,6 +177,8 @@ public class LerpAnimatorEditor : Editor
 
         GUILayout.EndHorizontal();
 
+        EditorGUILayout.Space(20);
+
         //EditorGUILayout.PropertyField(serializedObject.FindProperty("Segments"));
 
         if (!justModifiedSegmentsNumber)
@@ -185,8 +200,10 @@ public class LerpAnimatorEditor : Editor
 
                 if (GUILayout.Button("Play from here"))
                 {
-                    Debug.Log("You pressed Play from here on segment " + i);
+                    ApplyFromDatastore(i);
+                    StartPlayback(i);
                 }
+
                 GUILayout.EndHorizontal();
 
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("Segments").GetArrayElementAtIndex(i));
@@ -630,10 +647,13 @@ public class LerpAnimatorEditor : Editor
         return step < 1;
     }
 
+    #region Playback
+
     double startTime;
-    double step;
+    double lerpStep;
     int fromIndex;
     int toIndex;
+    int indexStartedFrom;
 
     bool playbackRunning;
 
@@ -641,9 +661,11 @@ public class LerpAnimatorEditor : Editor
     {
         if (serializedObject.FindProperty("Segments").arraySize == 0) return;
 
+        ApplyFromDatastore(fromIndex);
+
         startTime = EditorApplication.timeSinceStartup;
 
-        this.fromIndex = fromIndex;
+        this.fromIndex = indexStartedFrom = fromIndex;
 
         toIndex = fromIndex == -1 ? 0 : fromIndex + 1;
 
@@ -651,9 +673,80 @@ public class LerpAnimatorEditor : Editor
     }
 
 
-
     private void OnEditorUpdate()
     {
-        
+        if (playbackRunning)
+        {
+            lerpStep = (EditorApplication.timeSinceStartup - startTime) / editorSegmentsArray[toIndex].duration;
+
+            if (fromIndex == -1)
+            {
+                for (int i = 0; i < editorTransformsArray.Count; i++)
+                {
+                    
+
+                    editorTransformsArray[i].localPosition =
+                        Vector3.Lerp(editorStartStates[i].position,
+                                              editorSegmentsArray[toIndex].toTransformData[i].position,
+                                              editorSegmentsArray[toIndex].curve.Evaluate((float)lerpStep));
+
+                    editorTransformsArray[i].localRotation =
+                        Quaternion.Euler(Vector3.Lerp(editorStartStates[i].rotation,
+                                              editorSegmentsArray[toIndex].toTransformData[i].rotation,
+                                              editorSegmentsArray[toIndex].curve.Evaluate((float)lerpStep)));
+
+                    editorTransformsArray[i].localScale =
+                        Vector3.Lerp(editorStartStates[i].scale,
+                                              editorSegmentsArray[toIndex].toTransformData[i].scale,
+                                              editorSegmentsArray[toIndex].curve.Evaluate((float)lerpStep));
+                }
+            }
+
+            else
+            {
+                for (int i = 0; i < editorTransformsArray.Count; i++)
+                {
+                    editorTransformsArray[i].localPosition =
+                        Vector3.Lerp(editorSegmentsArray[fromIndex].toTransformData[i].position,
+                                              editorSegmentsArray[toIndex].toTransformData[i].position,
+                                              editorSegmentsArray[toIndex].curve.Evaluate((float)lerpStep));
+
+                    editorTransformsArray[i].localRotation =
+                        Quaternion.Euler(Vector3.Lerp(editorSegmentsArray[fromIndex].toTransformData[i].rotation,
+                                              editorSegmentsArray[toIndex].toTransformData[i].rotation,
+                                              editorSegmentsArray[toIndex].curve.Evaluate((float)lerpStep)));
+
+                    editorTransformsArray[i].localScale =
+                        Vector3.Lerp(editorSegmentsArray[fromIndex].toTransformData[i].scale,
+                                              editorSegmentsArray[toIndex].toTransformData[i].scale,
+                                              editorSegmentsArray[toIndex].curve.Evaluate((float)lerpStep));
+                }
+            }
+
+            if (lerpStep > 1 )
+            {
+                //Go to next segment
+                if (toIndex + 1 > editorSegmentsArray.Count -1)
+                {
+                    Debug.Log("Detected toIndex + 1 is more than indexes in editorSegmentsArray. toIndex + 1 =" + toIndex + 1 );
+
+                    playbackRunning = false;
+                    //ApplyFromDatastore(indexStartedFrom);
+                }
+
+                else
+                {
+                    fromIndex = fromIndex == -1 ? 0 : ++fromIndex;
+                    toIndex++;
+
+                    startTime = EditorApplication.timeSinceStartup;
+
+                    Debug.Log("Going to next segment. fromIndex " + fromIndex + ". toIndex =" + toIndex);
+                }
+            }
+            
+        }
     }
+
+    #endregion
 }
