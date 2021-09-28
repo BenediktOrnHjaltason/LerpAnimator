@@ -196,6 +196,10 @@ public class LerpAnimatorEditor : Editor
         }
         justModifiedSegmentsNumber = false;
 
+
+        EditorGUILayout.Space(20);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("OnSequenceEnd"));
+
         EditorGUI.BeginChangeCheck();
         if (EditorGUI.EndChangeCheck()) Debug.Log("A change was made");
 
@@ -484,15 +488,6 @@ public class LerpAnimatorEditor : Editor
         editorSegmentsArray.RemoveAt(editorSegmentsArray.Count - 1);
     }
 
-    double startTime;
-    double step;
-    private void StartSequence()
-    {
-        if (animator.Segments.Count == 0) return;
-
-        startTime = EditorApplication.timeSinceStartup;
-    }
-
     #region Data management
     public void ApplyFromDatastore(int segmentIndex)
     {
@@ -635,8 +630,30 @@ public class LerpAnimatorEditor : Editor
         return step < 1;
     }
 
+    double startTime;
+    double step;
+    int fromIndex;
+    int toIndex;
+
+    bool playbackRunning;
+
+    private void StartPlayback(int fromIndex)
+    {
+        if (serializedObject.FindProperty("Segments").arraySize == 0) return;
+
+        startTime = EditorApplication.timeSinceStartup;
+
+        this.fromIndex = fromIndex;
+
+        toIndex = fromIndex == -1 ? 0 : fromIndex + 1;
+
+        playbackRunning = true;
+    }
+
+
+
     private void OnEditorUpdate()
     {
-        //Debug.Log("OnEditorUpdate");
+        
     }
 }

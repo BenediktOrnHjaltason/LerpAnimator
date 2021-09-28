@@ -46,7 +46,7 @@ public class LerpAnimator : MonoBehaviour
 
     public List<Segment> Segments;
 
-    public UnityAction OnSequenceEnd;
+    public UnityEvent OnSequenceEnd;
 
 
     #region Validation
