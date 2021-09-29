@@ -155,6 +155,7 @@ public class LerpAnimatorEditor : Editor
 
             if (GUILayout.Button("STOP"))
             {
+                ApplyFromDatastore(lastSelectedState);
                 playbackRunning = false;
             }
         }
