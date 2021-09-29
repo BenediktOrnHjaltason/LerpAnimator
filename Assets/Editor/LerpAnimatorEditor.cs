@@ -161,7 +161,7 @@ public class LerpAnimatorEditor : Editor
 
         GUILayout.EndHorizontal();
 
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("StartStates"), true);
+        //EditorGUILayout.PropertyField(serializedObject.FindProperty("StartStates"), true);
 
 
         GUILayout.Space(20);
