@@ -48,22 +48,6 @@ public class LerpAnimator : MonoBehaviour
 
     public UnityEvent OnSequenceEnd;
 
-
-    #region Validation
-
-    public List<int> GetDeletedTransformsIndexes()
-    {
-        List<int> invalidTransformsIndexes = new List<int>();
-
-        for (int i = 0; i < TransformsToActOn.Count; i++)
-        {
-            if (TransformsToActOn[i] == null)
-                invalidTransformsIndexes.Add(i);
-        }
-
-        return invalidTransformsIndexes;
-    }
-
-    #endregion
+    public int lastSelectedState;
 
 }

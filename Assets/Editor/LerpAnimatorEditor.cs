@@ -17,7 +17,6 @@ public class LerpAnimatorEditor : Editor
 
     int serializedArrayCount;
 
-
     private void OnEnable()
     {
         animator = (LerpAnimator)target;
@@ -29,6 +28,9 @@ public class LerpAnimatorEditor : Editor
         CollectEditorSegmentsData();
 
         Debug.Log("EditorTransformsArray size = " + editorTransformsArray.Count);
+
+        lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue;
+
     }
 
     private void OnDisable()
@@ -111,6 +113,8 @@ public class LerpAnimatorEditor : Editor
     bool justModifiedSegmentsNumber = false;
     bool OnGUIChangedCalled = false;
 
+    int lastSelectedState;
+
     #region GUI
     public override void OnInspectorGUI()
     {
@@ -122,21 +126,24 @@ public class LerpAnimatorEditor : Editor
         GUILayout.Label("START STATE");
 
         GUILayout.BeginHorizontal("Box");
+        EditorGUILayout.LabelField(lastSelectedState == -1 ? "|>" : "", GUILayout.Width(20));
+
         if (GUILayout.Button("Select"))
         {
+            lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = -1;
+            serializedObject.ApplyModifiedProperties();
             ApplyFromDatastore(-1);
         }
-        if (GUILayout.Button("Sample scene"))
+        if (GUILayout.Button("Sample"))
         {
             SampleFromScene(-1);
         }
 
-        if (animator == null) Debug.Log("LAE: animator is null");
-
         if(serializedObject.FindProperty("Segments").arraySize > 0)
         {
-            if (GUILayout.Button("Play from start"))
+            if (GUILayout.Button("Play"))
             {
+                lastSelectedState  = serializedObject.FindProperty("lastSelectedState").intValue = -1;
                 ApplyFromDatastore(-1);
                 StartPlayback(-1);
             }
@@ -163,14 +170,12 @@ public class LerpAnimatorEditor : Editor
         {
             if (numberOfSegments < 2) return;
 
-            Debug.Log("Pressed Remove segment");
             RemoveSegment();
             justModifiedSegmentsNumber = true;
         }
 
         if (GUILayout.Button("Add segment"))
         {
-            Debug.Log("Pressed Add segment");
             AddSegment();
             justModifiedSegmentsNumber = true;
         }
@@ -186,30 +191,36 @@ public class LerpAnimatorEditor : Editor
 
             for (int i = 0; i < numberOfSegments; i++)
             {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("Segments").GetArrayElementAtIndex(i).FindPropertyRelative("duration"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("Segments").GetArrayElementAtIndex(i).FindPropertyRelative("curve"));
+                serializedObject.ApplyModifiedProperties();
+
+
                 GUILayout.BeginHorizontal("Box");
+
+                EditorGUILayout.LabelField(lastSelectedState == i ? "|>" : "", GUILayout.Width(20));
+
                 if (GUILayout.Button("Select"))
                 {
-                    Debug.Log("You pressed Preview on segment " + i);
+                    lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
                     ApplyFromDatastore(i);
                 }
 
-                if (GUILayout.Button("Sample scene"))
+                if (GUILayout.Button("Sample"))
                 {
                     SampleFromScene(i);
                 }
 
-                if (GUILayout.Button("Play from here"))
+                if (i != numberOfSegments -1 && GUILayout.Button("Play"))
                 {
+                    lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
                     ApplyFromDatastore(i);
                     StartPlayback(i);
                 }
 
                 GUILayout.EndHorizontal();
-
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("Segments").GetArrayElementAtIndex(i));
+                GUILayout.Space(15);
             }
-
-            
         }
         justModifiedSegmentsNumber = false;
 
@@ -502,6 +513,14 @@ public class LerpAnimatorEditor : Editor
         serializedObject.FindProperty("Segments").arraySize--;
         serializedObject.ApplyModifiedProperties();
 
+
+        //If last segment to select was the one we are about to delete, set to previous segment
+        if (lastSelectedState == editorSegmentsArray.Count - 1)
+        {
+            ApplyFromDatastore(editorSegmentsArray.Count - 2);
+            lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = editorSegmentsArray.Count - 2;
+        }
+
         editorSegmentsArray.RemoveAt(editorSegmentsArray.Count - 1);
     }
 
@@ -638,15 +657,6 @@ public class LerpAnimatorEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 
-
-
-    private bool CalculatingInterpolationStep(double startTime, double duration, out double step)
-    {
-        step = (EditorApplication.timeSinceStartup - startTime) / duration;
-
-        return step < 1;
-    }
-
     #region Playback
 
     double startTime;
@@ -725,15 +735,17 @@ public class LerpAnimatorEditor : Editor
 
             if (lerpStep > 1 )
             {
-                //Go to next segment
+                //Was it the last segment?
                 if (toIndex + 1 > editorSegmentsArray.Count -1)
                 {
                     Debug.Log("Detected toIndex + 1 is more than indexes in editorSegmentsArray. toIndex + 1 =" + toIndex + 1 );
 
                     playbackRunning = false;
-                    //ApplyFromDatastore(indexStartedFrom);
+                    lastSelectedState = toIndex;
+                    //ApplyFromDatastore(lastSelectedState);
                 }
 
+                //Go to next segment
                 else
                 {
                     fromIndex = fromIndex == -1 ? 0 : ++fromIndex;
