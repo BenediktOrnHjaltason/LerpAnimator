@@ -31,6 +31,10 @@ public class LerpAnimatorEditor : Editor
 
         lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue;
 
+        //ApplyFromDatastore(lastSelectedState);
+        SampleFromScene(lastSelectedState);
+
+
     }
 
     private void OnDisable()
@@ -134,6 +138,7 @@ public class LerpAnimatorEditor : Editor
             serializedObject.ApplyModifiedProperties();
             ApplyFromDatastore(-1);
         }
+        
         if (GUILayout.Button("Sample"))
         {
             SampleFromScene(-1);
@@ -206,10 +211,12 @@ public class LerpAnimatorEditor : Editor
                     ApplyFromDatastore(i);
                 }
 
+                
                 if (GUILayout.Button("Sample"))
                 {
                     SampleFromScene(i);
                 }
+                
 
                 if (i != numberOfSegments -1 && GUILayout.Button("Play"))
                 {
@@ -575,6 +582,9 @@ public class LerpAnimatorEditor : Editor
                 serializedObject.FindProperty("StartStates").GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value
                     = editorTransformsArray[i].transform.localScale;
             }
+
+            serializedObject.ApplyModifiedProperties();
+            CollectEditorStartStates();
         }
 
         else
@@ -590,7 +600,14 @@ public class LerpAnimatorEditor : Editor
                 serializedObject.FindProperty("Segments").GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value
                     = editorTransformsArray[i].transform.localScale;
             }
+
+            serializedObject.ApplyModifiedProperties();
+            CollectEditorSegmentsData();
         }
+
+        
+        
+        
         
     }
 
