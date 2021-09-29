@@ -148,6 +148,8 @@ public class LerpAnimatorEditor : Editor
         {
             if (GUILayout.Button("Play"))
             {
+                CollectEditorSegmentsData();
+
                 lastSelectedState  = serializedObject.FindProperty("lastSelectedState").intValue = -1;
                 ApplyFromDatastore(-1);
                 StartPlayback(-1);
@@ -221,6 +223,8 @@ public class LerpAnimatorEditor : Editor
 
                 if (i != numberOfSegments -1 && GUILayout.Button("Play"))
                 {
+                    CollectEditorSegmentsData();
+
                     lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
                     ApplyFromDatastore(i);
                     StartPlayback(i);
@@ -335,8 +339,6 @@ public class LerpAnimatorEditor : Editor
                     else Debug.Log("User nulled array element");
                 }
             }
-
-
         }
 
         serializedArrayCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
