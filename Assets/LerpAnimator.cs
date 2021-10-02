@@ -57,7 +57,7 @@ public class LerpAnimator : MonoBehaviour
 
     private void Start()
     {
-        StartSequence();
+        //StartSequence();
     }
 
     public void StartSequence()
@@ -73,7 +73,10 @@ public class LerpAnimator : MonoBehaviour
 
     public IEnumerator RunSegment()
     {
-        while(CalculatingInterpolationStep(Segments[toIndex].duration, out step))
+        Segments[toIndex].OnSegmentStart?.Invoke();
+
+
+        while (CalculatingInterpolationStep(Segments[toIndex].duration, out step))
         {
             if (fromIndex == -1)
             {
@@ -104,7 +107,7 @@ public class LerpAnimator : MonoBehaviour
 
 
         //Start next segment
-        if (toIndex < Segments.Count -1)
+        if (toIndex < Segments.Count - 1)
         {
             fromIndex = fromIndex == -1 ? 0 : ++fromIndex;
             toIndex++;
@@ -112,6 +115,8 @@ public class LerpAnimator : MonoBehaviour
 
             StartCoroutine(RunSegment());
         }
+
+        else OnSequenceEnd?.Invoke();
     }
 
     bool CalculatingInterpolationStep(float duration, out float step)
