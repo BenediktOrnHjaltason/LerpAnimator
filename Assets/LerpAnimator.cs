@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [System.Serializable]
-public class TransformData
+public struct TransformData
 {
     public TransformData(Vector3 pPosition, Quaternion pRotation, Vector3 pScale) { position = pPosition; rotation = pRotation; scale = pScale; }
 
@@ -14,7 +14,7 @@ public class TransformData
 }
 
 [System.Serializable]
-public class Segment
+public struct Segment
 {
     public List<TransformData> toTransformData;
 
