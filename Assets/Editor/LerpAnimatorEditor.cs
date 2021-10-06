@@ -159,11 +159,11 @@ public class LerpAnimatorEditor : Editor
 
     #region GUI
 
-    bool justModifiedSegmentsNumber = false;
+    bool modifyingSegmentsNumber = false;
     bool OnGUIChangedCalled = false;
 
     int lastSelectedState;
-
+    bool adjustingSegments = false;
     
 
 
@@ -232,7 +232,7 @@ public class LerpAnimatorEditor : Editor
         
 
 
-        if (!justModifiedSegmentsNumber)
+        if (!modifyingSegmentsNumber)
         {
 
             for (int i = 0; i < numberOfSegments; i++)
@@ -302,22 +302,27 @@ public class LerpAnimatorEditor : Editor
                 EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             }
         }
-        justModifiedSegmentsNumber = false;
 
         GUILayout.BeginHorizontal("Box");
 
         if (GUILayout.Button("Add segment"))
         {
+            modifyingSegmentsNumber = true;
             AddSegment();
-            justModifiedSegmentsNumber = true;
+            modifyingSegmentsNumber = false;
+
+
         }
 
         if (GUILayout.Button("Remove segment"))
         {
             if (numberOfSegments < 2) return;
 
+            modifyingSegmentsNumber = true;
             RemoveSegment();
-            justModifiedSegmentsNumber = true;
+            modifyingSegmentsNumber = false;
+
+
         }
 
         GUILayout.EndHorizontal();
