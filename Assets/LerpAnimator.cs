@@ -6,10 +6,12 @@ using UnityEngine.Events;
 [System.Serializable]
 public struct TransformData
 {
-    public TransformData(Vector3 pPosition, Quaternion pRotation, Vector3 pScale) { position = pPosition; rotation = pRotation; scale = pScale; }
+    public TransformData(Vector3 pPosition, Vector3 pRotation, Vector3 pScale) { position = pPosition; rotation = pRotation; scale = pScale; }
 
     public Vector3 position;
-    public Quaternion rotation;
+
+    //NOTE: For start value, this will actually be used to set rotation, but for segments, it is used to give an offsett to use in Lerp'ing.
+    public Vector3 rotation;
     public Vector3 scale;
 }
 
@@ -22,6 +24,13 @@ public struct Segment
     public AnimationCurve curve;
 
     public UnityEvent OnSegmentStart;
+}
+
+[SerializeField]
+public struct SegmentRotation
+{
+    public string transformName;
+    public Vector3 rotationToAdd;
 }
 
 public enum EEditorOrGame
@@ -49,6 +58,8 @@ public class LerpAnimator : MonoBehaviour
     [SerializeField] UnityEvent OnSequenceEnd;
 
     public int lastSelectedState;
+
+    [SerializeField] List<bool> ShowRotations;
 
     int fromIndex;
     int toIndex;
@@ -84,7 +95,7 @@ public class LerpAnimator : MonoBehaviour
                 {
                     TransformsToActOn[i].localPosition = Vector3.Lerp(StartStates[i].position, Segments[toIndex].toTransformData[i].position, Segments[toIndex].curve.Evaluate(step));
 
-                    TransformsToActOn[i].localRotation = Quaternion.Lerp(StartStates[i].rotation, Segments[toIndex].toTransformData[i].rotation, Segments[toIndex].curve.Evaluate(step));
+                    //TransformsToActOn[i].localRotation = Quaternion.Lerp(StartStates[i].rotation.e, Segments[toIndex].toTransformData[i].rotation, Segments[toIndex].curve.Evaluate(step));
 
                     TransformsToActOn[i].localScale = Vector3.Lerp(StartStates[i].scale, Segments[toIndex].toTransformData[i].scale, Segments[toIndex].curve.Evaluate(step));
                 }
@@ -96,7 +107,7 @@ public class LerpAnimator : MonoBehaviour
                 {
                     TransformsToActOn[i].localPosition = Vector3.Lerp(Segments[fromIndex].toTransformData[i].position, Segments[toIndex].toTransformData[i].position, Segments[toIndex].curve.Evaluate(step));
 
-                    TransformsToActOn[i].localRotation = Quaternion.Lerp(Segments[fromIndex].toTransformData[i].rotation, Segments[toIndex].toTransformData[i].rotation, Segments[toIndex].curve.Evaluate(step));
+                    //TransformsToActOn[i].localRotation = Quaternion.Lerp(Segments[fromIndex].toTransformData[i].rotation, Segments[toIndex].toTransformData[i].rotation, Segments[toIndex].curve.Evaluate(step));
 
                     TransformsToActOn[i].localScale = Vector3.Lerp(StartStates[i].scale, Segments[toIndex].toTransformData[i].scale, Segments[toIndex].curve.Evaluate(step));
                 }
