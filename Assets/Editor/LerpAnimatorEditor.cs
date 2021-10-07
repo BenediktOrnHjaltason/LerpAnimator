@@ -257,11 +257,22 @@ public class LerpAnimatorEditor : Editor
                     {
                         GUILayout.BeginHorizontal("Box");
 
+                        
                         EditorGUILayout.LabelField(editorTransforms[j].name, GUILayout.Width(100));
 
+                        
 
+                        EditorGUI.BeginChangeCheck();
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("Segments").GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(j).FindPropertyRelative("rotation"));
+                        if (EditorGUI.EndChangeCheck())
+                        {
+                            //OnRotationEntered(i);
 
+                            CollectEditorSegments();
+                            ApplyFromDatastore(i);
+
+                            lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
+                        }
 
                         GUILayout.EndHorizontal();
                     }
@@ -436,6 +447,12 @@ public class LerpAnimatorEditor : Editor
         }
 
         serializedArrayCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
+    }
+
+    private void OnRotationEntered(int index)
+    {
+        Debug.Log("Rotation changed in segment index " + index);
+        //serializedObject.FindProperty("Segments").
     }
 
     private void OnUserDeletedElementDirectly()
