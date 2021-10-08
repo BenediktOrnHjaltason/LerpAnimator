@@ -61,6 +61,8 @@ public class LerpAnimator : MonoBehaviour
 
     [SerializeField] List<bool> ShowRotations;
 
+    [SerializeField] List<bool> ShowSegmentEvents;
+
     int fromIndex;
     int toIndex;
     float timeOnSegmentStart;
