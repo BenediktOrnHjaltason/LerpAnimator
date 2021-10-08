@@ -175,6 +175,7 @@ public class LerpAnimatorEditor : Editor
 
         EditorGUILayout.PropertyField(serializedObject.FindProperty("TransformsToActOn"), true);
 
+
         GUILayout.Space(20);
         GUILayout.Label("START STATE");
 
@@ -205,11 +206,13 @@ public class LerpAnimatorEditor : Editor
                 StartPlayback(-1);
             }
 
+            /*
             if (GUILayout.Button("STOP"))
             {
                 ApplyFromDatastore(lastSelectedState);
                 playbackRunning = false;
             }
+            */
         }
 
         GUILayout.EndHorizontal();
@@ -218,6 +221,7 @@ public class LerpAnimatorEditor : Editor
 
 
         GUILayout.Space(20);
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         GUILayout.Label("SEGMENTS");
 
         int numberOfSegments = serializedObject.FindProperty("Segments").arraySize;
@@ -245,7 +249,6 @@ public class LerpAnimatorEditor : Editor
 
                 if (showRotation != showRotationOffsets[i])
                 {
-                    Debug.Log("Updating serialized object showRotations bool");
                     serializedObject.FindProperty("ShowRotations").GetArrayElementAtIndex(i).boolValue = showRotation;
                 }
 
@@ -255,10 +258,11 @@ public class LerpAnimatorEditor : Editor
                 {
                     for (int j = 0; j < editorTransforms.Count; j++)
                     {
+
                         GUILayout.BeginHorizontal("Box");
 
                         
-                        EditorGUILayout.LabelField(editorTransforms[j].name, GUILayout.Width(100));
+                        EditorGUILayout.LabelField(editorTransforms[j] != null ? editorTransforms[j].name : "*NULL*", GUILayout.Width(100));
 
                         
 
@@ -429,19 +433,19 @@ public class LerpAnimatorEditor : Editor
                         Debug.Log("User set array element value");
 
 
-
-                        InsertDataForNewlyOverriddenTransform(i);
                         CollectEditorTransforms();
+                        InsertDataForNewlyOverriddenTransform(i);
+                        
+
                         return;
                     }
 
+                    
                     else
                     {
                         Debug.Log("User nulled element");
                         CollectEditorTransforms();
-                    };
-
-                    
+                    }
                 }
             }
         }
@@ -449,11 +453,6 @@ public class LerpAnimatorEditor : Editor
         serializedArrayCount = serializedObject.FindProperty("TransformsToActOn").arraySize;
     }
 
-    private void OnRotationEntered(int index)
-    {
-        Debug.Log("Rotation changed in segment index " + index);
-        //serializedObject.FindProperty("Segments").
-    }
 
     private void OnUserDeletedElementDirectly()
     {
