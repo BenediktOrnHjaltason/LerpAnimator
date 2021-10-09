@@ -218,6 +218,7 @@ public class LerpAnimatorEditor : Editor
         
         if (GUILayout.Button("Sample (pos,rot,scale)"))
         {
+            lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = -1;
             SampleFromScene(-1);
         }
 
@@ -253,17 +254,8 @@ public class LerpAnimatorEditor : Editor
 
         int numberOfSegments = SerializedSegments.arraySize;
 
-        
 
-        
-
-        EditorGUILayout.Space(20);
-
-
-        //GUILayout.BeginHorizontal("Box");
-
-        
-
+        EditorGUILayout.Space(10);
 
         if (!modifyingSegmentsNumber && !handlingUserDeletedElement)
         {
@@ -875,9 +867,6 @@ public class LerpAnimatorEditor : Editor
                     SerializedSegments.GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value
                     = editorTransforms[i].transform.localPosition;
 
-                    /*
-                    serializedObject.FindProperty("Segments").GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("rotation").vector3Value
-                        = editorTransforms[i].transform.localRotation.eulerAngles; */
 
                     SerializedSegments.GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value
                         = editorTransforms[i].transform.localScale;

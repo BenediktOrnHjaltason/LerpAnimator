@@ -804,13 +804,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 452076789}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.098, y: 0.75, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: -0.00000004371139}
+  m_LocalPosition: {x: -8.598, y: 1.25, z: 0}
   m_LocalScale: {x: 1, y: 0.25048676, z: 1}
   m_Children: []
   m_Father: {fileID: 1269025458}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90.00001}
 --- !u!65 &452076791
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -928,13 +928,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 569656686}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.098, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: -0.00000004371139}
+  m_LocalPosition: {x: -5.5980015, y: 0.5000019, z: 0}
   m_LocalScale: {x: 1, y: 0.25048676, z: 1}
   m_Children: []
   m_Father: {fileID: 1269025458}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90.00001}
 --- !u!65 &569656688
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1811,13 +1811,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 851236512}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.098, y: 0.25, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: -0.00000004371139}
+  m_LocalPosition: {x: -6.5979996, y: 0.7500038, z: 0}
   m_LocalScale: {x: 1, y: 0.25048676, z: 1}
   m_Children: []
   m_Father: {fileID: 1269025458}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90.00001}
 --- !u!65 &851236514
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2094,6 +2094,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1269025458}
+  - component: {fileID: 1269025457}
   m_Layer: 0
   m_Name: Stairs
   m_TagString: Untagged
@@ -2101,6 +2102,355 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1269025457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1269025456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eefb4c63eaf94f41a70a97adcf74538, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransformsToActOn:
+  - {fileID: 569656687}
+  - {fileID: 851236513}
+  - {fileID: 2055172343}
+  - {fileID: 452076790}
+  - {fileID: 1906642611}
+  StartStates:
+  - position: {x: -5.5980015, y: 0.5000019, z: 0}
+    rotation: {x: -0, y: 0, z: 89.99999}
+    scale: {x: 1, y: 0.25048676, z: 1}
+  - position: {x: -5.8479996, y: 0.5000019, z: 0}
+    rotation: {x: -0, y: 0, z: 89.99999}
+    scale: {x: 1, y: 0.25048676, z: 1}
+  - position: {x: -6.0979996, y: 0.5, z: 0}
+    rotation: {x: -0, y: 0, z: 89.99999}
+    scale: {x: 1, y: 0.25048676, z: 1}
+  - position: {x: -6.3479996, y: 0.4999981, z: 0}
+    rotation: {x: -0, y: 0, z: 89.99999}
+    scale: {x: 1, y: 0.25048676, z: 1}
+  - position: {x: -6.5979977, y: 0.4999981, z: 0}
+    rotation: {x: -0, y: 0, z: 89.99999}
+    scale: {x: 1, y: 0.25048676, z: 1}
+  Segments:
+  - toTransformData:
+    - position: {x: -5.5980015, y: 0.5000019, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -6.5979996, y: 0.5000019, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -7.5979996, y: 0.5, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -8.598, y: 0.4999981, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -9.598, y: 0.4999981, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    duration: 3
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    OnSegmentStart:
+      m_PersistentCalls:
+        m_Calls: []
+  - toTransformData:
+    - position: {x: -5.5980015, y: 0.5000019, z: 0}
+      rotation: {x: 0, y: 0, z: 90}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -6.5979996, y: 0.5000019, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -7.5979996, y: 0.5, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -8.598, y: 0.4999981, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -9.598, y: 0.4999981, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    duration: 0.5
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    OnSegmentStart:
+      m_PersistentCalls:
+        m_Calls: []
+  - toTransformData:
+    - position: {x: -5.5980015, y: 0.5000019, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -6.5979996, y: 0.5000019, z: 0}
+      rotation: {x: 0, y: 0, z: 90}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -7.5979996, y: 0.5, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -8.598, y: 0.4999981, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -9.598, y: 0.4999981, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    duration: 0.5
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    OnSegmentStart:
+      m_PersistentCalls:
+        m_Calls: []
+  - toTransformData:
+    - position: {x: -5.5980015, y: 0.5000019, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -6.5979996, y: 0.5000019, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -7.5979996, y: 0.5, z: 0}
+      rotation: {x: 0, y: 0, z: 90}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -8.598, y: 0.4999981, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -9.598, y: 0.4999981, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    duration: 0.5
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    OnSegmentStart:
+      m_PersistentCalls:
+        m_Calls: []
+  - toTransformData:
+    - position: {x: -5.5980015, y: 0.5000019, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -6.5979996, y: 0.5000019, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -7.5979996, y: 0.5, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -8.598, y: 0.4999981, z: 0}
+      rotation: {x: 0, y: 0, z: 90}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -9.598, y: 0.4999981, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    duration: 0.5
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    OnSegmentStart:
+      m_PersistentCalls:
+        m_Calls: []
+  - toTransformData:
+    - position: {x: -5.5980015, y: 0.5000019, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -6.5979996, y: 0.5000019, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -7.5979996, y: 0.5, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -8.598, y: 0.4999981, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -9.598, y: 0.4999981, z: 0}
+      rotation: {x: 0, y: 0, z: 90}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    duration: 0.5
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    OnSegmentStart:
+      m_PersistentCalls:
+        m_Calls: []
+  - toTransformData:
+    - position: {x: -5.5980015, y: 0.5000019, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -6.5979996, y: 0.7500038, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -7.5979996, y: 1.0000019, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -8.598, y: 1.25, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    - position: {x: -9.598, y: 1.5, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 0.25048676, z: 1}
+    duration: 1
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    OnSegmentStart:
+      m_PersistentCalls:
+        m_Calls: []
+  OnSequenceEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  lastSelectedState: -1
+  ShowRotations: 0001010101010000
+  ShowSegmentEvents: 00000000000000
 --- !u!4 &1269025458
 Transform:
   m_ObjectHideFlags: 0
@@ -2458,13 +2808,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1906642610}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.098, y: 1, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: -0.00000004371139}
+  m_LocalPosition: {x: -9.598, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 0.25048676, z: 1}
   m_Children: []
   m_Father: {fileID: 1269025458}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90.00001}
 --- !u!65 &1906642612
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2551,13 +2901,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2055172342}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.098, y: 0.5, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: -0.00000004371139}
+  m_LocalPosition: {x: -7.5979996, y: 1.0000019, z: 0}
   m_LocalScale: {x: 1, y: 0.25048676, z: 1}
   m_Children: []
   m_Father: {fileID: 1269025458}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90.00001}
 --- !u!65 &2055172344
 BoxCollider:
   m_ObjectHideFlags: 0
