@@ -59,6 +59,8 @@ public class LerpAnimatorEditor : Editor
 
             SerializedSegments.GetArrayElementAtIndex(SerializedSegments.arraySize - 1).FindPropertyRelative("curve").animationCurveValue = AnimationCurve.Linear(0, 0, 1, 1);
             SerializedSegments.GetArrayElementAtIndex(SerializedSegments.arraySize - 1).FindPropertyRelative("duration").floatValue = 1;
+
+            lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = -1;
         }
 
         CollectEditorTransforms();
@@ -257,7 +259,7 @@ public class LerpAnimatorEditor : Editor
 
         EditorGUILayout.Space(10);
 
-        if (!modifyingSegmentsNumber && !handlingUserDeletedElement)
+        if (!modifyingSegmentsNumber)
         {
 
             for (int i = 0; i < numberOfSegments; i++)
