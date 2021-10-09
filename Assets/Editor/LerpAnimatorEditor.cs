@@ -190,7 +190,6 @@ public class LerpAnimatorEditor : Editor
     bool OnGUIChangedCalled = false;
 
     int lastSelectedState;
-    bool adjustingSegments = false;
 
 
     bool handlingUserDeletedElement = false;
@@ -217,7 +216,7 @@ public class LerpAnimatorEditor : Editor
             ApplyFromDatastore(-1);
         }
         
-        if (GUILayout.Button("Sample"))
+        if (GUILayout.Button("Sample (pos,rot,scale)"))
         {
             SampleFromScene(-1);
         }
@@ -271,6 +270,8 @@ public class LerpAnimatorEditor : Editor
 
             for (int i = 0; i < numberOfSegments; i++)
             {
+                GUILayout.Label((i+1).ToString());
+
                 bool showEvents = EditorGUILayout.Foldout(SerializedShowSegmentEvents.GetArrayElementAtIndex(i).boolValue, "EventsOnStart", true);
 
                 if (showEvents != showSegmentEvents[i])
@@ -340,7 +341,7 @@ public class LerpAnimatorEditor : Editor
 
                 
 
-                if (GUILayout.Button("Sample"))
+                if (GUILayout.Button("Sample (pos & scale)"))
                 {
                     lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
                     SampleFromScene(i);
@@ -794,8 +795,13 @@ public class LerpAnimatorEditor : Editor
                     editorTransforms[i].localPosition =
                     SerializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value;
 
-                    editorTransforms[i].localRotation =
+                    if (editorTransforms[i].parent == null)
+                    editorTransforms[i].rotation =
                         Quaternion.Euler(SerializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("rotation").vector3Value);
+
+                    else editorTransforms[i].localRotation =
+                        Quaternion.Euler(SerializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("rotation").vector3Value);
+
 
                     editorTransforms[i].localScale =
                     SerializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value;
@@ -814,12 +820,12 @@ public class LerpAnimatorEditor : Editor
 
                     Vector3 acculumatedRotationOffsett = Vector3.zero;
 
-
-
                     for (int j = 0; j <= segmentIndex; j++)
                         acculumatedRotationOffsett += SerializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("rotation").vector3Value;
 
-                    editorTransforms[i].localRotation = Quaternion.Euler(SerializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("rotation").vector3Value + acculumatedRotationOffsett);
+
+                    editorTransforms[i].localEulerAngles = SerializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("rotation").vector3Value + acculumatedRotationOffsett;
+
 
 
                     //editorTransforms[i].localRotation 
@@ -929,16 +935,19 @@ public class LerpAnimatorEditor : Editor
                                               editorSegments[toIndex].toTransformData[i].position,
                                               editorSegments[toIndex].curve.Evaluate((float)lerpStep));
 
-                        
-                        editorTransforms[i].localRotation =
-                            Quaternion.Euler(Vector3.Lerp(editorStartStates[i].rotation,
-                                                  editorStartStates[i].rotation + editorSegments[toIndex].toTransformData[i].rotation,
-                                                  editorSegments[toIndex].curve.Evaluate((float)lerpStep)));
+                        if (editorSegments[toIndex].toTransformData[i].rotation != Vector3.zero)
+                        {
+                            editorTransforms[i].localRotation =
+                                Quaternion.Euler(Vector3.Lerp(editorStartStates[i].rotation,
+                                                      editorStartStates[i].rotation + editorSegments[toIndex].toTransformData[i].rotation,
+                                                      editorSegments[toIndex].curve.Evaluate((float)lerpStep)));
+                        }
 
                         editorTransforms[i].localScale =
-                            Vector3.Lerp(editorStartStates[i].scale,
-                                                  editorSegments[toIndex].toTransformData[i].scale,
-                                                  editorSegments[toIndex].curve.Evaluate((float)lerpStep));
+                                Vector3.Lerp(editorStartStates[i].scale,
+                                                      editorSegments[toIndex].toTransformData[i].scale,
+                                                      editorSegments[toIndex].curve.Evaluate((float)lerpStep));
+                        
                     }
                 }
             }
