@@ -104,18 +104,20 @@ public class LerpAnimatorEditor : Editor
     /// Handles when Undo/Redo is performed by user. Because Undo.undoRedoPerformed is fired before changes are registered in serializedObject,
     /// a delay is used to wait for it to update before collecting data again.
     /// </summary>
-    bool collectEditorDataDelayed = false;
+    bool handlingUndoRedo = false;
     float delayedCollectTimerStart;
     const float delayAmount = 0.05f;
     private void OnUndoRedoPerformed()
     {
+        handlingUndoRedo = true;
+
         CollectEditorTransforms();
         CollectEditorStartStates();
         CollectEditorSegments();
 
-        //Debug.Log("OnUndoRedoPerformed called. Transforms count in serialized object: " + serializedObject.FindProperty("TransformsToActOn").arraySize);
+        Debug.Log("OnUndoRedoPerformed called");
         delayedCollectTimerStart = (float)EditorApplication.timeSinceStartup;
-        collectEditorDataDelayed = true;
+        
     }
 
     #endregion
@@ -246,7 +248,7 @@ public class LerpAnimatorEditor : Editor
 
         GUILayout.EndHorizontal();
 
-        //EditorGUILayout.PropertyField(serializedObject.FindProperty("StartStates"), true);
+        EditorGUILayout.PropertyField(SerializedStartStates, true);
 
 
         GUILayout.Space(20);
@@ -259,7 +261,7 @@ public class LerpAnimatorEditor : Editor
 
         EditorGUILayout.Space(10);
 
-        if (!modifyingSegmentsNumber)
+        if (!modifyingSegmentsNumber && !handlingUndoRedo)
         {
 
             for (int i = 0; i < numberOfSegments; i++)
@@ -398,7 +400,7 @@ public class LerpAnimatorEditor : Editor
         int currentTransformsArraySize = SerializedTransforms.arraySize;
 
         //If user deletes array element completely
-        if (!OnGUIChangedCalled && currentTransformsArraySize < serializedArrayCount)
+        if (!OnGUIChangedCalled && !handlingUndoRedo && currentTransformsArraySize < serializedArrayCount)
         {
             Debug.Log("Detected user deleted array element");
 
@@ -549,7 +551,11 @@ public class LerpAnimatorEditor : Editor
         {
             editorTransforms.RemoveAt(editorTransforms.Count - 1);
 
+            Debug.Log("SerializedStartStates size = " + SerializedStartStates.arraySize);
+
             SerializedStartStates.arraySize--;
+
+            
 
             for (int i = 0; i < SerializedSegments.arraySize; i++)
                 SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").arraySize--;
@@ -595,6 +601,7 @@ public class LerpAnimatorEditor : Editor
     
     private void OnUserDecreasedTransformsArraySize()
     {
+        Debug.Log("OnUserDecreasedTransformsArraySize called");
 
         int serializedTransformsArrayCount = SerializedTransforms.arraySize;
         int editorTransformsCount = editorTransforms.Count;
@@ -1001,13 +1008,13 @@ public class LerpAnimatorEditor : Editor
         }
 
         //Handles UndoRedo
-        if (collectEditorDataDelayed && EditorApplication.timeSinceStartup - delayedCollectTimerStart > delayAmount)
+        if (handlingUndoRedo && EditorApplication.timeSinceStartup - delayedCollectTimerStart > delayAmount)
         {
             CollectEditorTransforms();
             CollectEditorStartStates();
             CollectEditorSegments();
 
-            collectEditorDataDelayed = false;
+            handlingUndoRedo = false;
         }
     }
 
