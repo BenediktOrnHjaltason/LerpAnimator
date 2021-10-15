@@ -42,6 +42,8 @@ public enum EEditorOrGame
 [System.Serializable]
 public class LerpAnimator : MonoBehaviour
 {
+    [SerializeField] bool StartOnPlay;
+
     [SerializeField] List<Transform> TransformsToActOn;
 
     /// <summary>
@@ -53,7 +55,7 @@ public class LerpAnimator : MonoBehaviour
     /// Individual segments of complete sequence
     /// </summary>
 
-    [SerializeField] List<Segment> Segments;
+    public List<Segment> Segments;
 
     [SerializeField] UnityEvent OnSequenceEnd;
 
@@ -70,7 +72,7 @@ public class LerpAnimator : MonoBehaviour
 
     private void Start()
     {
-        StartSequence();
+        if (StartOnPlay) StartSequence();
     }
 
     public void StartSequence()
@@ -87,7 +89,6 @@ public class LerpAnimator : MonoBehaviour
     public IEnumerator RunSegment()
     {
         Segments[toIndex].OnSegmentStart?.Invoke();
-
 
         while (CalculatingInterpolationStep(Segments[toIndex].duration, out lerpStep))
         {
@@ -135,7 +136,7 @@ public class LerpAnimator : MonoBehaviour
             yield return null;
         }
         
-        /*
+        
         //Make sure segment arrived fully at destination
         for (int i = 0; i < TransformsToActOn.Count; i++)
         {
@@ -152,7 +153,7 @@ public class LerpAnimator : MonoBehaviour
 
             TransformsToActOn[i].localScale = Segments[toIndex].toTransformData[i].scale;
         }
-        */
+        
 
 
         //Start next segment
@@ -173,5 +174,10 @@ public class LerpAnimator : MonoBehaviour
         step = (Time.time - timeOnSegmentStart) / duration;
 
         return step < 1;
+    }
+
+    public void TestLinkingEvent()
+    {
+        Debug.Log("Triggering test linking from monobehaviour while not running??");
     }
 }

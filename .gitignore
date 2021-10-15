@@ -5,6 +5,14 @@
 [Bb]uilds/
 Assets/AssetStoreTools*
 *.fbx
+*.jpg
+*.tga
+*.obj
+*.jpg.meta
+*.tga.meta
+*.mat
+*.mat.meta
+Metal textures pack/
 
 # Visual Studio cache directory
 .vs/

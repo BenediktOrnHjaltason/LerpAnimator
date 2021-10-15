@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.Events;
 
 
 [CustomEditor(typeof(LerpAnimator))]
@@ -20,6 +21,7 @@ public class LerpAnimatorEditor : Editor
     /// </summary>
     List<Segment> editorSegments;
 
+    SerializedProperty SerializedStartOnPlay;
     List<bool> showRotationOffsets;
     List<bool> showSegmentEvents;
 
@@ -27,6 +29,7 @@ public class LerpAnimatorEditor : Editor
     SerializedProperty SerializedSegments;
     SerializedProperty SerializedStartStates;
 
+    //To remember inspector fold out states for segment rotations and events
     SerializedProperty SerializedShowRotations;
     SerializedProperty SerializedShowSegmentEvents;
 
@@ -36,6 +39,8 @@ public class LerpAnimatorEditor : Editor
 
     private void OnEnable()
     {
+        SerializedStartOnPlay = serializedObject.FindProperty("StartOnPlay");
+
         SerializedTransforms = serializedObject.FindProperty("TransformsToActOn");
         SerializedStartStates = serializedObject.FindProperty("StartStates");
         SerializedSegments = serializedObject.FindProperty("Segments");
@@ -201,6 +206,8 @@ public class LerpAnimatorEditor : Editor
     {
         if (handlingUserDeletedElement) return;
 
+        EditorGUILayout.PropertyField(SerializedStartOnPlay);
+
         EditorGUILayout.HelpBox("\"Sample\" fetches positions and scales from scene. \n Rotations entered will be offsett from start rotations", MessageType.Info);
 
         EditorGUILayout.PropertyField(SerializedTransforms, true);
@@ -234,7 +241,7 @@ public class LerpAnimatorEditor : Editor
 
                 lastSelectedState  = serializedObject.FindProperty("lastSelectedState").intValue = -1;
                 ApplyFromDatastore(-1);
-                StartPlayback(-1);
+                StartEditorPlayback(-1);
             }
 
             /*
@@ -350,7 +357,7 @@ public class LerpAnimatorEditor : Editor
 
                     lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
                     ApplyFromDatastore(i);
-                    StartPlayback(i);
+                    StartEditorPlayback(i);
                 }
 
                 GUILayout.EndHorizontal();
@@ -710,6 +717,8 @@ public class LerpAnimatorEditor : Editor
 
         int indexAdded_Segments = SerializedSegments.arraySize -1;
 
+        lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = indexAdded_Segments;
+
         SerializedSegments.GetArrayElementAtIndex(indexAdded_Segments).FindPropertyRelative("duration").floatValue = 1;
         SerializedSegments.GetArrayElementAtIndex(indexAdded_Segments).FindPropertyRelative("curve").animationCurveValue = AnimationCurve.Linear(0, 0, 1, 1);
 
@@ -797,7 +806,7 @@ public class LerpAnimatorEditor : Editor
                     SerializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value;
 
                     if (editorTransforms[i].parent == null)
-                    editorTransforms[i].rotation =
+                    editorTransforms[i].localRotation =
                         Quaternion.Euler(SerializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("rotation").vector3Value);
 
                     else editorTransforms[i].localRotation =
@@ -899,7 +908,7 @@ public class LerpAnimatorEditor : Editor
 
     bool playbackRunning;
 
-    private void StartPlayback(int fromIndex)
+    public void StartEditorPlayback(int fromIndex)
     {
         if (SerializedSegments.arraySize == 0) return;
 
@@ -1019,4 +1028,9 @@ public class LerpAnimatorEditor : Editor
     }
 
     #endregion
+
+    private void PrintSegmentStarted()
+    {
+        Debug.Log("SEGMENT STARTED");
+    }
 }
