@@ -94,7 +94,10 @@ public class LerpAnimatorEditor : Editor
     private void OnPlayModeChanged(PlayModeStateChange state)
     {
         if (state == PlayModeStateChange.EnteredPlayMode || state == PlayModeStateChange.EnteredEditMode)
+        {
+            Debug.Log("PlayMode changed to " + state.ToString() + ". Registered on " + name);
             ApplyFromDatastore(-1);
+        }
     }
 
     private void OnGUIChanged()
@@ -214,7 +217,7 @@ public class LerpAnimatorEditor : Editor
 
 
         GUILayout.Space(20);
-        GUILayout.Label("START STATES");
+        GUILayout.Label("START STATES - Samples location, rotation and scale");
 
         GUILayout.BeginHorizontal("Box");
         EditorGUILayout.LabelField(lastSelectedState == -1 ? "|>" : "", GUILayout.Width(20));
@@ -227,7 +230,7 @@ public class LerpAnimatorEditor : Editor
             ApplyFromDatastore(-1);
         }
         
-        if (GUILayout.Button("Sample (pos,rot,scale)"))
+        if (GUILayout.Button("Sample"))
         {
             lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = -1;
             SampleFromScene(-1);
@@ -255,12 +258,12 @@ public class LerpAnimatorEditor : Editor
 
         GUILayout.EndHorizontal();
 
-        EditorGUILayout.PropertyField(SerializedStartStates, true);
+        //EditorGUILayout.PropertyField(SerializedStartStates, true);
 
 
         GUILayout.Space(20);
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-        GUILayout.Label("SEGMENTS");
+        GUILayout.Label("SEGMENTS - Samples location and scale");
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
         int numberOfSegments = SerializedSegments.arraySize;
@@ -344,7 +347,7 @@ public class LerpAnimatorEditor : Editor
 
                 
 
-                if (GUILayout.Button("Sample (pos & scale)"))
+                if (GUILayout.Button("Sample"))
                 {
                     lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
                     SampleFromScene(i);
@@ -834,16 +837,8 @@ public class LerpAnimatorEditor : Editor
                         acculumatedRotationOffsett += SerializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("rotation").vector3Value;
 
 
-                    editorTransforms[i].localEulerAngles = SerializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("rotation").vector3Value + acculumatedRotationOffsett;
+                    editorTransforms[i].localRotation = Quaternion.Euler(SerializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("rotation").vector3Value + acculumatedRotationOffsett);
 
-
-
-                    //editorTransforms[i].localRotation 
-
-                    /*
-                    editorTransforms[i].localRotation =
-                    Quaternion.Euler(serializedObject.FindProperty("Segments").GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("rotation").vector3Value);
-                    */
 
 
                     editorTransforms[i].localScale =
@@ -996,11 +991,8 @@ public class LerpAnimatorEditor : Editor
                 //Was it the last segment?
                 if (toIndex + 1 > editorSegments.Count -1)
                 {
-                    //Debug.Log("Detected toIndex + 1 is more than indexes in editorSegments. toIndex + 1 = " + (toIndex + 1 ).ToString());
-
                     playbackRunning = false;
-                    lastSelectedState = toIndex;
-                    //ApplyFromDatastore(lastSelectedState);
+                    lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = toIndex;
                 }
 
                 //Go to next segment
