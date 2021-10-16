@@ -50,7 +50,6 @@ public class LerpAnimatorEditor : Editor
 
 
         EditorApplication.update += OnEditorUpdate;
-        EditorApplication.playModeStateChanged += OnPlayModeChanged;
         Undo.undoRedoPerformed += OnUndoRedoPerformed;
 
         showRotationOffsets = new List<bool>();
@@ -86,18 +85,7 @@ public class LerpAnimatorEditor : Editor
     private void OnDisable()
     {
         EditorApplication.update -= OnEditorUpdate;
-        EditorApplication.playModeStateChanged -= OnPlayModeChanged;
         Undo.undoRedoPerformed -= OnUndoRedoPerformed;
-    }
-
-    
-    private void OnPlayModeChanged(PlayModeStateChange state)
-    {
-        if (state == PlayModeStateChange.EnteredPlayMode || state == PlayModeStateChange.EnteredEditMode)
-        {
-            Debug.Log("PlayMode changed to " + state.ToString() + ". Registered on " + name);
-            ApplyFromDatastore(-1);
-        }
     }
 
     private void OnGUIChanged()
@@ -210,8 +198,6 @@ public class LerpAnimatorEditor : Editor
         if (handlingUserDeletedElement) return;
 
         EditorGUILayout.PropertyField(SerializedStartOnPlay);
-
-        EditorGUILayout.HelpBox("\"Sample\" fetches positions and scales from scene. \n Rotations entered will be offsett from start rotations", MessageType.Info);
 
         EditorGUILayout.PropertyField(SerializedTransforms, true);
 
@@ -801,6 +787,8 @@ public class LerpAnimatorEditor : Editor
     {
         if (segmentIndex == -1)
         {
+            if (editorTransforms.Count == 0) Debug.Log("LAE: ApplyFromDataStore: EditorTransforms is empty");
+
             for (int i = 0; i < editorTransforms.Count; i++)
             {
                 if (editorTransforms[i])

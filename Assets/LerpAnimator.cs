@@ -65,15 +65,17 @@ public class LerpAnimator : MonoBehaviour
 
     [SerializeField] List<bool> ShowSegmentEvents;
 
+    private void Start()
+    {
+        ApplyStartStates();
+
+        if (StartOnPlay) StartSequence();
+    }
+
     int fromIndex;
     int toIndex;
     float timeOnSegmentStart;
     float lerpStep;
-
-    private void Start()
-    {
-        if (StartOnPlay) StartSequence();
-    }
 
     public void StartSequence()
     {
@@ -83,8 +85,6 @@ public class LerpAnimator : MonoBehaviour
 
         StartCoroutine(RunSegment());
     }
-
-    
 
     public IEnumerator RunSegment()
     {
@@ -176,8 +176,13 @@ public class LerpAnimator : MonoBehaviour
         return step < 1;
     }
 
-    public void TestLinkingEvent()
+    private void ApplyStartStates()
     {
-        Debug.Log("Triggering test linking from monobehaviour while not running??");
+        for (int i = 0; i < TransformsToActOn.Count; i++)
+        {
+            TransformsToActOn[i].localPosition = StartStates[i].position;
+            TransformsToActOn[i].localRotation = Quaternion.Euler(StartStates[i].rotation);
+            TransformsToActOn[i].localScale = StartStates[i].scale;
+        }
     }
 }
