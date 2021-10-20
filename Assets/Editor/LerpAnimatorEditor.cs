@@ -923,7 +923,7 @@ public class LerpAnimatorEditor : Editor
         playbackRunning = true;
     }
 
-    
+    List<Quaternion> interSegmentRotations;
 
     private void OnEditorUpdate()
     {
@@ -976,6 +976,7 @@ public class LerpAnimatorEditor : Editor
 
                         if (editorSegments[toIndex].toTransformData[i].rotation != Vector3.zero)
                         {
+                            /*
                             Vector3 accumulatedPreviousRotationOffsets = Vector3.zero;
                             for (int j = 0; j < toIndex; j++)
                                 accumulatedPreviousRotationOffsets += editorSegments[j].toTransformData[i].rotation;
@@ -983,7 +984,12 @@ public class LerpAnimatorEditor : Editor
                             editorTransforms[i].localRotation =
                             Quaternion.Euler(Vector3.Lerp(editorStartStates[i].rotation + accumulatedPreviousRotationOffsets,
                                                   editorStartStates[i].rotation + accumulatedPreviousRotationOffsets + editorSegments[toIndex].toTransformData[i].rotation,
-                                                  editorSegments[toIndex].curve.Evaluate((float)lerpStep)));
+                                                  editorSegments[toIndex].curve.Evaluate((float)lerpStep)));*/
+
+
+                            editorTransforms[i].localRotation = interSegmentRotations[i] *
+                                Quaternion.Euler(Vector3.Lerp(Vector3.zero, editorSegments[toIndex].toTransformData[i].rotation, editorSegments[toIndex].curve.Evaluate((float)lerpStep)));
+
                         }
                         
                         editorTransforms[i].localScale =
@@ -1006,6 +1012,13 @@ public class LerpAnimatorEditor : Editor
                 //Go to next segment
                 else
                 {
+                    //Sample current rotations
+                    interSegmentRotations = new List<Quaternion>();
+
+                    foreach (Transform transform in editorTransforms)
+                        interSegmentRotations.Add(transform.localRotation);
+
+
                     fromIndex = fromIndex == -1 ? 0 : ++fromIndex;
                     toIndex++;
 
