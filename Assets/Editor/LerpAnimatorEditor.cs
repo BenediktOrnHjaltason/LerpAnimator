@@ -938,7 +938,7 @@ public class LerpAnimatorEditor : Editor
         playbackRunning = true;
     }
 
-    List<Quaternion> interSegmentRotations;
+    private List<Quaternion> interSegmentRotations;
 
     
 

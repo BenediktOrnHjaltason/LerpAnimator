@@ -72,10 +72,21 @@ public class LerpAnimator : MonoBehaviour
         if (StartOnPlay) StartSequence();
     }
 
+    private void SampleInterSegmentRotations()
+    {
+        //Sample current rotations
+        interSegmentRotations = new List<Quaternion>();
+
+        foreach (Transform transform in TransformsToActOn)
+            interSegmentRotations.Add(transform.localRotation);
+    }
+
     int fromIndex;
     int toIndex;
     float timeOnSegmentStart;
     float lerpStep;
+
+    float reciprocal;
 
     public void StartSequence()
     {
@@ -83,8 +94,12 @@ public class LerpAnimator : MonoBehaviour
         toIndex = 0;
         timeOnSegmentStart = Time.time;
 
+        SampleInterSegmentRotations();
+
         StartCoroutine(RunSegment());
     }
+
+    private List<Quaternion> interSegmentRotations;
 
     public IEnumerator RunSegment()
     {
@@ -100,10 +115,8 @@ public class LerpAnimator : MonoBehaviour
 
                     if (Segments[toIndex].toTransformData[i].rotation != Vector3.zero)
                     {
-                        TransformsToActOn[i].localRotation =
-                            Quaternion.Euler(Vector3.Lerp(StartStates[i].rotation,
-                                                  StartStates[i].rotation + Segments[toIndex].toTransformData[i].rotation,
-                                                  Segments[toIndex].curve.Evaluate(lerpStep)));
+                        TransformsToActOn[i].localRotation = Quaternion.Euler(StartStates[i].rotation) *
+                                Quaternion.Euler(Vector3.Lerp(Vector3.zero, Segments[toIndex].toTransformData[i].rotation, Segments[toIndex].curve.Evaluate(lerpStep)));
                     }
 
 
@@ -119,14 +132,8 @@ public class LerpAnimator : MonoBehaviour
 
                     if (Segments[toIndex].toTransformData[i].rotation != Vector3.zero)
                     {
-                        Vector3 accumulatedPreviousRotationOffsets = Vector3.zero;
-                        for (int j = 0; j < toIndex; j++)
-                            accumulatedPreviousRotationOffsets += Segments[j].toTransformData[i].rotation;
-
-                        TransformsToActOn[i].localRotation =
-                        Quaternion.Euler(Vector3.Lerp(StartStates[i].rotation + accumulatedPreviousRotationOffsets,
-                                              StartStates[i].rotation + accumulatedPreviousRotationOffsets + Segments[toIndex].toTransformData[i].rotation,
-                                              Segments[toIndex].curve.Evaluate(lerpStep)));
+                        TransformsToActOn[i].localRotation = interSegmentRotations[i] *
+                                Quaternion.Euler(Vector3.Lerp(Vector3.zero, Segments[toIndex].toTransformData[i].rotation, Segments[toIndex].curve.Evaluate(lerpStep)));
                     }
 
                     TransformsToActOn[i].localScale = Vector3.Lerp(Segments[fromIndex].toTransformData[i].scale, Segments[toIndex].toTransformData[i].scale, Segments[toIndex].curve.Evaluate(lerpStep));
@@ -144,11 +151,8 @@ public class LerpAnimator : MonoBehaviour
 
             if (Segments[toIndex].toTransformData[i].rotation != Vector3.zero)
             {
-                Vector3 accumulatedPreviousRotationOffsets = Vector3.zero;
-                for (int j = 0; j < toIndex; j++)
-                    accumulatedPreviousRotationOffsets += Segments[j].toTransformData[i].rotation;
-
-                TransformsToActOn[i].localRotation = Quaternion.Euler(StartStates[i].rotation + accumulatedPreviousRotationOffsets + Segments[toIndex].toTransformData[i].rotation);
+                TransformsToActOn[i].localRotation = interSegmentRotations[i] *
+                                Quaternion.Euler(Vector3.Lerp(Vector3.zero, Segments[toIndex].toTransformData[i].rotation, Segments[toIndex].curve.Evaluate(lerpStep)));
             }
 
             TransformsToActOn[i].localScale = Segments[toIndex].toTransformData[i].scale;
@@ -162,6 +166,8 @@ public class LerpAnimator : MonoBehaviour
             fromIndex = fromIndex == -1 ? 0 : ++fromIndex;
             toIndex++;
             timeOnSegmentStart = Time.time;
+
+            SampleInterSegmentRotations();
 
             StartCoroutine(RunSegment());
         }
