@@ -1456,7 +1456,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eefb4c63eaf94f41a70a97adcf74538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartOnPlay: 0
+  StartOnPlay: 1
   TransformsToActOn:
   - {fileID: 649511109}
   - {fileID: 798791139}
@@ -2178,7 +2178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eefb4c63eaf94f41a70a97adcf74538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartOnPlay: 0
+  StartOnPlay: 1
   TransformsToActOn:
   - {fileID: 662765935}
   - {fileID: 1448211444}
@@ -3248,7 +3248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eefb4c63eaf94f41a70a97adcf74538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartOnPlay: 0
+  StartOnPlay: 1
   TransformsToActOn:
   - {fileID: 1042919418}
   - {fileID: 1089222975}
@@ -3507,7 +3507,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eefb4c63eaf94f41a70a97adcf74538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartOnPlay: 1
+  StartOnPlay: 0
   TransformsToActOn:
   - {fileID: 1135111340}
   StartStates:
@@ -4316,8 +4316,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -138.07126, y: 19.489515, z: 18.495275}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1315697926}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4934,12 +4933,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1315697925}
-  m_LocalRotation: {x: 0.030085634, y: 0.9237557, z: 0.04290647, w: 0.37938023}
-  m_LocalPosition: {x: 2.8583984, y: -6.223649, z: -15.519728}
-  m_LocalScale: {x: 2.1397, y: 1, z: 6.5794}
+  m_LocalRotation: {x: 0.2523627, y: -0.6897888, z: -0.076261654, w: -0.6743061}
+  m_LocalPosition: {x: -135.21286, y: 13.265866, z: 2.9755478}
+  m_LocalScale: {x: 2.1397004, y: 1, z: 6.579402}
   m_Children: []
-  m_Father: {fileID: 1290708028}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: -180, y: -0.000015258789, z: 215.617}
 --- !u!114 &1315697927
 MonoBehaviour:
@@ -4957,15 +4956,15 @@ MonoBehaviour:
   TransformsToActOn:
   - {fileID: 1315697926}
   StartStates:
-  - position: {x: 2.8583984, y: -6.223649, z: -15.519728}
-    rotation: {x: 0.0000061171736, y: 180, z: 35.617}
-    scale: {x: 2.1397, y: 1, z: 6.5794}
+  - position: {x: -135.21286, y: 13.265866, z: 2.9755478}
+    rotation: {x: 356.76437, y: 135.20161, z: 5.064665}
+    scale: {x: 2.1397004, y: 1, z: 6.579402}
   Segments:
   - toTransformData:
-    - position: {x: 2.8583984, y: -6.223649, z: -15.519728}
+    - position: {x: -135.21286, y: 13.265866, z: 2.9755478}
       rotation: {x: 0, y: 312, z: 0}
-      scale: {x: 2.1397, y: 1, z: 6.5794}
-    duration: 3
+      scale: {x: 2.1397004, y: 1, z: 6.579402}
+    duration: 5
     curve:
       serializedVersion: 2
       m_Curve:
@@ -4994,10 +4993,10 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - toTransformData:
-    - position: {x: 2.8583984, y: -6.223649, z: -15.519728}
+    - position: {x: -135.21286, y: 13.265866, z: 2.9755478}
       rotation: {x: 0, y: 0, z: 340}
-      scale: {x: 2.1397, y: 1, z: 6.5794}
-    duration: 3
+      scale: {x: 2.1397004, y: 1, z: 6.579402}
+    duration: 5
     curve:
       serializedVersion: 2
       m_Curve:
@@ -5026,10 +5025,10 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - toTransformData:
-    - position: {x: 2.8583984, y: -6.223649, z: -15.519728}
+    - position: {x: -135.21286, y: 13.265866, z: 2.9755478}
       rotation: {x: 691, y: 0, z: 0}
-      scale: {x: 2.1397, y: 1, z: 6.5794}
-    duration: 1
+      scale: {x: 2.1397004, y: 1, z: 6.579402}
+    duration: 5
     curve:
       serializedVersion: 2
       m_Curve:
@@ -14291,7 +14290,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eefb4c63eaf94f41a70a97adcf74538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartOnPlay: 0
+  StartOnPlay: 1
   TransformsToActOn:
   - {fileID: 71452156}
   - {fileID: 1475237789}

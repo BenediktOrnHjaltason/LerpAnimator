@@ -900,8 +900,17 @@ public class LerpAnimatorEditor : Editor
 
     #region Playback
 
+    private void SampleInterSegmentRotations()
+    {
+        //Sample current rotations
+        interSegmentRotations = new List<Quaternion>();
+
+        foreach (Transform transform in editorTransforms)
+            interSegmentRotations.Add(transform.localRotation);
+    }
+
     double startTime;
-    double lerpStep;
+    float lerpStep;
     int fromIndex;
     int toIndex;
     int indexStartedFrom;
@@ -914,22 +923,36 @@ public class LerpAnimatorEditor : Editor
 
         ApplyFromDatastore(fromIndex);
 
-        startTime = EditorApplication.timeSinceStartup;
+        startTime = (float)EditorApplication.timeSinceStartup;
+
+        nextLerpUpdate = startTime + lerpFrequency;
 
         this.fromIndex = indexStartedFrom = fromIndex;
 
         toIndex = fromIndex == -1 ? 0 : fromIndex + 1;
+
+        SampleInterSegmentRotations();
+
+        reciprocal = 1 / editorSegments[toIndex].duration;
 
         playbackRunning = true;
     }
 
     List<Quaternion> interSegmentRotations;
 
+    
+
+
+    private readonly double lerpFrequency = 0.0166;
+    private double nextLerpUpdate;
+    private float reciprocal;
     private void OnEditorUpdate()
     {
-        if (playbackRunning)
+        if (playbackRunning && EditorApplication.timeSinceStartup > nextLerpUpdate)
         {
-            lerpStep = (EditorApplication.timeSinceStartup - startTime) / editorSegments[toIndex].duration;
+            nextLerpUpdate += lerpFrequency;
+
+            lerpStep = ((float)EditorApplication.timeSinceStartup - (float)startTime) * reciprocal;
 
             if (fromIndex == -1)
             {
@@ -940,24 +963,18 @@ public class LerpAnimatorEditor : Editor
                         editorTransforms[i].localPosition =
                         Vector3.Lerp(editorStartStates[i].position,
                                               editorSegments[toIndex].toTransformData[i].position,
-                                              editorSegments[toIndex].curve.Evaluate((float)lerpStep));
+                                              editorSegments[toIndex].curve.Evaluate(lerpStep));
 
                         if (editorSegments[toIndex].toTransformData[i].rotation != Vector3.zero)
                         {
-                            /*editorTransforms[i].localRotation =
-                                Quaternion.Euler(Vector3.Lerp(editorStartStates[i].rotation,
-                                                      editorStartStates[i].rotation + editorSegments[toIndex].toTransformData[i].rotation,
-                                                      editorSegments[toIndex].curve.Evaluate((float)lerpStep)));*/
-
                             editorTransforms[i].localRotation = Quaternion.Euler(editorStartStates[i].rotation) *
-                                Quaternion.Euler(Vector3.Lerp(Vector3.zero, editorSegments[toIndex].toTransformData[i].rotation, editorSegments[toIndex].curve.Evaluate((float)lerpStep))); 
+                                Quaternion.Euler(Vector3.Lerp(Vector3.zero, editorSegments[toIndex].toTransformData[i].rotation, editorSegments[toIndex].curve.Evaluate(lerpStep))); 
                         }
 
                         editorTransforms[i].localScale =
                                 Vector3.Lerp(editorStartStates[i].scale,
                                                       editorSegments[toIndex].toTransformData[i].scale,
-                                                      editorSegments[toIndex].curve.Evaluate((float)lerpStep));
-                        
+                                                      editorSegments[toIndex].curve.Evaluate(lerpStep));
                     }
                 }
             }
@@ -971,34 +988,25 @@ public class LerpAnimatorEditor : Editor
                         editorTransforms[i].localPosition =
                         Vector3.Lerp(editorSegments[fromIndex].toTransformData[i].position,
                                               editorSegments[toIndex].toTransformData[i].position,
-                                              editorSegments[toIndex].curve.Evaluate((float)lerpStep));
+                                              editorSegments[toIndex].curve.Evaluate(lerpStep));
 
 
                         if (editorSegments[toIndex].toTransformData[i].rotation != Vector3.zero)
                         {
-                            /*
-                            Vector3 accumulatedPreviousRotationOffsets = Vector3.zero;
-                            for (int j = 0; j < toIndex; j++)
-                                accumulatedPreviousRotationOffsets += editorSegments[j].toTransformData[i].rotation;
-
-                            editorTransforms[i].localRotation =
-                            Quaternion.Euler(Vector3.Lerp(editorStartStates[i].rotation + accumulatedPreviousRotationOffsets,
-                                                  editorStartStates[i].rotation + accumulatedPreviousRotationOffsets + editorSegments[toIndex].toTransformData[i].rotation,
-                                                  editorSegments[toIndex].curve.Evaluate((float)lerpStep)));*/
-
-
                             editorTransforms[i].localRotation = interSegmentRotations[i] *
-                                Quaternion.Euler(Vector3.Lerp(Vector3.zero, editorSegments[toIndex].toTransformData[i].rotation, editorSegments[toIndex].curve.Evaluate((float)lerpStep)));
+                                Quaternion.Euler(Vector3.Lerp(Vector3.zero, editorSegments[toIndex].toTransformData[i].rotation, editorSegments[toIndex].curve.Evaluate(lerpStep)));
 
                         }
                         
                         editorTransforms[i].localScale =
                             Vector3.Lerp(editorSegments[fromIndex].toTransformData[i].scale,
                                                   editorSegments[toIndex].toTransformData[i].scale,
-                                                  editorSegments[toIndex].curve.Evaluate((float)lerpStep));
+                                                  editorSegments[toIndex].curve.Evaluate(lerpStep));
                     }
                 }
             }
+
+            
 
             if (lerpStep > 1 )
             {
@@ -1012,17 +1020,14 @@ public class LerpAnimatorEditor : Editor
                 //Go to next segment
                 else
                 {
-                    //Sample current rotations
-                    interSegmentRotations = new List<Quaternion>();
+                    reciprocal = 1 / editorSegments[toIndex].duration;
 
-                    foreach (Transform transform in editorTransforms)
-                        interSegmentRotations.Add(transform.localRotation);
-
+                    SampleInterSegmentRotations();
 
                     fromIndex = fromIndex == -1 ? 0 : ++fromIndex;
                     toIndex++;
 
-                    startTime = EditorApplication.timeSinceStartup;
+                    startTime = (float)EditorApplication.timeSinceStartup;
 
                     //Debug.Log("Going to next segment. fromIndex " + fromIndex + ". toIndex =" + toIndex);
                 }
