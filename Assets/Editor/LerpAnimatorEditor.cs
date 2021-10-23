@@ -936,6 +936,8 @@ public class LerpAnimatorEditor : Editor
         reciprocal = 1 / editorSegments[toIndex].duration;
 
         playbackRunning = true;
+
+        Debug.Log("First duration = " + editorSegments[toIndex].duration);
     }
 
     private List<Quaternion> interSegmentRotations;
@@ -1020,14 +1022,18 @@ public class LerpAnimatorEditor : Editor
                 //Go to next segment
                 else
                 {
-                    reciprocal = 1 / editorSegments[toIndex].duration;
+                    
 
                     SampleInterSegmentRotations();
 
                     fromIndex = fromIndex == -1 ? 0 : ++fromIndex;
                     toIndex++;
 
+                    reciprocal = 1 / editorSegments[toIndex].duration;
+
                     startTime = (float)EditorApplication.timeSinceStartup;
+
+                    //Debug.Log("Nect duration = " + editorSegments[toIndex].duration);
 
                     //Debug.Log("Going to next segment. fromIndex " + fromIndex + ". toIndex =" + toIndex);
                 }
