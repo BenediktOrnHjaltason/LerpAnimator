@@ -96,6 +96,8 @@ public class LerpAnimator : MonoBehaviour
 
         SampleInterSegmentRotations();
 
+        reciprocal = 1 / Segments[toIndex].duration;
+
         StartCoroutine(RunSegment());
     }
 
@@ -105,7 +107,7 @@ public class LerpAnimator : MonoBehaviour
     {
         Segments[toIndex].OnSegmentStart?.Invoke();
 
-        while (CalculatingInterpolationStep(Segments[toIndex].duration, out lerpStep))
+        while (CalculatingInterpolationStep(out lerpStep))
         {
             if (fromIndex == -1)
             {
@@ -157,7 +159,7 @@ public class LerpAnimator : MonoBehaviour
 
             TransformsToActOn[i].localScale = Segments[toIndex].toTransformData[i].scale;
         }
-        
+
 
 
         //Start next segment
@@ -167,17 +169,23 @@ public class LerpAnimator : MonoBehaviour
             toIndex++;
             timeOnSegmentStart = Time.time;
 
+            reciprocal = 1 / Segments[toIndex].duration;
+
             SampleInterSegmentRotations();
 
             StartCoroutine(RunSegment());
         }
 
-        else OnSequenceEnd?.Invoke();
+        else
+        {
+            Debug.Log("Ending playback for " + name);
+            OnSequenceEnd?.Invoke();
+        }
     }
 
-    bool CalculatingInterpolationStep(float duration, out float step)
+    bool CalculatingInterpolationStep(out float step)
     {
-        step = (Time.time - timeOnSegmentStart) / duration;
+        step = (Time.time - timeOnSegmentStart) * reciprocal;
 
         return step < 1;
     }
