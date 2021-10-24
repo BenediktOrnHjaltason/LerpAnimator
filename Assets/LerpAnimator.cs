@@ -6,12 +6,12 @@ using UnityEngine.Events;
 [System.Serializable]
 public struct TransformData
 {
-    public TransformData(Vector3 pPosition, Vector3 pRotation, Vector3 pScale) { position = pPosition; rotation = pRotation; scale = pScale; }
+    public TransformData(Vector3 pPosition, Vector3 pRotOffset, Vector3 pScale) { position = pPosition; offset = pRotOffset; scale = pScale; }
 
     public Vector3 position;
 
-    //NOTE: For start value, this will actually be used to set rotation, but for segments, it is used to give an offsett to use in Lerp'ing.
-    public Vector3 rotation;
+    //NOTE: For StartStates, this will actually be used to set rotation, but for segments, it is used to give an offsett from start values.
+    public Vector3 offset;
     public Vector3 scale;
 }
 
@@ -19,6 +19,8 @@ public struct TransformData
 public struct Segment
 {
     public List<TransformData> toTransformData;
+
+    public string name;
 
     public float duration;
     public AnimationCurve curve;
@@ -115,10 +117,10 @@ public class LerpAnimator : MonoBehaviour
                 {
                     TransformsToActOn[i].localPosition = Vector3.Lerp(StartStates[i].position, Segments[toIndex].toTransformData[i].position, Segments[toIndex].curve.Evaluate(lerpStep));
 
-                    if (Segments[toIndex].toTransformData[i].rotation != Vector3.zero)
+                    if (Segments[toIndex].toTransformData[i].offset != Vector3.zero)
                     {
-                        TransformsToActOn[i].localRotation = Quaternion.Euler(StartStates[i].rotation) *
-                                Quaternion.Euler(Vector3.Lerp(Vector3.zero, Segments[toIndex].toTransformData[i].rotation, Segments[toIndex].curve.Evaluate(lerpStep)));
+                        TransformsToActOn[i].localRotation = Quaternion.Euler(StartStates[i].offset) *
+                                Quaternion.Euler(Vector3.Lerp(Vector3.zero, Segments[toIndex].toTransformData[i].offset, Segments[toIndex].curve.Evaluate(lerpStep)));
                     }
 
 
@@ -132,10 +134,10 @@ public class LerpAnimator : MonoBehaviour
                 {
                     TransformsToActOn[i].localPosition = Vector3.Lerp(Segments[fromIndex].toTransformData[i].position, Segments[toIndex].toTransformData[i].position, Segments[toIndex].curve.Evaluate(lerpStep));
 
-                    if (Segments[toIndex].toTransformData[i].rotation != Vector3.zero)
+                    if (Segments[toIndex].toTransformData[i].offset != Vector3.zero)
                     {
                         TransformsToActOn[i].localRotation = interSegmentRotations[i] *
-                                Quaternion.Euler(Vector3.Lerp(Vector3.zero, Segments[toIndex].toTransformData[i].rotation, Segments[toIndex].curve.Evaluate(lerpStep)));
+                                Quaternion.Euler(Vector3.Lerp(Vector3.zero, Segments[toIndex].toTransformData[i].offset, Segments[toIndex].curve.Evaluate(lerpStep)));
                     }
 
                     TransformsToActOn[i].localScale = Vector3.Lerp(Segments[fromIndex].toTransformData[i].scale, Segments[toIndex].toTransformData[i].scale, Segments[toIndex].curve.Evaluate(lerpStep));
@@ -151,10 +153,10 @@ public class LerpAnimator : MonoBehaviour
         {
             TransformsToActOn[i].localPosition = Segments[toIndex].toTransformData[i].position;
 
-            if (Segments[toIndex].toTransformData[i].rotation != Vector3.zero)
+            if (Segments[toIndex].toTransformData[i].offset != Vector3.zero)
             {
                 TransformsToActOn[i].localRotation = interSegmentRotations[i] *
-                                Quaternion.Euler(Vector3.Lerp(Vector3.zero, Segments[toIndex].toTransformData[i].rotation, Segments[toIndex].curve.Evaluate(lerpStep)));
+                                Quaternion.Euler(Vector3.Lerp(Vector3.zero, Segments[toIndex].toTransformData[i].offset, Segments[toIndex].curve.Evaluate(lerpStep)));
             }
 
             TransformsToActOn[i].localScale = Segments[toIndex].toTransformData[i].scale;
@@ -195,7 +197,7 @@ public class LerpAnimator : MonoBehaviour
         for (int i = 0; i < TransformsToActOn.Count; i++)
         {
             TransformsToActOn[i].localPosition = StartStates[i].position;
-            TransformsToActOn[i].localRotation = Quaternion.Euler(StartStates[i].rotation);
+            TransformsToActOn[i].localRotation = Quaternion.Euler(StartStates[i].offset);
             TransformsToActOn[i].localScale = StartStates[i].scale;
         }
     }
