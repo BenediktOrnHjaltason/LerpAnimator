@@ -389,11 +389,11 @@ public class LerpAnimatorEditor : Editor
             RemoveSegment();
             modifyingSegmentsNumber = false;
             processingData = false;
-
-
         }
 
         GUILayout.EndHorizontal();
+        EditorGUILayout.HelpBox("NOTE! Adding segment auto samples from scene", MessageType.Info);
+
 
         EditorGUILayout.Space(20);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("OnSequenceEnd"));
