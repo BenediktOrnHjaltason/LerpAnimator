@@ -238,6 +238,7 @@ public class LerpAnimatorEditor : Editor
 
         if(SerializedSegments.arraySize > 0)
         {
+            /*
             if (GUILayout.Button("Play"))
             {
                 CollectEditorSegments();
@@ -247,7 +248,7 @@ public class LerpAnimatorEditor : Editor
                 StartEditorPlayback(-1);
             }
 
-            /*
+            
             if (GUILayout.Button("STOP"))
             {
                 ApplyFromDatastore(lastSelectedState);
@@ -276,14 +277,29 @@ public class LerpAnimatorEditor : Editor
 
             for (int i = 0; i < numberOfSegments; i++)
             {
+                
+
+                GUILayout.BeginHorizontal();
+                
+                //GUILayout.Label((i+1).ToString());
+
+                if (/*i != numberOfSegments -1 &&*/ GUILayout.Button((i + 1).ToString() + " | Play", GUILayout.Width(90)))
+                {
+                    CollectEditorSegments();
+
+                    lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
+                    ApplyFromDatastore(i - 1);
+                    StartEditorPlayback(i - 1);
+                }
+                
+
                 if (playbackRunning && i == toIndex)
                 {
                     var rect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight);
                     EditorGUI.ProgressBar(rect, lerpStep, "");
-                    
-                }
 
-                GUILayout.Label((i+1).ToString());
+                }
+                GUILayout.EndHorizontal();
 
                 bool showEvents = EditorGUILayout.Foldout(SerializedShowSegmentEvents.GetArrayElementAtIndex(i).boolValue, "EventsOnStart", true);
 
@@ -299,7 +315,7 @@ public class LerpAnimatorEditor : Editor
                     EditorGUILayout.PropertyField(SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("OnSegmentStart"));
                 }
 
-                EditorGUILayout.PropertyField(SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("name"));
+                //EditorGUILayout.PropertyField(SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("name"));
                 EditorGUILayout.PropertyField(SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("duration"));
 
                 EditorGUILayout.PropertyField(SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("curve"));
@@ -363,18 +379,10 @@ public class LerpAnimatorEditor : Editor
                 }
                 
 
-                if (i != numberOfSegments -1 && GUILayout.Button("Play"))
-                {
-                    CollectEditorSegments();
-
-                    lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
-                    ApplyFromDatastore(i);
-                    StartEditorPlayback(i);
-                }
-
                 GUILayout.EndHorizontal();
-                GUILayout.Space(15);
                 EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+                GUILayout.Space(15);
+                
             }
         }
 
@@ -997,6 +1005,8 @@ public class LerpAnimatorEditor : Editor
                     reciprocal = 1 / editorSegments[toIndex].duration;
 
                     startTime = (float)EditorApplication.timeSinceStartup;
+
+                    lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = toIndex;
                 }
             }
         }
