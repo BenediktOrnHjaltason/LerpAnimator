@@ -58,22 +58,23 @@ public class LerpAnimatorEditor : Editor
         editorShowRotationOffsets = new List<bool>();
         editorShowSegmentEvents = new List<bool>();
 
+        CollectEditorTransforms();
+        CollectEditorStartStates();
+        CollectEditorSegments();
+        CollectEditorShowRotations();
+
         if (SerializedSegments.arraySize < 1)
         {
             SerializedShowRotations.arraySize++;
             AddSegment();
             serializedObject.ApplyModifiedProperties();
 
+            
             SerializedSegments.GetArrayElementAtIndex(SerializedSegments.arraySize - 1).FindPropertyRelative("curve").animationCurveValue = AnimationCurve.Linear(0, 0, 1, 1);
             SerializedSegments.GetArrayElementAtIndex(SerializedSegments.arraySize - 1).FindPropertyRelative("duration").floatValue = 1;
 
             lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = -1;
         }
-
-        CollectEditorTransforms();
-        CollectEditorStartStates();
-        CollectEditorSegments();
-        CollectEditorShowRotations();
 
         lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue;
 
@@ -275,6 +276,13 @@ public class LerpAnimatorEditor : Editor
 
             for (int i = 0; i < numberOfSegments; i++)
             {
+                if (playbackRunning && i == toIndex)
+                {
+                    var rect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight);
+                    EditorGUI.ProgressBar(rect, lerpStep, "");
+                    
+                }
+
                 GUILayout.Label((i+1).ToString());
 
                 bool showEvents = EditorGUILayout.Foldout(SerializedShowSegmentEvents.GetArrayElementAtIndex(i).boolValue, "EventsOnStart", true);
@@ -293,6 +301,7 @@ public class LerpAnimatorEditor : Editor
 
                 EditorGUILayout.PropertyField(SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("name"));
                 EditorGUILayout.PropertyField(SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("duration"));
+
                 EditorGUILayout.PropertyField(SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("curve"));
 
                 bool showRotation = EditorGUILayout.Foldout(SerializedShowRotations.GetArrayElementAtIndex(i).boolValue, "RotationOffsets", true);
@@ -910,6 +919,7 @@ public class LerpAnimatorEditor : Editor
         if (playbackRunning && EditorApplication.timeSinceStartup > nextLerpUpdate)
         {
             nextLerpUpdate += lerpFrequency;
+            Repaint();
 
             lerpStep = ((float)EditorApplication.timeSinceStartup - (float)startTime) * reciprocal;
 
@@ -979,8 +989,6 @@ public class LerpAnimatorEditor : Editor
                 //Go to next segment
                 else
                 {
-                    
-
                     SampleInterSegmentRotations();
 
                     fromIndex = fromIndex == -1 ? 0 : ++fromIndex;
@@ -989,10 +997,6 @@ public class LerpAnimatorEditor : Editor
                     reciprocal = 1 / editorSegments[toIndex].duration;
 
                     startTime = (float)EditorApplication.timeSinceStartup;
-
-                    //Debug.Log("Nect duration = " + editorSegments[toIndex].duration);
-
-                    //Debug.Log("Going to next segment. fromIndex " + fromIndex + ". toIndex =" + toIndex);
                 }
             }
         }
