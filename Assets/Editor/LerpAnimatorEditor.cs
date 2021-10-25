@@ -213,6 +213,8 @@ public class LerpAnimatorEditor : Editor
 
         EditorGUILayout.PropertyField(SerializedStartOnPlay);
 
+        GUILayout.Space(20);
+
         EditorGUILayout.PropertyField(SerializedTransforms, true);
 
 
@@ -234,27 +236,6 @@ public class LerpAnimatorEditor : Editor
         {
             lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = -1;
             SampleFromScene(-1);
-        }
-
-        if(SerializedSegments.arraySize > 0)
-        {
-            /*
-            if (GUILayout.Button("Play"))
-            {
-                CollectEditorSegments();
-
-                lastSelectedState  = serializedObject.FindProperty("lastSelectedState").intValue = -1;
-                ApplyFromDatastore(-1);
-                StartEditorPlayback(-1);
-            }
-
-            
-            if (GUILayout.Button("STOP"))
-            {
-                ApplyFromDatastore(lastSelectedState);
-                playbackRunning = false;
-            }
-            */
         }
 
         GUILayout.EndHorizontal();
@@ -733,6 +714,11 @@ public class LerpAnimatorEditor : Editor
     private void AddSegment()
     {
         SerializedSegments.arraySize++;
+
+        //Remove rotation offsets data if inherited from previous segment
+        for (int i = 0; i < SerializedTransforms.arraySize; i++)
+            SerializedSegments.GetArrayElementAtIndex(SerializedSegments.arraySize - 1).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value = Vector3.zero;
+
         serializedObject.ApplyModifiedProperties();
 
         //Insert data for transforms allready in array
@@ -744,7 +730,10 @@ public class LerpAnimatorEditor : Editor
         SerializedSegments.GetArrayElementAtIndex(indexAdded_Segments).FindPropertyRelative("duration").floatValue = 1;
         SerializedSegments.GetArrayElementAtIndex(indexAdded_Segments).FindPropertyRelative("curve").animationCurveValue = AnimationCurve.Linear(0, 0, 1, 1);
 
+        
         CollectEditorSegments();
+
+        
 
         editorShowRotationOffsets.Add(false);
         editorShowSegmentEvents.Add(false);
