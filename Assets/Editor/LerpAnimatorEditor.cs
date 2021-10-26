@@ -213,7 +213,7 @@ public class LerpAnimatorEditor : Editor
         GUILayout.BeginHorizontal("Box");
         EditorGUILayout.LabelField(lastSelectedState == -1 ? "|>" : "", GUILayout.Width(20));
 
-        if (GUILayout.Button("Preview"))
+        if (!EditorApplication.isPlaying && GUILayout.Button("Preview"))
         {
             lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = -1;
             serializedObject.ApplyModifiedProperties();
@@ -221,7 +221,7 @@ public class LerpAnimatorEditor : Editor
             ApplyFromDatastore(-1);
         }
         
-        if (GUILayout.Button("Sample"))
+        if (!EditorApplication.isPlaying && GUILayout.Button("Sample"))
         {
             lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = -1;
             SampleFromScene(-1);
@@ -246,7 +246,7 @@ public class LerpAnimatorEditor : Editor
             for (int i = 0; i < SerializedSegments.arraySize; i++)
             {
                 GUILayout.BeginHorizontal();
-                if (GUILayout.Button((i + 1).ToString() + " : Play", GUILayout.Width(90)))
+                if (!EditorApplication.isPlaying &&  GUILayout.Button((i + 1).ToString() + " : Play", GUILayout.Width(90)))
                 {
                     CollectEditorSegments();
 
@@ -325,7 +325,7 @@ public class LerpAnimatorEditor : Editor
 
                 EditorGUILayout.LabelField(lastSelectedState == i ? "|>" : "", GUILayout.Width(20));
 
-                if (GUILayout.Button("Preview"))
+                if (!EditorApplication.isPlaying && GUILayout.Button("Preview"))
                 {
                     lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
                     playbackRunning = false;
@@ -334,7 +334,7 @@ public class LerpAnimatorEditor : Editor
 
                 
 
-                if (GUILayout.Button("Sample"))
+                if (!EditorApplication.isPlaying && GUILayout.Button("Sample"))
                 {
                     lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
                     SampleFromScene(i);
