@@ -69,8 +69,6 @@ public class LerpAnimator : MonoBehaviour
 
     private void Start()
     {
-        ApplyStartStates();
-
         if (StartOnPlay) StartSequence();
     }
 
