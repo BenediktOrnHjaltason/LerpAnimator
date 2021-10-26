@@ -29,14 +29,13 @@ public class LerpAnimatorEditor : Editor
     
 
     SerializedProperty SerializedTransforms;
-    SerializedProperty SerializedSegments;
     SerializedProperty SerializedStartStates;
+    SerializedProperty SerializedSegments;
+    
 
     //To remember inspector fold out states for segment rotations and events
     SerializedProperty SerializedShowRotations;
     SerializedProperty SerializedShowSegmentEvents;
-
-    int serializedArrayCount;
 
     #region Events
 
@@ -55,34 +54,26 @@ public class LerpAnimatorEditor : Editor
         EditorApplication.update += OnEditorUpdate;
         Undo.undoRedoPerformed += OnUndoRedoPerformed;
 
-        editorShowRotationOffsets = new List<bool>();
-        editorShowSegmentEvents = new List<bool>();
-
         CollectEditorTransforms();
         CollectEditorStartStates();
         CollectEditorSegments();
         CollectEditorShowRotations();
+        CollectEditorShowSegmentEvents();
 
         if (SerializedSegments.arraySize < 1)
         {
             SerializedShowRotations.arraySize++;
             AddSegment();
-            serializedObject.ApplyModifiedProperties();
-
             
             SerializedSegments.GetArrayElementAtIndex(SerializedSegments.arraySize - 1).FindPropertyRelative("curve").animationCurveValue = AnimationCurve.Linear(0, 0, 1, 1);
             SerializedSegments.GetArrayElementAtIndex(SerializedSegments.arraySize - 1).FindPropertyRelative("duration").floatValue = 1;
+
+            serializedObject.ApplyModifiedProperties();
 
             lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = -1;
         }
 
         lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue;
-
-        for (int i = 0; i < SerializedSegments.arraySize; i++)
-        {
-            editorShowRotationOffsets.Add(SerializedShowRotations.GetArrayElementAtIndex(i).boolValue);
-            editorShowSegmentEvents.Add(SerializedShowSegmentEvents.GetArrayElementAtIndex(i).boolValue);
-        }
     }
 
     private void OnDisable()
@@ -93,8 +84,6 @@ public class LerpAnimatorEditor : Editor
 
     private void OnGUIChanged()
     {
-        //Debug.Log("OnGUIChanged called");
-
         CheckForTransformsArrayChanged();
     }
 
@@ -109,15 +98,12 @@ public class LerpAnimatorEditor : Editor
     private void OnUndoRedoPerformed()
     {
         handlingUndoRedo = true;
-        processingData = true;
 
         CollectEditorTransforms();
         CollectEditorStartStates();
         CollectEditorSegments();
 
-        Debug.Log("OnUndoRedoPerformed called");
-        delayedCollectTimerStart = (float)EditorApplication.timeSinceStartup;
-        
+        delayedCollectTimerStart = (float)EditorApplication.timeSinceStartup; 
     }
 
     #endregion
@@ -126,18 +112,14 @@ public class LerpAnimatorEditor : Editor
 
     private void CollectEditorTransforms()
     {
-        serializedArrayCount = SerializedTransforms.arraySize;
-
         editorTransforms = new List<Transform>();
 
-        for (int i = 0; i < serializedArrayCount; i++)
+        for (int i = 0; i < SerializedTransforms.arraySize; i++)
         {
             Transform transform = SerializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue as Transform;
 
             editorTransforms.Add(transform);
         }
-
-        serializedArrayCount = editorTransforms.Count;
     }
 
     private void CollectEditorStartStates()
@@ -194,6 +176,16 @@ public class LerpAnimatorEditor : Editor
             editorShowRotationOffsets.Add(SerializedShowRotations.GetArrayElementAtIndex(i).boolValue);
         }
     }
+
+    private void CollectEditorShowSegmentEvents()
+    {
+        editorShowSegmentEvents = new List<bool>();
+
+        for (int i = 0; i < SerializedShowSegmentEvents.arraySize; i++)
+        {
+            editorShowSegmentEvents.Add(SerializedShowSegmentEvents.GetArrayElementAtIndex(i).boolValue);
+        }
+    }
     #endregion
 
     #region GUI
@@ -202,9 +194,6 @@ public class LerpAnimatorEditor : Editor
     bool OnGUIChangedCalled = false;
 
     int lastSelectedState;
-
-    bool processingData;
-
 
     bool handlingUserDeletedElement = false;
     public override void OnInspectorGUI()
@@ -248,23 +237,16 @@ public class LerpAnimatorEditor : Editor
         GUILayout.Label("SEGMENTS - Samples location and scale");
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-        int numberOfSegments = SerializedSegments.arraySize;
-
 
         EditorGUILayout.Space(10);
 
         if (!modifyingSegmentsNumber && !handlingUndoRedo)
         {
 
-            for (int i = 0; i < numberOfSegments; i++)
+            for (int i = 0; i < SerializedSegments.arraySize; i++)
             {
-                
-
                 GUILayout.BeginHorizontal();
-                
-                //GUILayout.Label((i+1).ToString());
-
-                if (/*i != numberOfSegments -1 &&*/ GUILayout.Button((i + 1).ToString() + " | Play", GUILayout.Width(90)))
+                if (GUILayout.Button((i + 1).ToString() + " : Play", GUILayout.Width(90)))
                 {
                     CollectEditorSegments();
 
@@ -272,7 +254,6 @@ public class LerpAnimatorEditor : Editor
                     ApplyFromDatastore(i - 1);
                     StartEditorPlayback(i - 1);
                 }
-                
 
                 if (playbackRunning && i == toIndex)
                 {
@@ -371,24 +352,18 @@ public class LerpAnimatorEditor : Editor
 
         if (GUILayout.Button("Add segment"))
         {
-            processingData = true;
             modifyingSegmentsNumber = true;
             AddSegment();
             modifyingSegmentsNumber = false;
-            processingData = false;
-
-
         }
 
         if (GUILayout.Button("Remove segment"))
         {
-            if (numberOfSegments < 2) return;
+            if (SerializedSegments.arraySize < 2) return;
 
-            processingData = true;
             modifyingSegmentsNumber = true;
             RemoveSegment();
             modifyingSegmentsNumber = false;
-            processingData = false;
         }
 
         GUILayout.EndHorizontal();
@@ -412,15 +387,12 @@ public class LerpAnimatorEditor : Editor
         int currentTransformsArraySize = SerializedTransforms.arraySize;
 
         //If user deletes array element completely
-        if (!OnGUIChangedCalled && !handlingUndoRedo && currentTransformsArraySize < serializedArrayCount)
+        if (!OnGUIChangedCalled && !handlingUndoRedo && currentTransformsArraySize < SerializedTransforms.arraySize)
         {
             Debug.Log("Detected user deleted array element");
 
             OnUserDeletedElementDirectly();
             serializedObject.Update();
-            
-
-            serializedArrayCount = SerializedTransforms.arraySize;
         }
     }
 
@@ -454,7 +426,7 @@ public class LerpAnimatorEditor : Editor
         {
             //Check if user overrided array element
 
-            for (int i = 0; i < serializedArrayCount; i++)
+            for (int i = 0; i < SerializedTransforms.arraySize; i++)
             {
                 Transform serializedTransform = SerializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue as Transform;
 
@@ -486,31 +458,26 @@ public class LerpAnimatorEditor : Editor
                     {
                         Debug.Log("User set array element value");
 
-
                         CollectEditorTransforms();
                         InsertDataForNewlyOverriddenTransform(i);
                         
-
                         return;
                     }
 
-                    
                     else
                     {
-                        Debug.Log("User nulled element");
+                        Debug.Log("User nulled transforms element");
                         CollectEditorTransforms();
                     }
                 }
             }
         }
-
-        serializedArrayCount = SerializedTransforms.arraySize;
     }
 
 
     private void OnUserDeletedElementDirectly()
     {
-        Debug.Log("OnUserDeletedElementDirectly called");
+        Debug.Log("Lerp Animator: User deleted transforms element directly");
         handlingUserDeletedElement = true;
 
 
@@ -733,7 +700,6 @@ public class LerpAnimatorEditor : Editor
         
         CollectEditorSegments();
 
-        
 
         editorShowRotationOffsets.Add(false);
         editorShowSegmentEvents.Add(false);
@@ -771,8 +737,6 @@ public class LerpAnimatorEditor : Editor
     {
         if (segmentIndex == -1)
         {
-            if (editorTransforms.Count == 0) Debug.Log("LAE: ApplyFromDataStore: EditorTransforms is empty");
-
             for (int i = 0; i < editorTransforms.Count; i++)
             {
                 if (editorTransforms[i])
@@ -876,13 +840,11 @@ public class LerpAnimatorEditor : Editor
             else interSegmentRotations.Add(Quaternion.identity);
     }
 
-    double startTime;
-    float lerpStep;
-    int fromIndex;
-    int toIndex;
-    int indexStartedFrom;
-
-    bool playbackRunning;
+    private double startTime;
+    private float lerpStep;
+    private int fromIndex;
+    private int toIndex;
+    private bool playbackRunning;
 
     public void StartEditorPlayback(int fromIndex)
     {
@@ -894,7 +856,7 @@ public class LerpAnimatorEditor : Editor
 
         nextLerpUpdate = startTime + lerpFrequency;
 
-        this.fromIndex = indexStartedFrom = fromIndex;
+        this.fromIndex = fromIndex;
 
         toIndex = fromIndex == -1 ? 0 : fromIndex + 1;
 
@@ -1008,7 +970,6 @@ public class LerpAnimatorEditor : Editor
             CollectEditorSegments();
 
             handlingUndoRedo = false;
-            processingData = false;
         }
     }
 
