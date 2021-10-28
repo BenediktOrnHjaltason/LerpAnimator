@@ -73,7 +73,11 @@ public class LerpAnimator : MonoBehaviour
         interSegmentRotations = new List<Quaternion>();
 
         foreach (Transform transform in TransformsToActOn)
-            interSegmentRotations.Add(transform.localRotation);
+            if (transform)
+                interSegmentRotations.Add(transform.localRotation);
+
+            //We need something in the array to keep the number of elements correct
+            else interSegmentRotations.Add(Quaternion.identity);
     }
 
     int fromIndex;

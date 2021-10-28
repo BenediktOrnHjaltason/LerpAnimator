@@ -41,6 +41,8 @@ public class LerpAnimatorEditor : Editor
 
     private void OnEnable()
     {
+
+
         SerializedStartOnPlay = serializedObject.FindProperty("StartOnPlay");
 
         SerializedTransforms = serializedObject.FindProperty("TransformsToActOn");
@@ -205,7 +207,7 @@ public class LerpAnimatorEditor : Editor
 
         GUILayout.Space(20);
 
-        EditorGUILayout.PropertyField(SerializedTransforms/*, true*/);
+        EditorGUILayout.PropertyField(SerializedTransforms, true);
 
 
         GUILayout.Space(20);
@@ -214,19 +216,23 @@ public class LerpAnimatorEditor : Editor
         GUILayout.BeginHorizontal("Box");
         EditorGUILayout.LabelField(lastSelectedState == -1 ? "|>" : "", GUILayout.Width(20));
 
-        if (!EditorApplication.isPlaying && GUILayout.Button("Preview"))
+        GUI.enabled = !EditorApplication.isPlaying;
+        if (GUILayout.Button("Preview"))
         {
             lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = -1;
             serializedObject.ApplyModifiedProperties();
-            playbackRunning = false;
+            editorPlaybackRunning = false;
             ApplyFromDatastore(-1);
         }
-        
-        if (!EditorApplication.isPlaying && GUILayout.Button("Sample"))
+        GUI.enabled = true;
+
+        GUI.enabled = !editorPlaybackRunning && !EditorApplication.isPlaying;
+        if (GUILayout.Button("Sample"))
         {
             lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = -1;
             SampleAllFromScene(-1);
         }
+        GUI.enabled = true;
 
         GUILayout.EndHorizontal();
 
@@ -247,7 +253,9 @@ public class LerpAnimatorEditor : Editor
             for (int i = 0; i < SerializedSegments.arraySize; i++)
             {
                 GUILayout.BeginHorizontal();
-                if (!EditorApplication.isPlaying &&  GUILayout.Button((i + 1).ToString() + " : Play", GUILayout.Width(90)))
+
+                GUI.enabled = !EditorApplication.isPlaying;
+                if (GUILayout.Button((i + 1).ToString() + " : Play", GUILayout.Width(90)))
                 {
                     CollectEditorSegments();
 
@@ -255,8 +263,9 @@ public class LerpAnimatorEditor : Editor
                     ApplyFromDatastore(i - 1);
                     StartEditorPlayback(i - 1);
                 }
+                GUI.enabled = true;
 
-                if (playbackRunning && i == toIndex)
+                if (editorPlaybackRunning && i == toIndex)
                 {
                     var rect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight);
                     EditorGUI.ProgressBar(rect, lerpStep, "");
@@ -285,6 +294,8 @@ public class LerpAnimatorEditor : Editor
                 EditorGUILayout.PropertyField(SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("duration"));
 
                 EditorGUILayout.PropertyField(SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("curve"));
+
+                //EditorGUILayout.PropertyField(SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData"));
 
                 bool showRotation = EditorGUILayout.Foldout(SerializedShowRotations.GetArrayElementAtIndex(i).boolValue, "RotationOffsets", true);
 
@@ -325,23 +336,26 @@ public class LerpAnimatorEditor : Editor
 
                 GUILayout.BeginHorizontal("Box");
 
-                EditorGUILayout.LabelField(lastSelectedState == i ? "|>" : "", GUILayout.Width(20));
+                if (!EditorApplication.isPlaying)
+                    EditorGUILayout.LabelField(lastSelectedState == i ? "|>" : "", GUILayout.Width(20));
 
-                if (!EditorApplication.isPlaying && GUILayout.Button("Preview"))
+                GUI.enabled = !EditorApplication.isPlaying;
+                if (GUILayout.Button("Preview"))
                 {
                     lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
-                    playbackRunning = false;
+                    editorPlaybackRunning = false;
                     ApplyFromDatastore(i);
                 }
+                GUI.enabled = true;
 
-                
 
-                if (!EditorApplication.isPlaying && GUILayout.Button("Sample"))
+                GUI.enabled = !editorPlaybackRunning && !EditorApplication.isPlaying;
+                if (GUILayout.Button("Sample"))
                 {
                     lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
                     SampleAllFromScene(i);
                 }
-                
+                GUI.enabled = true;
 
                 GUILayout.EndHorizontal();
                 EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
@@ -352,6 +366,7 @@ public class LerpAnimatorEditor : Editor
 
         GUILayout.BeginHorizontal("Box");
 
+        GUI.enabled = !EditorApplication.isPlaying && !editorPlaybackRunning;
         if (GUILayout.Button("Add segment"))
         {
             modifyingSegmentsNumber = true;
@@ -367,13 +382,17 @@ public class LerpAnimatorEditor : Editor
             RemoveSegment();
             modifyingSegmentsNumber = false;
         }
+        GUI.enabled = true;
 
         GUILayout.EndHorizontal();
         EditorGUILayout.HelpBox("NOTE! Adding segment auto samples from scene", MessageType.Info);
 
 
         EditorGUILayout.Space(20);
+
+        GUI.enabled = !EditorApplication.isPlaying && !editorPlaybackRunning;
         EditorGUILayout.PropertyField(serializedObject.FindProperty("OnSequenceEnd"));
+        GUI.enabled = true;
 
 
         serializedObject.ApplyModifiedProperties();
@@ -875,7 +894,7 @@ public class LerpAnimatorEditor : Editor
     private float lerpStep;
     private int fromIndex;
     private int toIndex;
-    private bool playbackRunning;
+    private bool editorPlaybackRunning;
 
     public void StartEditorPlayback(int fromIndex)
     {
@@ -895,7 +914,7 @@ public class LerpAnimatorEditor : Editor
 
         reciprocal = 1 / editorSegments[toIndex].duration;
 
-        playbackRunning = true;
+        editorPlaybackRunning = true;
     }
 
     private List<Quaternion> interSegmentRotations;
@@ -906,7 +925,7 @@ public class LerpAnimatorEditor : Editor
     private float reciprocal;
     private void OnEditorUpdate()
     {
-        if (playbackRunning && EditorApplication.timeSinceStartup > nextLerpUpdate)
+        if (editorPlaybackRunning && EditorApplication.timeSinceStartup > nextLerpUpdate)
         {
             nextLerpUpdate += lerpFrequency;
             Repaint();
@@ -972,7 +991,7 @@ public class LerpAnimatorEditor : Editor
                 //Was it the last segment?
                 if (toIndex + 1 > editorSegments.Count -1)
                 {
-                    playbackRunning = false;
+                    editorPlaybackRunning = false;
                     lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = toIndex;
                 }
 
