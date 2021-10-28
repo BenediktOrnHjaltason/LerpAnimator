@@ -41,8 +41,6 @@ public class LerpAnimatorEditor : Editor
 
     private void OnEnable()
     {
-
-
         SerializedStartOnPlay = serializedObject.FindProperty("StartOnPlay");
 
         SerializedTransforms = serializedObject.FindProperty("TransformsToActOn");
@@ -55,6 +53,12 @@ public class LerpAnimatorEditor : Editor
 
         EditorApplication.update += OnEditorUpdate;
         Undo.undoRedoPerformed += OnUndoRedoPerformed;
+
+        editorTransforms = new List<Transform>();
+        editorStartStates = new List<TransformData>();
+        editorSegments = new List<Segment>();
+        editorShowRotationOffsets = new List<bool>();
+        editorShowSegmentEvents = new List<bool>();
 
         CollectEditorTransforms();
         CollectEditorStartStates();
@@ -115,7 +119,7 @@ public class LerpAnimatorEditor : Editor
 
     private void CollectEditorTransforms()
     {
-        editorTransforms = new List<Transform>();
+        editorTransforms.Clear();
 
         for (int i = 0; i < SerializedTransforms.arraySize; i++)
         {
@@ -127,7 +131,7 @@ public class LerpAnimatorEditor : Editor
 
     private void CollectEditorStartStates()
     {
-        editorStartStates = new List<TransformData>();
+        editorStartStates.Clear();
 
         for (int i = 0; i < SerializedStartStates.arraySize; i++)
         {
@@ -141,7 +145,7 @@ public class LerpAnimatorEditor : Editor
 
     private void CollectEditorSegments()
     {
-        editorSegments = new List<Segment>();
+        editorSegments.Clear();
 
         int numberOfSegments = SerializedSegments.arraySize;
 
@@ -172,7 +176,7 @@ public class LerpAnimatorEditor : Editor
 
     private void CollectEditorShowRotations()
     {
-        editorShowRotationOffsets = new List<bool>();
+        editorShowRotationOffsets.Clear();
 
         for (int i = 0; i < SerializedShowRotations.arraySize; i++)
         {
@@ -182,7 +186,7 @@ public class LerpAnimatorEditor : Editor
 
     private void CollectEditorShowSegmentEvents()
     {
-        editorShowSegmentEvents = new List<bool>();
+        editorShowSegmentEvents.Clear();
 
         for (int i = 0; i < SerializedShowSegmentEvents.arraySize; i++)
         {

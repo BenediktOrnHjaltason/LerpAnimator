@@ -93,6 +93,8 @@ public class LerpAnimator : MonoBehaviour
         toIndex = 0;
         timeOnSegmentStart = Time.time;
 
+        ApplyStartStates();
+
         SampleInterSegmentRotations();
 
         reciprocal = 1 / Segments[toIndex].duration;
