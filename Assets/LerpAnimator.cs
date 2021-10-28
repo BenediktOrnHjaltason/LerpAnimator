@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [System.Serializable]
-public struct TransformData
+public class TransformData
 {
     public TransformData(Vector3 pPosition, Vector3 pRotOffset, Vector3 pScale) { position = pPosition; offset = pRotOffset; scale = pScale; }
 
@@ -16,7 +16,7 @@ public struct TransformData
 }
 
 [System.Serializable]
-public struct Segment
+public class Segment
 {
     public List<TransformData> toTransformData;
 
@@ -28,12 +28,7 @@ public struct Segment
     public UnityEvent OnSegmentStart;
 }
 
-[SerializeField]
-public struct SegmentRotation
-{
-    public string transformName;
-    public Vector3 rotationToAdd;
-}
+
 
 public enum EEditorOrGame
 {
