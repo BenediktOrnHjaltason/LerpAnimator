@@ -3960,20 +3960,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eefb4c63eaf94f41a70a97adcf74538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartOnPlay: 1
+  StartOnPlay: 0
   TransformsToActOn:
-  - {fileID: 1942488989}
+  - {fileID: 0}
   StartStates:
   - position: {x: 14.16, y: 0, z: 0}
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 4.3559, z: 1}
   Segments:
   - toTransformData:
-    - position: {x: 14.16, y: 2.96, z: 0}
+    - position: {x: 14.16, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 4.3559, z: 1}
     name: 
-    duration: 5
+    duration: 1
     curve:
       serializedVersion: 2
       m_Curve:
@@ -4852,7 +4852,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1060069049}
-  m_LocalRotation: {x: 0, y: 0.4226183, z: 0, w: 0.9063078}
+  m_LocalRotation: {x: 0.09406091, y: 0.078926474, z: 0.078926474, w: 0.9892896}
   m_LocalPosition: {x: 15.16, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 4.3559, z: 1}
   m_Children: []
@@ -9100,7 +9100,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1942488988}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.16, y: 2.96, z: 0}
+  m_LocalPosition: {x: 14.16, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 4.3559, z: 1}
   m_Children: []
   m_Father: {fileID: 775490876}

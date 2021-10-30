@@ -11,31 +11,33 @@ public class LerpAnimatorEditor : Editor
     /// <summary>
     /// transforms references used to playback animation during edit mode. Saving a copy to avoid having to access serialized object in Update() while animating
     /// </summary>
-    List<Transform> editorTransforms;
+    private List<Transform> editorTransforms;
     /// <summary>
     /// Start states data used to playback animation during edit mode
     /// </summary>
-    List<TransformData> editorStartStates;
+    private List<TransformData> editorStartStates;
     /// <summary>
     /// Segments data used to playback animation during edit mode
     /// </summary>
-    List<Segment> editorSegments;
+    private List<Segment> editorSegments;
 
 
-    List<bool> editorShowRotationOffsets;
-    List<bool> editorShowSegmentEvents;
+    private List<bool> editorShowRotationOffsets;
+    private List<bool> editorShowSegmentEvents;
 
-    SerializedProperty SerializedStartOnPlay;
-    
+    private SerializedProperty SerializedStartOnPlay;
 
-    SerializedProperty SerializedTransforms;
-    SerializedProperty SerializedStartStates;
-    SerializedProperty SerializedSegments;
-    
+
+    private SerializedProperty SerializedTransforms;
+    private SerializedProperty SerializedStartStates;
+    private SerializedProperty SerializedSegments;
+
 
     //To remember inspector fold out states for segment rotations and events
-    SerializedProperty SerializedShowRotations;
-    SerializedProperty SerializedShowSegmentEvents;
+    private SerializedProperty SerializedShowRotations;
+    private SerializedProperty SerializedShowSegmentEvents;
+
+    private double nextChangeCheck;
 
     #region Events
 
@@ -80,6 +82,8 @@ public class LerpAnimatorEditor : Editor
         }
 
         lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue;
+
+        nextChangeCheck = EditorApplication.timeSinceStartup + 0.5f;
     }
 
     private void OnDisable()
@@ -203,6 +207,7 @@ public class LerpAnimatorEditor : Editor
     private int lastSelectedState;
 
     private bool handlingUserDeletedElement = false;
+
     public override void OnInspectorGUI()
     {
         if (handlingUserDeletedElement) return;
@@ -299,7 +304,7 @@ public class LerpAnimatorEditor : Editor
 
                 EditorGUILayout.PropertyField(SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("curve"));
 
-                //EditorGUILayout.PropertyField(SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData"));
+                EditorGUILayout.PropertyField(SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData"));
 
                 bool showRotation = EditorGUILayout.Foldout(SerializedShowRotations.GetArrayElementAtIndex(i).boolValue, "RotationOffsets", true);
 
@@ -400,53 +405,54 @@ public class LerpAnimatorEditor : Editor
 
 
         serializedObject.ApplyModifiedProperties();
-
-
-        if (GUI.changed)
-        {
-            OnGUIChanged();
-            OnGUIChangedCalled = true;
-
-            Debug.Log("GUI changed");
-        }
-        else OnGUIChangedCalled = false;
-
-
-        //If user deletes array element completely
-        if (SerializedTransforms.arraySize < editorTransforms.Count)
-        {
-            Debug.Log("Detected user deleted array element");
-
-            OnUserDeletedElementDirectly();
-            serializedObject.Update();
-        }
     }
 
     #endregion
 
     #region Data consistency
     
+    private void CheckForUserNulledElement()
+    {
+        for(int i = 0; i < editorTransforms.Count; i++)
+        {
+            if (SerializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue == null && editorTransforms[i] != null)
+            {
+                Debug.Log("User nulled element");
 
+                editorTransforms[i] = null;
+
+                for (int j = 0; j < SerializedSegments.arraySize; j++)
+                {
+                    SerializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value = Vector3.zero;
+                    serializedObject.ApplyModifiedProperties();
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Checks if user increased or decreased array size by adjusting number, or replaced or nulled element
+    /// </summary>
     private void CheckForTransformsArrayChanged()
     {
         //If user adjusts array count
         if (editorTransforms.Count != SerializedTransforms.arraySize)
         {
-            if (SerializedTransforms.arraySize > editorTransforms.Count)
+            if (SerializedTransforms.arraySize > editorTransforms.Count) //<--------------------------------------------------------------------------
             {
-                Debug.Log("User increased array count");
+                Debug.Log("User increased array size");
 
                 OnUserIncreasedTransformsArraySize();
             }
             else
             {
-                Debug.Log("User decreased array count");
+                Debug.Log("User decreased array size");
 
                 OnUserDecreasedTransformsArraySize();
             }
         }
 
-        //Else if user changed transforms element
+        //Else if user changed existing transform element
         else
         {
             for(int i = 0; i < SerializedTransforms.arraySize; i++)
@@ -455,19 +461,29 @@ public class LerpAnimatorEditor : Editor
 
                 if (editorTransforms[i] != serializedTransform)
                 {
-                    if (serializedTransform == null || IsDuplicate(i, serializedTransform))
+                    if (serializedTransform == null)
                     {
+                        Debug.Log("User nulled reference on list element");
+
                         editorTransforms[i] = null;
 
+                        ResetDataForSingleElement(i);
+                    }
+
+                    else if(IsDuplicate(i, serializedTransform))
+                    {
+                        Debug.LogWarning("LerpAnimator: Duplicate transform detected. There should only be one reference for each. Nulling element");
+
+                        editorTransforms[i] = null;
                         SerializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue = null;
 
                         serializedObject.ApplyModifiedProperties();
-
-                        ResetSingleRotationsData(i);
                     }
 
                     else
                     {
+                        Debug.Log("User inserted new transform reference on list element");
+
                         editorTransforms[i] = serializedTransform;
 
                         SampleSingleFromSceneToStartStatesAndSegments(i);
@@ -489,22 +505,39 @@ public class LerpAnimatorEditor : Editor
         {
             if (i != newTransformIndex && newTransform == (Transform)SerializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue)
             {
-                Debug.LogWarning("LerpAnimator: Duplicate transform detected. There should only be one reference for each. Nulling element");
+                
                 return true;
             }
-                
         }
 
         return false;
     }
 
-    //If any data for null elements in start states or segments, it wont be used in lerping, but resetting rotations data to avoid confusing the user
-    private void ResetSingleRotationsData(int indexToReset)
+    /// <summary>
+    /// Initializes data in start states and segments for single element
+    /// </summary>
+    /// <param name="indexToReset"></param>
+    private void ResetDataForSingleElement(int indexToReset)
     {
+        SerializedStartStates.GetArrayElementAtIndex(indexToReset).FindPropertyRelative("position").vector3Value =
+        editorStartStates[indexToReset].position =
+
+        SerializedStartStates.GetArrayElementAtIndex(indexToReset).FindPropertyRelative("offset").vector3Value =
+        editorStartStates[indexToReset].offset =
+
+        SerializedStartStates.GetArrayElementAtIndex(indexToReset).FindPropertyRelative("scale").vector3Value =
+        editorStartStates[indexToReset].scale = Vector3.zero;
+
         for (int i = 0; i < SerializedSegments.arraySize; i++)
         {
+            SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(indexToReset).FindPropertyRelative("position").vector3Value =
+                editorSegments[i].toTransformData[indexToReset].position =
+
             SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(indexToReset).FindPropertyRelative("offset").vector3Value =
-                editorSegments[i].toTransformData[indexToReset].offset = Vector3.zero;
+                editorSegments[i].toTransformData[indexToReset].offset =
+
+            SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(indexToReset).FindPropertyRelative("scale").vector3Value =
+            editorSegments[i].toTransformData[indexToReset].scale = Vector3.zero;
         }
 
         serializedObject.ApplyModifiedProperties();
@@ -537,17 +570,14 @@ public class LerpAnimatorEditor : Editor
 
 
     private void OnUserDeletedElementDirectly()
-    {
-        Debug.Log("Lerp Animator: User deleted transforms element directly");
+    {        
         handlingUserDeletedElement = true;
-
-
-        int serializedTransformsCount = SerializedTransforms.arraySize;
 
         bool foundDeletedBeforeLastIndex = false;
         //remove at index for editor transforms array and data
-        for (int i = 0; i < serializedTransformsCount; i++)
+        for (int i = 0; i < SerializedTransforms.arraySize; i++)
         {
+            //If user deleted last element
             if (SerializedTransforms.arraySize == 0)
             {
                 editorTransforms.Clear();
@@ -591,11 +621,7 @@ public class LerpAnimatorEditor : Editor
         {
             editorTransforms.RemoveAt(editorTransforms.Count - 1);
 
-            Debug.Log("SerializedStartStates size = " + SerializedStartStates.arraySize);
-
             SerializedStartStates.arraySize--;
-
-            
 
             for (int i = 0; i < SerializedSegments.arraySize; i++)
                 SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").arraySize--;
@@ -612,66 +638,99 @@ public class LerpAnimatorEditor : Editor
 
     private void OnUserIncreasedTransformsArraySize()
     {
-        int newElementsCount = SerializedTransforms.arraySize;
-        int difference = newElementsCount - editorTransforms.Count;
+        int difference = SerializedTransforms.arraySize - editorTransforms.Count;
 
-        //Null repeating transforms elements due to increasing size
-        for (int i = newElementsCount - 1; i > 0; i--)
+        for (int i = SerializedTransforms.arraySize - 1; i > 0; i--)
         {
-            Transform higherIndexTransform = (Transform)SerializedTransforms.GetArrayElementAtIndex(newElementsCount - 1).objectReferenceValue;
+            Transform higherIndexTransform = (Transform)SerializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue;
             Transform lowerIndexTransform = (Transform)SerializedTransforms.GetArrayElementAtIndex(i - 1).objectReferenceValue;
 
             if (higherIndexTransform != null && lowerIndexTransform != null && higherIndexTransform == lowerIndexTransform)
-            {
-                Debug.LogWarning("LerpAnimator: Duplicate transform detected. There should only be one reference for each. Nulling element");
-
-                SerializedTransforms.GetArrayElementAtIndex(newElementsCount - 1).objectReferenceValue = null;
-
-                serializedObject.ApplyModifiedProperties();
-            }
+                SerializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue = null;
         }
+            
+        serializedObject.ApplyModifiedProperties();
 
         CollectEditorTransforms();
-        //CollectEditorStartStates();
-        AddDataElementsForNewlyAddedTransformsElement(difference);
+
+        AddDataElementsForNewlyAddedTransformsElements(difference);
     }
     
     private void OnUserDecreasedTransformsArraySize()
     {
-        Debug.Log("OnUserDecreasedTransformsArraySize called");
+        //First find out if editor transforms are equal up to new size of serialized transforms (User deleted last element or down adjusted array size of transforms)
+        bool editorSegmentsContainsSameTransforms = true;
 
-        int serializedTransformsArrayCount = SerializedTransforms.arraySize;
-        int editorTransformsCount = editorTransforms.Count;
-        int difference = editorTransformsCount - serializedTransformsArrayCount;
-
-        //Remove from end from all collections
-        for (int i = 0; i < difference; i++ )
+        for (int i = 0; i < SerializedTransforms.arraySize; i++)
         {
-            editorTransforms.RemoveAt(editorTransforms.Count - 1);
+            if (SerializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue != editorTransforms[i])
+                editorSegmentsContainsSameTransforms = false;
+        }
 
-            SerializedStartStates.arraySize--;
+        //If it does, delete transforms and data from end of collections
+        if (editorSegmentsContainsSameTransforms)
+        {
+            Debug.Log("User deleted element(s) from end of list");
 
+            int difference = editorTransforms.Count - SerializedTransforms.arraySize;
 
-            int numberOfSegments = SerializedSegments.arraySize;
-
-            for (int j = 0; j < numberOfSegments; j++)
+            for (int j = 0; j < difference; j++)
             {
-                SerializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").arraySize--;
+                if (editorStartStates.Count > 0 && editorSegments.Count > 0)
+                {
+                    editorTransforms.RemoveAt(editorTransforms.Count - 1);
+
+                    //Delete from end of start states
+                    editorStartStates.RemoveAt(editorStartStates.Count - 1);
+                    SerializedStartStates.arraySize--;
+
+                    for (int k = 0; k < editorSegments.Count; k++)
+                    {
+                        //Delete from end of transforms data in segments
+                        editorSegments[k].toTransformData.RemoveAt(editorSegments[k].toTransformData.Count - 1);
+
+                        SerializedSegments.GetArrayElementAtIndex(k).FindPropertyRelative("toTransformData").arraySize--;
+                    }
+
+                    serializedObject.ApplyModifiedProperties();
+                }
             }
         }
 
-        serializedObject.ApplyModifiedProperties();
+        //Else if user deleted element other than last index(es)
+        else
+        {
+            Debug.Log("User deleted element in middle of list");
 
-        CollectEditorTransforms();
-        CollectEditorStartStates();
-        CollectEditorSegments();
+            for (int i = 0; i < SerializedTransforms.arraySize; i++)
+            {
+                if ((Transform)SerializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue != editorTransforms[i])
+                {
+                    editorTransforms.RemoveAt(i);
+                    editorStartStates.RemoveAt(i);
+
+                    SerializedStartStates.DeleteArrayElementAtIndex(i);
+
+                    for (int j = 0; j < SerializedSegments.arraySize; j++)
+                    {
+                        editorSegments[j].toTransformData.RemoveAt(i);
+                        SerializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").DeleteArrayElementAtIndex(i);
+                    }
+
+                    serializedObject.ApplyModifiedProperties();
+
+                    break;
+                }
+            }
+        }
     }
 
     /// <summary>
     /// Adds Start State data and Segments data when user increased transforms count, either by dropping one transform onto array or by manually increasing array size by any amount.
+    /// NOTE! Necessary even if null elements added
     /// </summary>
     /// <param name="difference"></param>
-    private void AddDataElementsForNewlyAddedTransformsElement(int difference)
+    private void AddDataElementsForNewlyAddedTransformsElements(int difference)
     {
         for (int i = 0; i < difference; i++)
         {
@@ -927,6 +986,9 @@ public class LerpAnimatorEditor : Editor
     private readonly double lerpFrequency = 0.0166; //60 times per second
     private double nextLerpUpdate;
     private float reciprocal;
+
+    
+
     private void OnEditorUpdate()
     {
         if (editorPlaybackRunning && EditorApplication.timeSinceStartup > nextLerpUpdate)
@@ -1024,6 +1086,16 @@ public class LerpAnimatorEditor : Editor
             CollectEditorSegments();
 
             handlingUndoRedo = false;
+        }
+
+        if(!handlingUndoRedo && (int)EditorApplication.timeSinceStartup > nextChangeCheck)
+        {
+            nextChangeCheck = EditorApplication.timeSinceStartup + 0.5f;
+
+            //Debug.Log("Checking for change");
+            CheckForTransformsArrayChanged();
+
+            //CheckForUserNulledElement();
         }
     }
 
