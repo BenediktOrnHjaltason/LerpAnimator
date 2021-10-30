@@ -8,6 +8,8 @@ using UnityEngine.Events;
 [CustomEditor(typeof(LerpAnimator))]
 public class LerpAnimatorEditor : Editor
 {
+    Texture logo;
+
     /// <summary>
     /// transforms references used to playback animation during edit mode. Saving a copy to avoid having find properties on serialized object in OnEditorUpdate() while animating
     /// </summary>
@@ -49,6 +51,12 @@ public class LerpAnimatorEditor : Editor
 
     private void OnEnable()
     {
+        logo = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LerpAnimator/Editor/T_LerpAnimatorLogo.png", typeof(Texture));
+
+        if (logo) Debug.Log("LOGO FOUND");
+
+        Debug.Log("LOGO NOT FOUND");
+
         serializedStartOnPlay = serializedObject.FindProperty("StartOnPlay");
 
         serializedTransforms = serializedObject.FindProperty("TransformsToActOn");
@@ -97,13 +105,6 @@ public class LerpAnimatorEditor : Editor
         EditorApplication.update -= OnEditorUpdate;
         Undo.undoRedoPerformed -= OnUndoRedoPerformed;
     }
-
-    private void OnGUIChanged()
-    {
-        Debug.Log("OnGUIChanged called");
-        CheckForTransformsArrayChanged();
-    }
-
 
     /// <summary>
     /// Handles when Undo/Redo is performed by user. Because Undo.undoRedoPerformed is fired before changes are registered in serializedObject,
@@ -210,6 +211,8 @@ public class LerpAnimatorEditor : Editor
 
     public override void OnInspectorGUI()
     {
+        GUILayout.Box(logo);
+
         EditorGUILayout.PropertyField(serializedStartOnPlay);
 
         GUILayout.Space(20);
