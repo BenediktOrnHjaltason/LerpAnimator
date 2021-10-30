@@ -9,7 +9,7 @@ using UnityEngine.Events;
 public class LerpAnimatorEditor : Editor
 {
     /// <summary>
-    /// transforms references used to playback animation during edit mode. Saving a copy to avoid having to access serialized object in Update() while animating
+    /// transforms references used to playback animation during edit mode. Saving a copy to avoid having find properties on serialized object in OnEditorUpdate() while animating
     /// </summary>
     private List<Transform> editorTransforms;
     /// <summary>
@@ -25,32 +25,38 @@ public class LerpAnimatorEditor : Editor
     private List<bool> editorShowRotationOffsets;
     private List<bool> editorShowSegmentEvents;
 
-    private SerializedProperty SerializedStartOnPlay;
+    //Properties for accessing parts of serializedObject
+    private SerializedProperty serializedStartOnPlay;
+    private SerializedProperty serializedTransforms;
+    private SerializedProperty serializedStartStates;
+    private SerializedProperty serializedSegments;
 
+    //To remember inspector fold out states for segment rotation offsets and events between LerpAnimator object selected/unselected
+    private SerializedProperty serializedShowRotations;
+    private SerializedProperty serializedShowSegmentEvents;
 
-    private SerializedProperty SerializedTransforms;
-    private SerializedProperty SerializedStartStates;
-    private SerializedProperty SerializedSegments;
+    /// <summary>
+    /// Used for displaying "|>" symbol on last previewed or sampled states (start states or segment states)
+    /// </summary>
+    private int lastSelectedState;
 
-
-    //To remember inspector fold out states for segment rotations and events
-    private SerializedProperty SerializedShowRotations;
-    private SerializedProperty SerializedShowSegmentEvents;
-
+    /// <summary>
+    /// Used for managing periodic checks for changes in serializedTransforms array
+    /// </summary>
     private double nextChangeCheck;
 
     #region Events
 
     private void OnEnable()
     {
-        SerializedStartOnPlay = serializedObject.FindProperty("StartOnPlay");
+        serializedStartOnPlay = serializedObject.FindProperty("StartOnPlay");
 
-        SerializedTransforms = serializedObject.FindProperty("TransformsToActOn");
-        SerializedStartStates = serializedObject.FindProperty("StartStates");
-        SerializedSegments = serializedObject.FindProperty("Segments");
+        serializedTransforms = serializedObject.FindProperty("TransformsToActOn");
+        serializedStartStates = serializedObject.FindProperty("StartStates");
+        serializedSegments = serializedObject.FindProperty("Segments");
 
-        SerializedShowRotations = serializedObject.FindProperty("ShowRotations");
-        SerializedShowSegmentEvents = serializedObject.FindProperty("ShowSegmentEvents");
+        serializedShowRotations = serializedObject.FindProperty("ShowRotations");
+        serializedShowSegmentEvents = serializedObject.FindProperty("ShowSegmentEvents");
 
 
         EditorApplication.update += OnEditorUpdate;
@@ -68,13 +74,13 @@ public class LerpAnimatorEditor : Editor
         CollectEditorShowRotations();
         CollectEditorShowSegmentEvents();
 
-        if (SerializedSegments.arraySize < 1)
+        if (serializedSegments.arraySize < 1)
         {
-            SerializedShowRotations.arraySize++;
+            serializedShowRotations.arraySize++;
             AddSegment();
             
-            SerializedSegments.GetArrayElementAtIndex(SerializedSegments.arraySize - 1).FindPropertyRelative("curve").animationCurveValue = AnimationCurve.Linear(0, 0, 1, 1);
-            SerializedSegments.GetArrayElementAtIndex(SerializedSegments.arraySize - 1).FindPropertyRelative("duration").floatValue = 1;
+            serializedSegments.GetArrayElementAtIndex(serializedSegments.arraySize - 1).FindPropertyRelative("curve").animationCurveValue = AnimationCurve.Linear(0, 0, 1, 1);
+            serializedSegments.GetArrayElementAtIndex(serializedSegments.arraySize - 1).FindPropertyRelative("duration").floatValue = 1;
 
             serializedObject.ApplyModifiedProperties();
 
@@ -125,9 +131,9 @@ public class LerpAnimatorEditor : Editor
     {
         editorTransforms.Clear();
 
-        for (int i = 0; i < SerializedTransforms.arraySize; i++)
+        for (int i = 0; i < serializedTransforms.arraySize; i++)
         {
-            Transform transform = SerializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue as Transform;
+            Transform transform = serializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue as Transform;
 
             editorTransforms.Add(transform);
         }
@@ -137,11 +143,11 @@ public class LerpAnimatorEditor : Editor
     {
         editorStartStates.Clear();
 
-        for (int i = 0; i < SerializedStartStates.arraySize; i++)
+        for (int i = 0; i < serializedStartStates.arraySize; i++)
         {
-            Vector3 position = SerializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value;
-            Vector3 rotation = SerializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value;
-            Vector3 scale = SerializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value;
+            Vector3 position = serializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value;
+            Vector3 rotation = serializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value;
+            Vector3 scale = serializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value;
 
             editorStartStates.Add(new TransformData(position, rotation, scale));
         }
@@ -151,28 +157,28 @@ public class LerpAnimatorEditor : Editor
     {
         editorSegments.Clear();
 
-        int numberOfSegments = SerializedSegments.arraySize;
+        int numberOfSegments = serializedSegments.arraySize;
 
         for (int i = 0; i < numberOfSegments; i++)
         {
             Segment segment = new Segment();
 
-            int toTransformDataCount = SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").arraySize;
+            int toTransformDataCount = serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").arraySize;
 
             List<TransformData> toTransformData = new List<TransformData>();
 
             for (int j = 0; j < toTransformDataCount; j++)
             {
-                Vector3 position = SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(j).FindPropertyRelative("position").vector3Value;
-                Vector3 rotation = SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(j).FindPropertyRelative("offset").vector3Value;
-                Vector3 scale = SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(j).FindPropertyRelative("scale").vector3Value;
+                Vector3 position = serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(j).FindPropertyRelative("position").vector3Value;
+                Vector3 rotation = serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(j).FindPropertyRelative("offset").vector3Value;
+                Vector3 scale = serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(j).FindPropertyRelative("scale").vector3Value;
 
                 toTransformData.Add(new TransformData(position, rotation, scale));
             }
 
             segment.toTransformData = toTransformData;
-            segment.duration = SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("duration").floatValue;
-            segment.curve = SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("curve").animationCurveValue;
+            segment.duration = serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("duration").floatValue;
+            segment.curve = serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("curve").animationCurveValue;
 
             editorSegments.Add(segment);
         }
@@ -182,9 +188,9 @@ public class LerpAnimatorEditor : Editor
     {
         editorShowRotationOffsets.Clear();
 
-        for (int i = 0; i < SerializedShowRotations.arraySize; i++)
+        for (int i = 0; i < serializedShowRotations.arraySize; i++)
         {
-            editorShowRotationOffsets.Add(SerializedShowRotations.GetArrayElementAtIndex(i).boolValue);
+            editorShowRotationOffsets.Add(serializedShowRotations.GetArrayElementAtIndex(i).boolValue);
         }
     }
 
@@ -192,34 +198,28 @@ public class LerpAnimatorEditor : Editor
     {
         editorShowSegmentEvents.Clear();
 
-        for (int i = 0; i < SerializedShowSegmentEvents.arraySize; i++)
+        for (int i = 0; i < serializedShowSegmentEvents.arraySize; i++)
         {
-            editorShowSegmentEvents.Add(SerializedShowSegmentEvents.GetArrayElementAtIndex(i).boolValue);
+            editorShowSegmentEvents.Add(serializedShowSegmentEvents.GetArrayElementAtIndex(i).boolValue);
         }
     }
     #endregion
 
     #region GUI
-
-    private bool modifyingSegmentsNumber = false;
-    private bool OnGUIChangedCalled = false;
-
-    private int lastSelectedState;
-
-    private bool handlingUserDeletedElement = false;
+    
 
     public override void OnInspectorGUI()
     {
-        if (handlingUserDeletedElement) return;
-
-        EditorGUILayout.PropertyField(SerializedStartOnPlay);
+        EditorGUILayout.PropertyField(serializedStartOnPlay);
 
         GUILayout.Space(20);
 
-        EditorGUILayout.PropertyField(SerializedTransforms, true);
-
+        GUI.enabled = !editorPlaybackRunning;
+        EditorGUILayout.PropertyField(serializedTransforms, true);
+        GUI.enabled = true;
 
         GUILayout.Space(20);
+
         GUILayout.Label("START STATES - Samples location, rotation and scale");
 
         GUILayout.BeginHorizontal("Box");
@@ -245,24 +245,20 @@ public class LerpAnimatorEditor : Editor
 
         GUILayout.EndHorizontal();
 
-        EditorGUILayout.PropertyField(SerializedStartStates, true);
-
+        EditorGUILayout.PropertyField(serializedStartStates, true);
 
         GUILayout.Space(20);
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         GUILayout.Label("SEGMENTS - Samples location and scale");
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-
         EditorGUILayout.Space(10);
 
-        if (!modifyingSegmentsNumber && !handlingUndoRedo)
+        if (!handlingUndoRedo)
         {
-
-            for (int i = 0; i < SerializedSegments.arraySize; i++)
+            for (int i = 0; i < serializedSegments.arraySize; i++)
             {
                 GUILayout.BeginHorizontal();
-
                 GUI.enabled = !EditorApplication.isPlaying;
                 if (GUILayout.Button((i + 1).ToString() + " : Play", GUILayout.Width(90)))
                 {
@@ -282,10 +278,8 @@ public class LerpAnimatorEditor : Editor
                 }
                 GUILayout.EndHorizontal();
 
-                
 
-
-                bool showEvents = EditorGUILayout.Foldout(SerializedShowSegmentEvents.GetArrayElementAtIndex(i).boolValue, "EventsOnStart", true);
+                bool showEvents = EditorGUILayout.Foldout(serializedShowSegmentEvents.GetArrayElementAtIndex(i).boolValue, "EventsOnStart", true);
 
                 if (showEvents != editorShowSegmentEvents[i])
                 {
@@ -296,21 +290,21 @@ public class LerpAnimatorEditor : Editor
 
                 if (editorShowSegmentEvents[i])
                 {
-                    EditorGUILayout.PropertyField(SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("OnSegmentStart"));
+                    EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("OnSegmentStart"));
                 }
 
-                //EditorGUILayout.PropertyField(SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("name"));
-                EditorGUILayout.PropertyField(SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("duration"));
+                //EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("name"));
+                EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("duration"));
 
-                EditorGUILayout.PropertyField(SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("curve"));
+                EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("curve"));
 
-                EditorGUILayout.PropertyField(SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData"));
+                EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData"));
 
-                bool showRotation = EditorGUILayout.Foldout(SerializedShowRotations.GetArrayElementAtIndex(i).boolValue, "RotationOffsets", true);
+                bool showRotation = EditorGUILayout.Foldout(serializedShowRotations.GetArrayElementAtIndex(i).boolValue, "RotationOffsets", true);
 
                 if (showRotation != editorShowRotationOffsets[i])
                 {
-                    SerializedShowRotations.GetArrayElementAtIndex(i).boolValue = showRotation;
+                    serializedShowRotations.GetArrayElementAtIndex(i).boolValue = showRotation;
                 }
 
                 editorShowRotationOffsets[i] = showRotation;
@@ -328,7 +322,7 @@ public class LerpAnimatorEditor : Editor
                         
 
                         EditorGUI.BeginChangeCheck();
-                        EditorGUILayout.PropertyField(SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(j).FindPropertyRelative("offset"));
+                        EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(j).FindPropertyRelative("offset"));
                         if (EditorGUI.EndChangeCheck())
                         {
                             CollectEditorSegments();
@@ -368,6 +362,7 @@ public class LerpAnimatorEditor : Editor
 
                 GUILayout.EndHorizontal();
                 EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
                 GUILayout.Space(15);
                 
             }
@@ -377,19 +372,15 @@ public class LerpAnimatorEditor : Editor
 
         GUI.enabled = !EditorApplication.isPlaying && !editorPlaybackRunning;
         if (GUILayout.Button("Add segment"))
-        {
-            modifyingSegmentsNumber = true;
             AddSegment();
-            modifyingSegmentsNumber = false;
-        }
+
 
         if (GUILayout.Button("Remove segment"))
         {
-            if (SerializedSegments.arraySize < 2) return;
+            if (serializedSegments.arraySize < 2) 
+                return;
 
-            modifyingSegmentsNumber = true;
             RemoveSegment();
-            modifyingSegmentsNumber = false;
         }
         GUI.enabled = true;
 
@@ -410,25 +401,6 @@ public class LerpAnimatorEditor : Editor
     #endregion
 
     #region Data consistency
-    
-    private void CheckForUserNulledElement()
-    {
-        for(int i = 0; i < editorTransforms.Count; i++)
-        {
-            if (SerializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue == null && editorTransforms[i] != null)
-            {
-                Debug.Log("User nulled element");
-
-                editorTransforms[i] = null;
-
-                for (int j = 0; j < SerializedSegments.arraySize; j++)
-                {
-                    SerializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value = Vector3.zero;
-                    serializedObject.ApplyModifiedProperties();
-                }
-            }
-        }
-    }
 
     /// <summary>
     /// Checks if user increased or decreased array size by adjusting number, or replaced or nulled element
@@ -436,9 +408,9 @@ public class LerpAnimatorEditor : Editor
     private void CheckForTransformsArrayChanged()
     {
         //If user adjusts array count
-        if (editorTransforms.Count != SerializedTransforms.arraySize)
+        if (editorTransforms.Count != serializedTransforms.arraySize)
         {
-            if (SerializedTransforms.arraySize > editorTransforms.Count) //<--------------------------------------------------------------------------
+            if (serializedTransforms.arraySize > editorTransforms.Count)
             {
                 Debug.Log("User increased array size");
 
@@ -455,9 +427,9 @@ public class LerpAnimatorEditor : Editor
         //Else if user changed existing transform element
         else
         {
-            for(int i = 0; i < SerializedTransforms.arraySize; i++)
+            for(int i = 0; i < serializedTransforms.arraySize; i++)
             {
-                Transform serializedTransform = (Transform)SerializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue;
+                Transform serializedTransform = (Transform)serializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue;
 
                 if (editorTransforms[i] != serializedTransform)
                 {
@@ -475,7 +447,7 @@ public class LerpAnimatorEditor : Editor
                         Debug.LogWarning("LerpAnimator: Duplicate transform detected. There should only be one reference for each. Nulling element");
 
                         editorTransforms[i] = null;
-                        SerializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue = null;
+                        serializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue = null;
 
                         serializedObject.ApplyModifiedProperties();
                     }
@@ -501,13 +473,10 @@ public class LerpAnimatorEditor : Editor
     /// <returns></returns>
     private bool IsDuplicate(int newTransformIndex, Transform newTransform)
     {
-        for (int i = 0; i < SerializedTransforms.arraySize; i++)
+        for (int i = 0; i < serializedTransforms.arraySize; i++)
         {
-            if (i != newTransformIndex && newTransform == (Transform)SerializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue)
-            {
-                
+            if (i != newTransformIndex && newTransform == (Transform)serializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue)
                 return true;
-            }
         }
 
         return false;
@@ -519,24 +488,24 @@ public class LerpAnimatorEditor : Editor
     /// <param name="indexToReset"></param>
     private void ResetDataForSingleElement(int indexToReset)
     {
-        SerializedStartStates.GetArrayElementAtIndex(indexToReset).FindPropertyRelative("position").vector3Value =
+        serializedStartStates.GetArrayElementAtIndex(indexToReset).FindPropertyRelative("position").vector3Value =
         editorStartStates[indexToReset].position =
 
-        SerializedStartStates.GetArrayElementAtIndex(indexToReset).FindPropertyRelative("offset").vector3Value =
+        serializedStartStates.GetArrayElementAtIndex(indexToReset).FindPropertyRelative("offset").vector3Value =
         editorStartStates[indexToReset].offset =
 
-        SerializedStartStates.GetArrayElementAtIndex(indexToReset).FindPropertyRelative("scale").vector3Value =
+        serializedStartStates.GetArrayElementAtIndex(indexToReset).FindPropertyRelative("scale").vector3Value =
         editorStartStates[indexToReset].scale = Vector3.zero;
 
-        for (int i = 0; i < SerializedSegments.arraySize; i++)
+        for (int i = 0; i < serializedSegments.arraySize; i++)
         {
-            SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(indexToReset).FindPropertyRelative("position").vector3Value =
+            serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(indexToReset).FindPropertyRelative("position").vector3Value =
                 editorSegments[i].toTransformData[indexToReset].position =
 
-            SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(indexToReset).FindPropertyRelative("offset").vector3Value =
+            serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(indexToReset).FindPropertyRelative("offset").vector3Value =
                 editorSegments[i].toTransformData[indexToReset].offset =
 
-            SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(indexToReset).FindPropertyRelative("scale").vector3Value =
+            serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(indexToReset).FindPropertyRelative("scale").vector3Value =
             editorSegments[i].toTransformData[indexToReset].scale = Vector3.zero;
         }
 
@@ -550,103 +519,35 @@ public class LerpAnimatorEditor : Editor
     private void SampleSingleFromSceneToStartStatesAndSegments(int transformIndex)
     {
         //Depends on editorTransform being updated before calling this function
-        SerializedStartStates.GetArrayElementAtIndex(transformIndex).FindPropertyRelative("position").vector3Value = 
+        serializedStartStates.GetArrayElementAtIndex(transformIndex).FindPropertyRelative("position").vector3Value = 
             editorStartStates[transformIndex].position = editorTransforms[transformIndex].localPosition;
 
-        SerializedStartStates.GetArrayElementAtIndex(transformIndex).FindPropertyRelative("scale").vector3Value =
+        serializedStartStates.GetArrayElementAtIndex(transformIndex).FindPropertyRelative("scale").vector3Value =
             editorStartStates[transformIndex].scale = editorTransforms[transformIndex].localScale;
 
         for (int i = 0; i < editorSegments.Count; i++)
         {
-            SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(transformIndex).FindPropertyRelative("position").vector3Value =
+            serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(transformIndex).FindPropertyRelative("position").vector3Value =
                 editorSegments[i].toTransformData[transformIndex].position = editorTransforms[transformIndex].localPosition;
 
-            SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(transformIndex).FindPropertyRelative("scale").vector3Value =
+            serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(transformIndex).FindPropertyRelative("scale").vector3Value =
                 editorSegments[i].toTransformData[transformIndex].scale = editorTransforms[transformIndex].localScale;
         }
 
         serializedObject.ApplyModifiedProperties();
     }
 
-
-    private void OnUserDeletedElementDirectly()
-    {        
-        handlingUserDeletedElement = true;
-
-        bool foundDeletedBeforeLastIndex = false;
-        //remove at index for editor transforms array and data
-        for (int i = 0; i < SerializedTransforms.arraySize; i++)
-        {
-            //If user deleted last element
-            if (SerializedTransforms.arraySize == 0)
-            {
-                editorTransforms.Clear();
-
-                SerializedStartStates.ClearArray();
-
-                int numberOfSegments = SerializedSegments.arraySize;
-                for (int j = 0; j < numberOfSegments; j++)
-                {
-                    SerializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").ClearArray();
-                }
-
-                serializedObject.ApplyModifiedProperties();
-
-                break;
-            }
-
-            if (editorTransforms[i] != SerializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue)
-            {
-                Debug.Log("OnUserDeletedElementDirectly: Found index " + i);
-                foundDeletedBeforeLastIndex = true;
-
-                editorTransforms.RemoveAt(i);
-
-                SerializedStartStates.DeleteArrayElementAtIndex(i);
-
-                int numberOfSegments = SerializedSegments.arraySize;
-                for (int j = 0; j < numberOfSegments; j++)
-                {
-                    SerializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").DeleteArrayElementAtIndex(i);
-                }
-
-                serializedObject.ApplyModifiedProperties();
-
-                break;
-            }
-        }
-
-        //If the deleted element was the last index
-        if (!foundDeletedBeforeLastIndex)
-        {
-            editorTransforms.RemoveAt(editorTransforms.Count - 1);
-
-            SerializedStartStates.arraySize--;
-
-            for (int i = 0; i < SerializedSegments.arraySize; i++)
-                SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").arraySize--;
-
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        CollectEditorTransforms();
-        CollectEditorStartStates();
-        CollectEditorSegments();
-
-        handlingUserDeletedElement = false;
-    }
-
     private void OnUserIncreasedTransformsArraySize()
     {
-        int difference = SerializedTransforms.arraySize - editorTransforms.Count;
+        int difference = serializedTransforms.arraySize - editorTransforms.Count;
 
-        for (int i = SerializedTransforms.arraySize - 1; i > 0; i--)
+        for (int i = serializedTransforms.arraySize - 1; i > 0; i--)
         {
-            Transform higherIndexTransform = (Transform)SerializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue;
-            Transform lowerIndexTransform = (Transform)SerializedTransforms.GetArrayElementAtIndex(i - 1).objectReferenceValue;
+            Transform higherIndexTransform = (Transform)serializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue;
+            Transform lowerIndexTransform = (Transform)serializedTransforms.GetArrayElementAtIndex(i - 1).objectReferenceValue;
 
             if (higherIndexTransform != null && lowerIndexTransform != null && higherIndexTransform == lowerIndexTransform)
-                SerializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue = null;
+                serializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue = null;
         }
             
         serializedObject.ApplyModifiedProperties();
@@ -661,9 +562,9 @@ public class LerpAnimatorEditor : Editor
         //First find out if editor transforms are equal up to new size of serialized transforms (User deleted last element or down adjusted array size of transforms)
         bool editorSegmentsContainsSameTransforms = true;
 
-        for (int i = 0; i < SerializedTransforms.arraySize; i++)
+        for (int i = 0; i < serializedTransforms.arraySize; i++)
         {
-            if (SerializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue != editorTransforms[i])
+            if (serializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue != editorTransforms[i])
                 editorSegmentsContainsSameTransforms = false;
         }
 
@@ -672,7 +573,7 @@ public class LerpAnimatorEditor : Editor
         {
             Debug.Log("User deleted element(s) from end of list");
 
-            int difference = editorTransforms.Count - SerializedTransforms.arraySize;
+            int difference = editorTransforms.Count - serializedTransforms.arraySize;
 
             for (int j = 0; j < difference; j++)
             {
@@ -682,14 +583,14 @@ public class LerpAnimatorEditor : Editor
 
                     //Delete from end of start states
                     editorStartStates.RemoveAt(editorStartStates.Count - 1);
-                    SerializedStartStates.arraySize--;
+                    serializedStartStates.arraySize--;
 
                     for (int k = 0; k < editorSegments.Count; k++)
                     {
                         //Delete from end of transforms data in segments
                         editorSegments[k].toTransformData.RemoveAt(editorSegments[k].toTransformData.Count - 1);
 
-                        SerializedSegments.GetArrayElementAtIndex(k).FindPropertyRelative("toTransformData").arraySize--;
+                        serializedSegments.GetArrayElementAtIndex(k).FindPropertyRelative("toTransformData").arraySize--;
                     }
 
                     serializedObject.ApplyModifiedProperties();
@@ -702,19 +603,19 @@ public class LerpAnimatorEditor : Editor
         {
             Debug.Log("User deleted element in middle of list");
 
-            for (int i = 0; i < SerializedTransforms.arraySize; i++)
+            for (int i = 0; i < serializedTransforms.arraySize; i++)
             {
-                if ((Transform)SerializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue != editorTransforms[i])
+                if ((Transform)serializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue != editorTransforms[i])
                 {
                     editorTransforms.RemoveAt(i);
                     editorStartStates.RemoveAt(i);
 
-                    SerializedStartStates.DeleteArrayElementAtIndex(i);
+                    serializedStartStates.DeleteArrayElementAtIndex(i);
 
-                    for (int j = 0; j < SerializedSegments.arraySize; j++)
+                    for (int j = 0; j < serializedSegments.arraySize; j++)
                     {
                         editorSegments[j].toTransformData.RemoveAt(i);
-                        SerializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").DeleteArrayElementAtIndex(i);
+                        serializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").DeleteArrayElementAtIndex(i);
                     }
 
                     serializedObject.ApplyModifiedProperties();
@@ -734,26 +635,26 @@ public class LerpAnimatorEditor : Editor
     {
         for (int i = 0; i < difference; i++)
         {
-            SerializedStartStates.arraySize++;
+            serializedStartStates.arraySize++;
 
             int newStartStatesCount = serializedObject.FindProperty("StartStates").arraySize;
 
             //--- Add states, initialized to object added
             //StartStates
-            SerializedStartStates.GetArrayElementAtIndex(newStartStatesCount - 1).FindPropertyRelative("position").vector3Value = editorTransforms[newStartStatesCount - 1] == null ? Vector3.zero : editorTransforms[newStartStatesCount - 1].localPosition;
-            SerializedStartStates.GetArrayElementAtIndex(newStartStatesCount - 1).FindPropertyRelative("offset").vector3Value = Vector3.zero;
-            SerializedStartStates.GetArrayElementAtIndex(newStartStatesCount - 1).FindPropertyRelative("scale").vector3Value = editorTransforms[newStartStatesCount - 1] == null ? Vector3.zero : editorTransforms[newStartStatesCount - 1].localScale;
+            serializedStartStates.GetArrayElementAtIndex(newStartStatesCount - 1).FindPropertyRelative("position").vector3Value = editorTransforms[newStartStatesCount - 1] == null ? Vector3.zero : editorTransforms[newStartStatesCount - 1].localPosition;
+            serializedStartStates.GetArrayElementAtIndex(newStartStatesCount - 1).FindPropertyRelative("offset").vector3Value = Vector3.zero;
+            serializedStartStates.GetArrayElementAtIndex(newStartStatesCount - 1).FindPropertyRelative("scale").vector3Value = editorTransforms[newStartStatesCount - 1] == null ? Vector3.zero : editorTransforms[newStartStatesCount - 1].localScale;
 
             //Segments
-            for (int j = 0; j < SerializedSegments.arraySize; j++)
+            for (int j = 0; j < serializedSegments.arraySize; j++)
             {
                 serializedObject.FindProperty("Segments").GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").arraySize++;
 
                 int newToTransformDataCount = serializedObject.FindProperty("Segments").GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").arraySize;
 
-                SerializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(newToTransformDataCount - 1).FindPropertyRelative("position").vector3Value = editorTransforms[newToTransformDataCount - 1] == null ? Vector3.zero : editorTransforms[newToTransformDataCount - 1].localPosition;
-                SerializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(newToTransformDataCount - 1).FindPropertyRelative("offset").vector3Value =  Vector3.zero;
-                SerializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(newToTransformDataCount - 1).FindPropertyRelative("scale").vector3Value = editorTransforms[newToTransformDataCount - 1] == null ? Vector3.zero : editorTransforms[newToTransformDataCount - 1].localScale;
+                serializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(newToTransformDataCount - 1).FindPropertyRelative("position").vector3Value = editorTransforms[newToTransformDataCount - 1] == null ? Vector3.zero : editorTransforms[newToTransformDataCount - 1].localPosition;
+                serializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(newToTransformDataCount - 1).FindPropertyRelative("offset").vector3Value =  Vector3.zero;
+                serializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(newToTransformDataCount - 1).FindPropertyRelative("scale").vector3Value = editorTransforms[newToTransformDataCount - 1] == null ? Vector3.zero : editorTransforms[newToTransformDataCount - 1].localScale;
             }
         }
 
@@ -766,18 +667,18 @@ public class LerpAnimatorEditor : Editor
     private void InsertDataForNewlyOverriddenTransform(int index)
     {
         //Start states
-        SerializedStartStates.GetArrayElementAtIndex(index).FindPropertyRelative("position").vector3Value = editorTransforms[index] == null ? Vector3.zero : editorTransforms[index].localPosition;
-        SerializedStartStates.GetArrayElementAtIndex(index).FindPropertyRelative("offset").vector3Value = Vector3.zero;
-        SerializedStartStates.GetArrayElementAtIndex(index).FindPropertyRelative("scale").vector3Value = editorTransforms[index] == null ? Vector3.zero : editorTransforms[index].localScale;
+        serializedStartStates.GetArrayElementAtIndex(index).FindPropertyRelative("position").vector3Value = editorTransforms[index] == null ? Vector3.zero : editorTransforms[index].localPosition;
+        serializedStartStates.GetArrayElementAtIndex(index).FindPropertyRelative("offset").vector3Value = Vector3.zero;
+        serializedStartStates.GetArrayElementAtIndex(index).FindPropertyRelative("scale").vector3Value = editorTransforms[index] == null ? Vector3.zero : editorTransforms[index].localScale;
 
         //Segments
         int segmentsCount = serializedObject.FindProperty("Segments").arraySize;
 
         for (int i = 0; i < segmentsCount; i++)
         {
-            SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(index).FindPropertyRelative("position").vector3Value = editorTransforms[index] == null ? Vector3.zero : editorTransforms[index].localPosition;
-            SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(index).FindPropertyRelative("offset").vector3Value = Vector3.zero;
-            SerializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(index).FindPropertyRelative("scale").vector3Value = editorTransforms[index] == null ? Vector3.zero : editorTransforms[index].localScale;
+            serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(index).FindPropertyRelative("position").vector3Value = editorTransforms[index] == null ? Vector3.zero : editorTransforms[index].localPosition;
+            serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(index).FindPropertyRelative("offset").vector3Value = Vector3.zero;
+            serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(index).FindPropertyRelative("scale").vector3Value = editorTransforms[index] == null ? Vector3.zero : editorTransforms[index].localScale;
         }
 
         serializedObject.ApplyModifiedProperties();
@@ -789,22 +690,22 @@ public class LerpAnimatorEditor : Editor
 
     private void AddSegment()
     {
-        SerializedSegments.arraySize++;
+        serializedSegments.arraySize++;
 
         //Remove rotation offsets data if inherited from previous segment
-        for (int i = 0; i < SerializedTransforms.arraySize; i++)
-            SerializedSegments.GetArrayElementAtIndex(SerializedSegments.arraySize - 1).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value = Vector3.zero;
+        for (int i = 0; i < serializedTransforms.arraySize; i++)
+            serializedSegments.GetArrayElementAtIndex(serializedSegments.arraySize - 1).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value = Vector3.zero;
 
         serializedObject.ApplyModifiedProperties();
 
         //Insert data for transforms allready in array
 
-        int indexAdded_Segments = SerializedSegments.arraySize -1;
+        int indexAdded_Segments = serializedSegments.arraySize -1;
 
         lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = indexAdded_Segments;
 
-        SerializedSegments.GetArrayElementAtIndex(indexAdded_Segments).FindPropertyRelative("duration").floatValue = 1;
-        SerializedSegments.GetArrayElementAtIndex(indexAdded_Segments).FindPropertyRelative("curve").animationCurveValue = AnimationCurve.Linear(0, 0, 1, 1);
+        serializedSegments.GetArrayElementAtIndex(indexAdded_Segments).FindPropertyRelative("duration").floatValue = 1;
+        serializedSegments.GetArrayElementAtIndex(indexAdded_Segments).FindPropertyRelative("curve").animationCurveValue = AnimationCurve.Linear(0, 0, 1, 1);
 
         
         CollectEditorSegments();
@@ -812,8 +713,8 @@ public class LerpAnimatorEditor : Editor
 
         editorShowRotationOffsets.Add(false);
         editorShowSegmentEvents.Add(false);
-        SerializedShowRotations.arraySize++;
-        SerializedShowSegmentEvents.arraySize++;
+        serializedShowRotations.arraySize++;
+        serializedShowSegmentEvents.arraySize++;
 
         serializedObject.ApplyModifiedProperties();
 
@@ -823,7 +724,7 @@ public class LerpAnimatorEditor : Editor
 
     private void RemoveSegment()
     {
-        SerializedSegments.arraySize--;
+        serializedSegments.arraySize--;
         serializedObject.ApplyModifiedProperties();
 
 
@@ -851,14 +752,14 @@ public class LerpAnimatorEditor : Editor
                 if (editorTransforms[i])
                 {
                     editorTransforms[i].localPosition =
-                        SerializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value;
+                        serializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value;
 
                     editorTransforms[i].localRotation =
-                        Quaternion.Euler(SerializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value);
+                        Quaternion.Euler(serializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value);
 
 
                     editorTransforms[i].localScale =
-                        SerializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value;
+                        serializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value;
                 }
             }
         }
@@ -870,20 +771,20 @@ public class LerpAnimatorEditor : Editor
                 if (editorTransforms[i])
                 {
                     editorTransforms[i].localPosition =
-                    SerializedSegments.GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value;
+                    serializedSegments.GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value;
 
                     Vector3 acculumatedRotationOffsett = Vector3.zero;
 
                     for (int j = 0; j <= segmentIndex; j++)
-                        acculumatedRotationOffsett += SerializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value;
+                        acculumatedRotationOffsett += serializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value;
 
 
-                    editorTransforms[i].localRotation = Quaternion.Euler(SerializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value) * Quaternion.Euler(acculumatedRotationOffsett);
+                    editorTransforms[i].localRotation = Quaternion.Euler(serializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value) * Quaternion.Euler(acculumatedRotationOffsett);
 
 
 
                     editorTransforms[i].localScale =
-                    SerializedSegments.GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value;
+                    serializedSegments.GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value;
                 }
             }
         }
@@ -901,13 +802,13 @@ public class LerpAnimatorEditor : Editor
             {
                 if (editorTransforms[i])
                 {
-                    SerializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value
+                    serializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value
                     = editorTransforms[i].transform.localPosition;
 
-                    SerializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value
+                    serializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value
                         = editorTransforms[i].transform.localRotation.eulerAngles;
 
-                    SerializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value
+                    serializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value
                         = editorTransforms[i].transform.localScale;
                 }
             }
@@ -922,11 +823,11 @@ public class LerpAnimatorEditor : Editor
             {
                 if (editorTransforms[i])
                 {
-                    SerializedSegments.GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value
+                    serializedSegments.GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value
                     = editorTransforms[i].transform.localPosition;
 
 
-                    SerializedSegments.GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value
+                    serializedSegments.GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value
                         = editorTransforms[i].transform.localScale;
                 }
             }
@@ -961,7 +862,7 @@ public class LerpAnimatorEditor : Editor
 
     public void StartEditorPlayback(int fromIndex)
     {
-        if (SerializedSegments.arraySize == 0) return;
+        if (serializedSegments.arraySize == 0) return;
 
         ApplyFromDatastore(fromIndex);
 
@@ -1088,14 +989,12 @@ public class LerpAnimatorEditor : Editor
             handlingUndoRedo = false;
         }
 
-        if(!handlingUndoRedo && (int)EditorApplication.timeSinceStartup > nextChangeCheck)
+        //Handles periodic checks for when user makes changes in serializedTransforms array
+        if(!handlingUndoRedo && EditorApplication.timeSinceStartup > nextChangeCheck)
         {
             nextChangeCheck = EditorApplication.timeSinceStartup + 0.5f;
 
-            //Debug.Log("Checking for change");
             CheckForTransformsArrayChanged();
-
-            //CheckForUserNulledElement();
         }
     }
 
