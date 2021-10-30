@@ -250,10 +250,11 @@ public class LerpAnimatorEditor : Editor
 
         GUILayout.Space(20);
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        GUILayout.Box(toolHandleReminder);
         GUILayout.Label("SEGMENTS - Samples location and scale");
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-        GUILayout.Box(toolHandleReminder);
+        
 
         if (!handlingUndoRedo)
         {
