@@ -9,6 +9,7 @@ using UnityEngine.Events;
 public class LerpAnimatorEditor : Editor
 {
     Texture logo;
+    Texture toolHandleReminder;
 
     /// <summary>
     /// transforms references used to playback animation during edit mode. Saving a copy to avoid having find properties on serialized object in OnEditorUpdate() while animating
@@ -52,10 +53,7 @@ public class LerpAnimatorEditor : Editor
     private void OnEnable()
     {
         logo = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LerpAnimator/Editor/T_LerpAnimatorLogo.png", typeof(Texture));
-
-        if (logo) Debug.Log("LOGO FOUND");
-
-        Debug.Log("LOGO NOT FOUND");
+        toolHandleReminder = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LerpAnimator/Editor/T_ToolHandleReminder.png", typeof(Texture));
 
         serializedStartOnPlay = serializedObject.FindProperty("StartOnPlay");
 
@@ -239,7 +237,7 @@ public class LerpAnimatorEditor : Editor
         GUI.enabled = true;
 
         GUI.enabled = !editorPlaybackRunning && !EditorApplication.isPlaying;
-        if (GUILayout.Button("Sample"))
+        if (GUILayout.Button("Sample scene"))
         {
             lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = -1;
             SampleAllFromScene(-1);
@@ -255,7 +253,7 @@ public class LerpAnimatorEditor : Editor
         GUILayout.Label("SEGMENTS - Samples location and scale");
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-        EditorGUILayout.Space(10);
+        GUILayout.Box(toolHandleReminder);
 
         if (!handlingUndoRedo)
         {
@@ -356,7 +354,7 @@ public class LerpAnimatorEditor : Editor
 
 
                 GUI.enabled = !editorPlaybackRunning && !EditorApplication.isPlaying;
-                if (GUILayout.Button("Sample"))
+                if (GUILayout.Button("Sample scene"))
                 {
                     lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
                     SampleAllFromScene(i);
