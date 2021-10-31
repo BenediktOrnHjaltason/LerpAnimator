@@ -300,7 +300,7 @@ public class LerpAnimatorEditor : Editor
 
                 EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("curve"));
 
-                EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData"));
+                //EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData"));
 
                 bool showRotation = EditorGUILayout.Foldout(serializedShowRotations.GetArrayElementAtIndex(i).boolValue, "RotationOffsets", true);
 
@@ -775,15 +775,12 @@ public class LerpAnimatorEditor : Editor
                     editorTransforms[i].localPosition =
                     serializedSegments.GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value;
 
-                    Vector3 acculumatedRotationOffsett = Vector3.zero;
+                    Quaternion acculumatedRotationOffsett = Quaternion.Euler(serializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value);
 
                     for (int j = 0; j <= segmentIndex; j++)
-                        acculumatedRotationOffsett += serializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value;
+                        acculumatedRotationOffsett *= Quaternion.Euler(serializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value);
 
-
-                    editorTransforms[i].localRotation = Quaternion.Euler(serializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value) * Quaternion.Euler(acculumatedRotationOffsett);
-
-
+                    editorTransforms[i].localRotation = acculumatedRotationOffsett;
 
                     editorTransforms[i].localScale =
                     serializedSegments.GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value;
