@@ -1616,7 +1616,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 388427615}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000003577464}
   m_LocalPosition: {x: -0.004, y: 0.986, z: -0.032}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -4346,8 +4346,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 822905390}
-  m_LocalRotation: {x: -0.000000029802315, y: -0.000000044703487, z: -0.66967815,
-    w: 0.74265146}
+  m_LocalRotation: {x: -0.000000049199464, y: 0.00000002158688, z: 0.6150806, w: 0.7884643}
   m_LocalPosition: {x: 0.01499, y: 0.03237, z: -0.00008}
   m_LocalScale: {x: 0.1, y: 0.099999994, z: 0.1}
   m_Children:
@@ -7121,7 +7120,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1370006863}
-  m_LocalRotation: {x: 0.29171276, y: -0.10091842, z: 0.029798727, w: 0.9507004}
+  m_LocalRotation: {x: -0.9512512, y: -0.044943392, z: 0.16773143, w: 0.25488713}
   m_LocalPosition: {x: 0.1475, y: 0.0001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -7130,7 +7129,7 @@ Transform:
   - {fileID: 932933805073524044}
   m_Father: {fileID: 1608666643}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 26.517002, y: -39.870003, z: -24.372002}
+  m_LocalEulerAnglesHint: {x: -150, y: 0, z: -0.000015258789}
 --- !u!4 &1376119807 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 04978a0285cf9e44c82462c918f4077a,
@@ -7189,18 +7188,22 @@ MonoBehaviour:
   - {fileID: 822905391}
   - {fileID: 1924188498}
   - {fileID: 1608666643}
+  - {fileID: 1370006864}
   StartStates:
   - position: {x: -0.004, y: 0.986, z: -0.032}
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
   - position: {x: 0.01499, y: 0.03237, z: -0.00008}
-    offset: {x: -0.0000059667464, y: -0.0000015173241, z: 95.91555}
+    offset: {x: -0.0000059667473, y: -0.0000015173241, z: 95.91555}
     scale: {x: 0.1, y: 0.099999994, z: 0.1}
   - position: {x: 0.04669, y: 0.02671, z: -0.03732}
-    offset: {x: -0.0000046884784, y: 0.0000019637766, z: 311.70813}
+    offset: {x: -0.0000046884784, y: 0.0000019637769, z: 311.70813}
     scale: {x: 0.099999994, y: 0.09999999, z: 0.09999999}
   - position: {x: 0.1183, y: 0.2899, z: -0.2025}
     offset: {x: 300, y: 179.99997, z: 180}
+    scale: {x: 1, y: 1, z: 1}
+  - position: {x: 0.1475, y: 0.0001, z: 0}
+    offset: {x: 330, y: 180.00002, z: 180}
     scale: {x: 1, y: 1, z: 1}
   Segments:
   - toTransformData:
@@ -7214,6 +7217,9 @@ MonoBehaviour:
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.099999994, y: 0.09999999, z: 0.09999999}
     - position: {x: 0.1183, y: 0.2899, z: -0.2025}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - position: {x: 0.1475, y: 0.0001, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
     name: 
@@ -7258,6 +7264,9 @@ MonoBehaviour:
     - position: {x: 0.1183, y: 0.2899, z: -0.2025}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
+    - position: {x: 0.1475, y: 0.0001, z: 0}
+      offset: {x: 0, y: 60, z: 0}
+      scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 1
     curve:
@@ -7300,6 +7309,9 @@ MonoBehaviour:
     - position: {x: 0.1183, y: 0.2899, z: -0.2025}
       offset: {x: 180, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
+    - position: {x: 0.1475, y: 0.0001, z: 0}
+      offset: {x: 0, y: 130, z: 0}
+      scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 3
     curve:
@@ -7337,10 +7349,13 @@ MonoBehaviour:
       offset: {x: 0, y: 0, z: -100}
       scale: {x: 0.1, y: 0.099999994, z: 0.1}
     - position: {x: 0.04669, y: 0.02671, z: -0.03732}
-      offset: {x: 0, y: 0, z: -120}
+      offset: {x: 0, y: 0, z: -160}
       scale: {x: 0.099999994, y: 0.09999999, z: 0.09999999}
     - position: {x: 0.1183, y: 0.2899, z: -0.2025}
-      offset: {x: -180, y: 0, z: 0}
+      offset: {x: -1080, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - position: {x: 0.1475, y: 0.0001, z: 0}
+      offset: {x: 0, y: -160, z: 0}
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 5
@@ -7379,10 +7394,13 @@ MonoBehaviour:
       offset: {x: 0, y: 0, z: 180}
       scale: {x: 0.1, y: 0.099999994, z: 0.1}
     - position: {x: 0.04669, y: 0.02671, z: -0.03732}
-      offset: {x: 0, y: 0, z: -170}
+      offset: {x: 0, y: 0, z: -130}
       scale: {x: 0.099999994, y: 0.09999999, z: 0.09999999}
     - position: {x: 0.1183, y: 0.2899, z: -0.2025}
       offset: {x: 180, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+    - position: {x: 0.1475, y: 0.0001, z: 0}
+      offset: {x: 0, y: -50, z: 0}
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 3
@@ -7416,8 +7434,8 @@ MonoBehaviour:
   OnSequenceEnd:
     m_PersistentCalls:
       m_Calls: []
-  lastSelectedState: 1
-  ShowRotations: 010000000000
+  lastSelectedState: 4
+  ShowRotations: 000000000100
   ShowSegmentEvents: 0000000000
 --- !u!1 &1428828943
 GameObject:
@@ -8757,7 +8775,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1608666642}
-  m_LocalRotation: {x: -0.8660254, y: -0.00000011910308, z: -0.00000025000395, w: 0.50000006}
+  m_LocalRotation: {x: -0.86602545, y: -0.000000119103035, z: -0.00000025000398, w: 0.4999999}
   m_LocalPosition: {x: 0.1183, y: 0.2899, z: -0.2025}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -9191,7 +9209,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1924188497}
-  m_LocalRotation: {x: 0.000000016199504, y: -0.00000004129493, z: -0.7175682, w: -0.69648826}
+  m_LocalRotation: {x: 0.000000044345096, y: 0.0000000010988543, z: 0.4090621, w: -0.9125066}
   m_LocalPosition: {x: 0.04669, y: 0.02671, z: -0.03732}
   m_LocalScale: {x: 0.099999994, y: 0.09999999, z: 0.09999999}
   m_Children:
