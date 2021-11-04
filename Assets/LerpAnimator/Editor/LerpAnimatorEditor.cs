@@ -222,6 +222,8 @@ public class LerpAnimatorEditor : Editor
     {
         GUILayout.Box(logo);
 
+        GUI.enabled = !editorPlaybackRunning && !playingPauseAfterSegment && !EditorApplication.isPlaying;
+
         GUILayout.BeginHorizontal();
         EditorGUILayout.PropertyField(serializedStartOnPlay);
         EditorGUILayout.PropertyField(serializedLoop);
@@ -229,7 +231,7 @@ public class LerpAnimatorEditor : Editor
 
         GUILayout.Space(20);
 
-        GUI.enabled = !editorPlaybackRunning;
+        
         EditorGUILayout.PropertyField(serializedTransforms, true);
         GUI.enabled = true;
 
@@ -246,11 +248,12 @@ public class LerpAnimatorEditor : Editor
             lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = -1;
             serializedObject.ApplyModifiedProperties();
             editorPlaybackRunning = false;
+            playingPauseAfterSegment = false;
             ApplyFromDatastore(-1);
         }
         GUI.enabled = true;
 
-        GUI.enabled = !editorPlaybackRunning && !EditorApplication.isPlaying;
+        GUI.enabled = !editorPlaybackRunning && !EditorApplication.isPlaying && !playingPauseAfterSegment;
         if (GUILayout.Button("Sample scene"))
         {
             lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = -1;
@@ -260,7 +263,6 @@ public class LerpAnimatorEditor : Editor
 
         GUILayout.EndHorizontal();
 
-        EditorGUILayout.PropertyField(serializedStartStates, true);
 
         GUILayout.Space(20);
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
@@ -292,9 +294,14 @@ public class LerpAnimatorEditor : Editor
                     EditorGUI.ProgressBar(rect, lerpStep, "");
 
                 }
+                else if (playingPauseAfterSegment && i == toIndex)
+                {
+                    var rect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight);
+                    EditorGUI.ProgressBar(rect, 0, "Pause: " + (((int)(startTime + pauseAfterDuration - EditorApplication.timeSinceStartup)) + 1).ToString());
+                }
                 GUILayout.EndHorizontal();
 
-
+                GUI.enabled = !editorPlaybackRunning && !playingPauseAfterSegment && !EditorApplication.isPlaying;
                 bool showEvents = EditorGUILayout.Foldout(serializedShowSegmentEvents.GetArrayElementAtIndex(i).boolValue, "EventsOnStart", true);
 
                 if (showEvents != editorShowSegmentEvents[i])
@@ -309,8 +316,15 @@ public class LerpAnimatorEditor : Editor
                     EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("OnSegmentStart"));
                 }
 
-                //EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("name"));
+                EditorGUILayout.BeginHorizontal();
+
+                
                 EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("duration"));
+
+                if (i != editorSegments.Count - 1)
+                    EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("pauseAfter"));
+
+                EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("curve"));
 
@@ -329,13 +343,9 @@ public class LerpAnimatorEditor : Editor
                 {
                     for (int j = 0; j < editorTransforms.Count; j++)
                     {
-
                         GUILayout.BeginHorizontal("Box");
-
                         
                         EditorGUILayout.LabelField(editorTransforms[j] != null ? editorTransforms[j].name : "*NULL*", GUILayout.Width(100));
-
-                        
 
                         EditorGUI.BeginChangeCheck();
                         EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(j).FindPropertyRelative("offset"));
@@ -350,6 +360,7 @@ public class LerpAnimatorEditor : Editor
                         GUILayout.EndHorizontal();
                     }
                 }
+                GUI.enabled = true;
 
                 serializedObject.ApplyModifiedProperties();
 
@@ -363,12 +374,13 @@ public class LerpAnimatorEditor : Editor
                 {
                     lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
                     editorPlaybackRunning = false;
+                    playingPauseAfterSegment = false;
                     ApplyFromDatastore(i);
                 }
                 GUI.enabled = true;
 
 
-                GUI.enabled = !editorPlaybackRunning && !EditorApplication.isPlaying;
+                GUI.enabled = !editorPlaybackRunning && !EditorApplication.isPlaying && !playingPauseAfterSegment;
                 if (GUILayout.Button("Sample scene"))
                 {
                     lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
@@ -386,7 +398,7 @@ public class LerpAnimatorEditor : Editor
 
         GUILayout.BeginHorizontal("Box");
 
-        GUI.enabled = !EditorApplication.isPlaying && !editorPlaybackRunning;
+        GUI.enabled = !EditorApplication.isPlaying && !editorPlaybackRunning && !playingPauseAfterSegment;
         if (GUILayout.Button("Add segment"))
             AddSegment();
 
@@ -406,7 +418,7 @@ public class LerpAnimatorEditor : Editor
 
         EditorGUILayout.Space(20);
 
-        GUI.enabled = !EditorApplication.isPlaying && !editorPlaybackRunning;
+        GUI.enabled = !EditorApplication.isPlaying && !editorPlaybackRunning && !playingPauseAfterSegment;
         EditorGUILayout.PropertyField(serializedObject.FindProperty("OnSequenceEnd"));
         GUI.enabled = true;
 
@@ -871,6 +883,7 @@ public class LerpAnimatorEditor : Editor
     private int fromIndex;
     private int toIndex;
     private bool editorPlaybackRunning;
+    private float pauseAfterDuration;
 
     public void StartEditorPlayback(int fromIndex)
     {
@@ -899,6 +912,7 @@ public class LerpAnimatorEditor : Editor
     private readonly double lerpFrequency = 0.0166; //60 times per second
     private double nextLerpUpdate;
     private float reciprocal;
+    private bool playingPauseAfterSegment;
 
     
 
@@ -909,7 +923,7 @@ public class LerpAnimatorEditor : Editor
             nextLerpUpdate += lerpFrequency;
             Repaint();
 
-            lerpStep = ((float)EditorApplication.timeSinceStartup - (float)startTime) * reciprocal;
+            lerpStep = (((float)EditorApplication.timeSinceStartup  - (float)startTime)) * reciprocal;
 
             if (fromIndex == -1)
             {
@@ -994,10 +1008,32 @@ public class LerpAnimatorEditor : Editor
 
                     reciprocal = 1 / editorSegments[toIndex].duration;
 
+                    pauseAfterDuration = serializedSegments.GetArrayElementAtIndex(fromIndex).FindPropertyRelative("pauseAfter").floatValue;
+
                     startTime = (float)EditorApplication.timeSinceStartup;
 
                     lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = toIndex;
+
+                    if (pauseAfterDuration > 0)
+                    {
+                        editorPlaybackRunning = false;
+                        playingPauseAfterSegment = true;
+                        startTime = (float)EditorApplication.timeSinceStartup;
+                    }
                 }
+            }
+        }
+
+        if(playingPauseAfterSegment)
+        {
+            Repaint();
+
+            if (EditorApplication.timeSinceStartup > startTime + pauseAfterDuration)
+            {
+                startTime = (float)EditorApplication.timeSinceStartup;
+                //pauseAfterDuration = serializedSegments.GetArrayElementAtIndex(toIndex).FindPropertyRelative("pauseAfterDuration").floatValue;
+                playingPauseAfterSegment = false;
+                editorPlaybackRunning = true;
             }
         }
 

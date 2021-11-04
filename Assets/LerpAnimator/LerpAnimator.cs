@@ -23,6 +23,9 @@ public class Segment
     public string name;
 
     public float duration;
+
+    public float pauseAfter;
+
     public AnimationCurve curve;
 
     public UnityEvent OnSegmentStart;

@@ -576,6 +576,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -612,6 +613,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -817,6 +819,7 @@ MonoBehaviour:
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
     name: 
     duration: 1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -1445,7 +1448,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 255246888}
-  m_LocalRotation: {x: 0.000000047699523, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 19.16, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 4.3559, z: 1}
   m_Children: []
@@ -1538,7 +1541,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 290090254}
-  m_LocalRotation: {x: 0.00000027814184, y: 0, z: 0, w: -1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 18.16, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 4.3559, z: 1}
   m_Children: []
@@ -1832,7 +1835,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 388427615}
-  m_LocalRotation: {x: 0, y: -0.93969274, z: 0, w: 0.34201995}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.004, y: 0.986, z: -0.032}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2092,6 +2095,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 5
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -2654,6 +2658,7 @@ MonoBehaviour:
       scale: {x: 2.1397004, y: 1, z: 6.579402}
     name: 
     duration: 5
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -2687,6 +2692,7 @@ MonoBehaviour:
       scale: {x: 2.1397004, y: 1, z: 6.579402}
     name: 
     duration: 5
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -2720,6 +2726,7 @@ MonoBehaviour:
       scale: {x: 2.1397004, y: 1, z: 6.579402}
     name: 
     duration: 5
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -2853,7 +2860,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 563206949}
-  m_LocalRotation: {x: 0.0000003496911, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 17.16, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 4.3559, z: 1}
   m_Children: []
@@ -3039,7 +3046,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 572115804}
-  m_LocalRotation: {x: -0.000000023849761, y: 0, z: 0, w: -1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 16.16, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 4.3559, z: 1}
   m_Children: []
@@ -3508,6 +3515,7 @@ MonoBehaviour:
       scale: {x: 0.11729657, y: 0, z: 1}
     name: 
     duration: 2
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -3550,6 +3558,7 @@ MonoBehaviour:
       scale: {x: 0.11729657, y: 0, z: 1}
     name: 
     duration: 1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -3592,6 +3601,7 @@ MonoBehaviour:
       scale: {x: 0.11729657, y: 364.672, z: 1}
     name: 
     duration: 1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -3830,6 +3840,7 @@ MonoBehaviour:
       scale: {x: 0.69582725, y: 1, z: 0.034391765}
     name: 
     duration: 0.1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -4237,6 +4248,7 @@ MonoBehaviour:
       scale: {x: 1, y: 4.3559, z: 1}
     name: 
     duration: 2
+    pauseAfter: 1
     curve:
       serializedVersion: 2
       m_Curve:
@@ -4288,6 +4300,7 @@ MonoBehaviour:
       scale: {x: 1, y: 4.3559, z: 1}
     name: 
     duration: 6
+    pauseAfter: 2
     curve:
       serializedVersion: 2
       m_Curve:
@@ -4339,6 +4352,7 @@ MonoBehaviour:
       scale: {x: 1, y: 4.3559, z: 1}
     name: 
     duration: 2
+    pauseAfter: 5
     curve:
       serializedVersion: 2
       m_Curve:
@@ -4390,6 +4404,7 @@ MonoBehaviour:
       scale: {x: 1, y: 4.3559, z: 1}
     name: 
     duration: 1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -4420,7 +4435,7 @@ MonoBehaviour:
   OnSequenceEnd:
     m_PersistentCalls:
       m_Calls: []
-  lastSelectedState: 3
+  lastSelectedState: -1
   ShowRotations: 0000000001
   ShowSegmentEvents: 00000000
 --- !u!1 &791704676
@@ -4449,7 +4464,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 791704676}
-  m_LocalRotation: {x: 0.0000005801334, y: 0, z: 0, w: -1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 20.16, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 4.3559, z: 1}
   m_Children: []
@@ -4618,7 +4633,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 822905390}
-  m_LocalRotation: {x: -0.00000004919946, y: 0.000000021586878, z: 0.6150806, w: 0.78846425}
+  m_LocalRotation: {x: -0.000000044703494, y: 0.000000029802326, z: 0.7426515, w: 0.66967815}
   m_LocalPosition: {x: 0.01499, y: 0.03237, z: -0.00008}
   m_LocalScale: {x: 0.1, y: 0.099999994, z: 0.1}
   m_Children:
@@ -5267,6 +5282,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 0.5
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -5303,6 +5319,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -5455,7 +5472,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1060069049}
-  m_LocalRotation: {x: 0.00000017484555, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 15.16, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 4.3559, z: 1}
   m_Children: []
@@ -5708,6 +5725,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 6
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -6366,6 +6384,7 @@ MonoBehaviour:
       scale: {x: 2.1397004, y: 1, z: 6.579402}
     name: 
     duration: 5
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -6399,6 +6418,7 @@ MonoBehaviour:
       scale: {x: 2.1397004, y: 1, z: 6.579402}
     name: 
     duration: 5
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -6432,6 +6452,7 @@ MonoBehaviour:
       scale: {x: 2.1397004, y: 1, z: 6.579402}
     name: 
     duration: 5
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -6612,6 +6633,7 @@ MonoBehaviour:
       scale: {x: 1, y: 0.25048676, z: 1}
     name: 
     duration: 3
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -6657,6 +6679,7 @@ MonoBehaviour:
       scale: {x: 1, y: 0.25048676, z: 1}
     name: 
     duration: 0.5
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -6702,6 +6725,7 @@ MonoBehaviour:
       scale: {x: 1, y: 0.25048676, z: 1}
     name: 
     duration: 0.5
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -6747,6 +6771,7 @@ MonoBehaviour:
       scale: {x: 1, y: 0.25048676, z: 1}
     name: 
     duration: 0.5
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -6792,6 +6817,7 @@ MonoBehaviour:
       scale: {x: 1, y: 0.25048676, z: 1}
     name: 
     duration: 0.5
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -6837,6 +6863,7 @@ MonoBehaviour:
       scale: {x: 1, y: 0.25048676, z: 1}
     name: 
     duration: 0.5
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -6882,6 +6909,7 @@ MonoBehaviour:
       scale: {x: 1, y: 0.25048676, z: 1}
     name: 
     duration: 1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -7014,6 +7042,7 @@ MonoBehaviour:
       scale: {x: 0, y: 0, z: 0}
     name: 
     duration: 1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -7071,6 +7100,7 @@ MonoBehaviour:
       scale: {x: 0, y: 0, z: 0}
     name: 
     duration: 1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -7139,6 +7169,7 @@ MonoBehaviour:
       scale: {x: 0, y: 0, z: 0}
     name: 
     duration: 1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -7207,6 +7238,7 @@ MonoBehaviour:
       scale: {x: 0, y: 0, z: 0}
     name: 
     duration: 1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -7275,6 +7307,7 @@ MonoBehaviour:
       scale: {x: 0, y: 0, z: 0}
     name: 
     duration: 1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -7343,6 +7376,7 @@ MonoBehaviour:
       scale: {x: 0.56627, y: 0.56627, z: 0.56627}
     name: 
     duration: 1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -7588,6 +7622,7 @@ MonoBehaviour:
       scale: {x: 2.1397004, y: 1, z: 12.988231}
     name: 
     duration: 2
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -7621,6 +7656,7 @@ MonoBehaviour:
       scale: {x: 2.1397004, y: 1, z: 12.988231}
     name: 
     duration: 2
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -7654,6 +7690,7 @@ MonoBehaviour:
       scale: {x: 2.1397004, y: 1, z: 12.988231}
     name: 
     duration: 2
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -7863,7 +7900,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1370006863}
-  m_LocalRotation: {x: -0.9512512, y: -0.044943362, z: 0.16773136, w: 0.2548871}
+  m_LocalRotation: {x: -0.9659258, y: 0.00000008438895, z: 0.00000016868265, w: 0.25881913}
   m_LocalPosition: {x: 0.1475, y: 0.0001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -7968,6 +8005,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 1.5
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -8013,6 +8051,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -8058,6 +8097,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 3
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -8103,6 +8143,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 5
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -8148,6 +8189,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 3
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -8178,7 +8220,7 @@ MonoBehaviour:
   OnSequenceEnd:
     m_PersistentCalls:
       m_Calls: []
-  lastSelectedState: 0
+  lastSelectedState: -1
   ShowRotations: 000000000000
   ShowSegmentEvents: 0000000000
 --- !u!1 &1428828943
@@ -8259,6 +8301,7 @@ MonoBehaviour:
       scale: {x: 0, y: 1, z: 1}
     name: 
     duration: 2
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -8298,6 +8341,7 @@ MonoBehaviour:
       scale: {x: 0, y: 1, z: 1}
     name: 
     duration: 2
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -8337,6 +8381,7 @@ MonoBehaviour:
       scale: {x: 12.863, y: 1, z: 1}
     name: 
     duration: 2
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -9027,6 +9072,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 3
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -9069,6 +9115,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 0.6
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -9111,6 +9158,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 0.6
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -9153,6 +9201,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 0.6
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -9195,6 +9244,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 0.6
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -9237,6 +9287,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 0.6
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -9279,6 +9330,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 0.6
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -9321,6 +9373,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 0.6
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -9363,6 +9416,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 0.6
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -9405,6 +9459,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -9447,6 +9502,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -9614,7 +9670,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1608666642}
-  m_LocalRotation: {x: 0.8660254, y: 0.00000011910309, z: 0.00000025000395, w: -0.5000001}
+  m_LocalRotation: {x: -0.8660254, y: -0.00000011910308, z: -0.00000025000395, w: 0.50000006}
   m_LocalPosition: {x: 0.1183, y: 0.2899, z: -0.2025}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -10048,7 +10104,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1924188497}
-  m_LocalRotation: {x: 0.000000044345096, y: 0.0000000010988539, z: 0.40906215, w: -0.9125066}
+  m_LocalRotation: {x: 0.000000044345096, y: 0.0000000010988543, z: 0.4090621, w: -0.9125066}
   m_LocalPosition: {x: 0.04669, y: 0.02671, z: -0.03732}
   m_LocalScale: {x: 0.099999994, y: 0.09999999, z: 0.09999999}
   m_Children:
@@ -10082,7 +10138,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1942488988}
-  m_LocalRotation: {x: -0.00000008742278, y: 0, z: 0, w: -1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 14.16, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 4.3559, z: 1}
   m_Children: []
@@ -10415,6 +10471,7 @@ MonoBehaviour:
       scale: {x: 2.1397004, y: 1, z: 6.579402}
     name: 
     duration: 5
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -10448,6 +10505,7 @@ MonoBehaviour:
       scale: {x: 2.1397004, y: 1, z: 6.579402}
     name: 
     duration: 5
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -10481,6 +10539,7 @@ MonoBehaviour:
       scale: {x: 2.1397004, y: 1, z: 6.579402}
     name: 
     duration: 5
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -20379,6 +20438,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -20427,6 +20487,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -20475,6 +20536,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 1
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
