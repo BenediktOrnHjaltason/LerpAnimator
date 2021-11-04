@@ -37,21 +37,21 @@ public enum EEditorOrGame
 [System.Serializable]
 public class LerpAnimator : MonoBehaviour
 {
+    [Tooltip("Wether sequence should start when game starts in this scene")]
     [SerializeField] bool StartOnPlay;
 
+    [Tooltip("Wether sequence should loop when playing in game play mode")]
+    [SerializeField] bool Loop;
+
+    [Tooltip("The transforms that will be affected by this Lerp Animator")]
     [SerializeField] List<Transform> TransformsToActOn;
 
-    /// <summary>
-    /// Start states of the chosen transforms
-    /// </summary>
+    [Tooltip("The start state for this animatic")]
     [SerializeField] List<TransformData> StartStates;
-
-    /// <summary>
-    /// Individual segments of complete sequence
-    /// </summary>
 
     public List<Segment> Segments;
 
+    [Tooltip("The events that will be triggered when sequence ends in play mode")]
     [SerializeField] UnityEvent OnSequenceEnd;
 
     public int lastSelectedState;
@@ -62,7 +62,8 @@ public class LerpAnimator : MonoBehaviour
 
     private void Start()
     {
-        if (StartOnPlay) StartSequence();
+        if (StartOnPlay) 
+            StartSequence();
     }
 
     private void SampleInterSegmentRotations()
@@ -198,8 +199,12 @@ public class LerpAnimator : MonoBehaviour
 
         else
         {
-            Debug.Log("Ending playback for " + name);
             OnSequenceEnd?.Invoke();
+
+            if (Loop)
+            {
+                StartSequence();
+            }
         }
     }
 

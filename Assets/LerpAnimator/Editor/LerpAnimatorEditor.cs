@@ -29,7 +29,17 @@ public class LerpAnimatorEditor : Editor
     private List<bool> editorShowSegmentEvents;
 
     //Properties for accessing parts of serializedObject
+
+    /// <summary>
+    /// Wether sequence should start when play in scene starts
+    /// </summary>
     private SerializedProperty serializedStartOnPlay;
+
+    /// <summary>
+    /// Wether sequence will loop in game play mode
+    /// </summary>
+    private SerializedProperty serializedLoop;
+
     private SerializedProperty serializedTransforms;
     private SerializedProperty serializedStartStates;
     private SerializedProperty serializedSegments;
@@ -56,6 +66,7 @@ public class LerpAnimatorEditor : Editor
         toolHandleReminder = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LerpAnimator/Editor/T_ToolHandleReminder.png", typeof(Texture));
 
         serializedStartOnPlay = serializedObject.FindProperty("StartOnPlay");
+        serializedLoop = serializedObject.FindProperty("Loop");
 
         serializedTransforms = serializedObject.FindProperty("TransformsToActOn");
         serializedStartStates = serializedObject.FindProperty("StartStates");
@@ -211,7 +222,10 @@ public class LerpAnimatorEditor : Editor
     {
         GUILayout.Box(logo);
 
+        GUILayout.BeginHorizontal();
         EditorGUILayout.PropertyField(serializedStartOnPlay);
+        EditorGUILayout.PropertyField(serializedLoop);
+        EditorGUILayout.EndHorizontal();
 
         GUILayout.Space(20);
 
