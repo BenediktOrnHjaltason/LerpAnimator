@@ -43,13 +43,13 @@ public class LerpAnimator : MonoBehaviour
     [Tooltip("Wether sequence should start when game starts")]
     [SerializeField] bool StartOnPlay;
 
-    [Tooltip("Wether sequence should loop when playing in game play mode")]
+    [Tooltip("Wether sequence should loop")]
     [SerializeField] bool Loop;
 
     [Tooltip("The transforms that will be affected by this Lerp Animator")]
     [SerializeField] List<Transform> TransformsToActOn;
 
-    [Tooltip("The start state for this animatic")]
+    [Tooltip("The start states for this animatic")]
     [SerializeField] List<TransformData> StartStates;
 
     public List<Segment> Segments;

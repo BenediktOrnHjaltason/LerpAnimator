@@ -283,7 +283,6 @@ public class LerpAnimatorEditor : Editor
                     CollectEditorSegments();
 
                     lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
-                    ApplyFromDatastore(i - 1);
                     StartEditorPlayback(i - 1);
                 }
                 GUI.enabled = true;
@@ -987,15 +986,18 @@ public class LerpAnimatorEditor : Editor
                 }
             }
 
-            
-
             if (lerpStep > 1 )
             {
                 //Was it the last segment?
                 if (toIndex + 1 > editorSegments.Count -1)
                 {
-                    editorPlaybackRunning = false;
-                    lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = toIndex;
+                    if (serializedLoop.boolValue == true)
+                    {
+                        lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = 0;
+                        StartEditorPlayback(-1);
+                    }
+
+                    else editorPlaybackRunning = false;
                 }
 
                 //Go to next segment
