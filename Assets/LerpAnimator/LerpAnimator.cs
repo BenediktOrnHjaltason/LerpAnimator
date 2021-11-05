@@ -10,7 +10,7 @@ public class TransformData
 
     public Vector3 position;
 
-    //NOTE: For StartStates, this will actually be used to set rotation, but for segments, it is used to give an offsett from start values.
+    //NOTE: For StartStates, this will actually be used to save rotation, but for segments, it is used to give an offsett from start rotation.
     public Vector3 offset;
     public Vector3 scale;
 }
@@ -40,7 +40,7 @@ public enum EEditorOrGame
 [System.Serializable]
 public class LerpAnimator : MonoBehaviour
 {
-    [Tooltip("Wether sequence should start when game starts in this scene")]
+    [Tooltip("Wether sequence should start when game starts")]
     [SerializeField] bool StartOnPlay;
 
     [Tooltip("Wether sequence should loop when playing in game play mode")]
@@ -69,31 +69,18 @@ public class LerpAnimator : MonoBehaviour
             StartSequence();
     }
 
-    private void SampleInterSegmentRotations()
-    {
-        //Sample current rotations
-        interSegmentRotations = new List<Quaternion>();
-
-        foreach (Transform transform in TransformsToActOn)
-            if (transform)
-                interSegmentRotations.Add(transform.localRotation);
-
-            //We need something in the array to keep the number of elements correct
-            else interSegmentRotations.Add(Quaternion.identity);
-    }
-
-    int fromIndex;
-    int toIndex;
-    float timeOnSegmentStart;
-    float lerpStep;
-
-    float reciprocal;
+    private int fromIndex;
+    private int toIndex;
+    private float timeOnStart;
+    private float lerpStep;
+    private float timeOnPauseEnd;
+    private float reciprocal;
 
     public void StartSequence()
     {
         fromIndex = -1;
         toIndex = 0;
-        timeOnSegmentStart = Time.time;
+        timeOnStart = Time.time;
 
         ApplyStartStates();
 
@@ -106,7 +93,7 @@ public class LerpAnimator : MonoBehaviour
 
     private List<Quaternion> interSegmentRotations;
 
-    public IEnumerator RunSegment()
+    private IEnumerator RunSegment()
     {
         Segments[toIndex].OnSegmentStart?.Invoke();
 
@@ -168,8 +155,7 @@ public class LerpAnimator : MonoBehaviour
 
             yield return null;
         }
-        
-        
+
         //Make sure segment arrived fully at destination
         for (int i = 0; i < TransformsToActOn.Count; i++)
         {
@@ -184,20 +170,26 @@ public class LerpAnimator : MonoBehaviour
             TransformsToActOn[i].localScale = Segments[toIndex].toTransformData[i].scale;
         }
 
-
-
         //Start next segment
         if (toIndex < Segments.Count - 1)
         {
             fromIndex = fromIndex == -1 ? 0 : ++fromIndex;
             toIndex++;
-            timeOnSegmentStart = Time.time;
+            timeOnStart = Time.time;
 
             reciprocal = 1 / Segments[toIndex].duration;
 
             SampleInterSegmentRotations();
 
-            StartCoroutine(RunSegment());
+            if(Segments[toIndex - 1].pauseAfter > 0)
+            {
+                timeOnStart = Time.time;
+                timeOnPauseEnd = Time.time + Segments[toIndex - 1].pauseAfter;
+
+                StartCoroutine(RunPauseAfterSegment());
+            }
+
+            else StartCoroutine(RunSegment());
         }
 
         else
@@ -211,9 +203,19 @@ public class LerpAnimator : MonoBehaviour
         }
     }
 
-    bool CalculatingInterpolationStep(out float step)
+    private IEnumerator RunPauseAfterSegment()
     {
-        step = (Time.time - timeOnSegmentStart) * reciprocal;
+        while (Time.time < timeOnPauseEnd)
+            yield return null;
+
+        timeOnStart = Time.time;
+
+        StartCoroutine(RunSegment());
+    }
+
+    private bool CalculatingInterpolationStep(out float step)
+    {
+        step = (Time.time - timeOnStart) * reciprocal;
 
         return step < 1;
     }
@@ -226,5 +228,18 @@ public class LerpAnimator : MonoBehaviour
             TransformsToActOn[i].localRotation = Quaternion.Euler(StartStates[i].offset);
             TransformsToActOn[i].localScale = StartStates[i].scale;
         }
+    }
+
+    private void SampleInterSegmentRotations()
+    {
+        //Sample current rotations
+        interSegmentRotations = new List<Quaternion>();
+
+        foreach (Transform transform in TransformsToActOn)
+            if (transform)
+                interSegmentRotations.Add(transform.localRotation);
+
+            //We need something in the array to keep the number of elements correct
+            else interSegmentRotations.Add(Quaternion.identity);
     }
 }
