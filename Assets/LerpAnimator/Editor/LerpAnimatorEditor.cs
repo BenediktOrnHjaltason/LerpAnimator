@@ -91,19 +91,6 @@ public class LerpAnimatorEditor : Editor
         CollectEditorShowRotations();
         CollectEditorShowSegmentEvents();
 
-        if (serializedSegments.arraySize < 1)
-        {
-            serializedShowRotations.arraySize++;
-            AddSegment();
-            
-            serializedSegments.GetArrayElementAtIndex(serializedSegments.arraySize - 1).FindPropertyRelative("curve").animationCurveValue = AnimationCurve.Linear(0, 0, 1, 1);
-            serializedSegments.GetArrayElementAtIndex(serializedSegments.arraySize - 1).FindPropertyRelative("duration").floatValue = 1;
-
-            serializedObject.ApplyModifiedProperties();
-
-            lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = -1;
-        }
-
         lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue;
 
         nextChangeCheck = EditorApplication.timeSinceStartup + 0.5f;
@@ -404,7 +391,7 @@ public class LerpAnimatorEditor : Editor
 
         if (GUILayout.Button("Remove segment"))
         {
-            if (serializedSegments.arraySize < 2) 
+            if (serializedSegments.arraySize < 1) 
                 return;
 
             RemoveSegment();
@@ -598,8 +585,6 @@ public class LerpAnimatorEditor : Editor
         //If it does, delete transforms and data from end of collections
         if (editorSegmentsContainsSameTransforms)
         {
-            Debug.Log("User deleted element(s) from end of list");
-
             int difference = editorTransforms.Count - serializedTransforms.arraySize;
 
             for (int j = 0; j < difference; j++)
@@ -720,7 +705,15 @@ public class LerpAnimatorEditor : Editor
 
         //Remove rotation offsets data if inherited from previous segment
         for (int i = 0; i < serializedTransforms.arraySize; i++)
+        {
+            if (i > serializedSegments.GetArrayElementAtIndex(serializedSegments.arraySize - 1).FindPropertyRelative("toTransformData").arraySize - 1)
+                serializedSegments.GetArrayElementAtIndex(serializedSegments.arraySize - 1).FindPropertyRelative("toTransformData").arraySize++;
+
+
+
             serializedSegments.GetArrayElementAtIndex(serializedSegments.arraySize - 1).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value = Vector3.zero;
+        }
+            
 
         serializedObject.ApplyModifiedProperties();
 
@@ -761,12 +754,13 @@ public class LerpAnimatorEditor : Editor
             lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = editorSegments.Count - 2;
         }
 
-        editorSegments.RemoveAt(editorSegments.Count - 1);
         editorShowRotationOffsets.RemoveAt(editorSegments.Count - 1);
         editorShowSegmentEvents.RemoveAt(editorSegments.Count - 1);
 
         serializedObject.FindProperty("ShowRotations").arraySize--;
         serializedObject.FindProperty("ShowSegmentEvents").arraySize--;
+
+        editorSegments.RemoveAt(editorSegments.Count - 1);
     }
 
     public void ApplyFromDatastore(int segmentIndex)
