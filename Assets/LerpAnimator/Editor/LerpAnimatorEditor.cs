@@ -283,7 +283,7 @@ public class LerpAnimatorEditor : Editor
                 else if (playingPauseAfterSegment && i == toIndex -1)
                 {
                     var rect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight);
-                    EditorGUI.ProgressBar(rect, 0, "Pause: " + (((int)(startTime + pauseAfterDuration - EditorApplication.timeSinceStartup)) + 1).ToString());
+                    EditorGUI.ProgressBar(rect, 0, string.Format("Pause: {0:#0.0}", (((startTime + pauseAfterDuration - EditorApplication.timeSinceStartup)))));
                 }
                 GUILayout.EndHorizontal();
 
@@ -426,14 +426,10 @@ public class LerpAnimatorEditor : Editor
         {
             if (serializedTransforms.arraySize > editorTransforms.Count)
             {
-                Debug.Log("User increased array size");
-
                 OnUserIncreasedTransformsArraySize();
             }
             else
             {
-                Debug.Log("User decreased array size");
-
                 OnUserDecreasedTransformsArraySize();
             }
         }
