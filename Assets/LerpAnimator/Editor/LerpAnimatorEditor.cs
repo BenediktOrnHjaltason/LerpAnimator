@@ -280,7 +280,7 @@ public class LerpAnimatorEditor : Editor
                     EditorGUI.ProgressBar(rect, lerpStep, "");
 
                 }
-                else if (playingPauseAfterSegment && i == toIndex)
+                else if (playingPauseAfterSegment && i == toIndex -1)
                 {
                     var rect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight);
                     EditorGUI.ProgressBar(rect, 0, "Pause: " + (((int)(startTime + pauseAfterDuration - EditorApplication.timeSinceStartup)) + 1).ToString());
@@ -1016,7 +1016,7 @@ public class LerpAnimatorEditor : Editor
 
                     startTime = (float)EditorApplication.timeSinceStartup;
 
-                    lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = toIndex;
+                    
 
                     if (pauseAfterDuration > 0)
                     {
@@ -1024,6 +1024,8 @@ public class LerpAnimatorEditor : Editor
                         playingPauseAfterSegment = true;
                         startTime = (float)EditorApplication.timeSinceStartup;
                     }
+
+                    else lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = toIndex;
                 }
             }
         }
@@ -1034,6 +1036,8 @@ public class LerpAnimatorEditor : Editor
 
             if (EditorApplication.timeSinceStartup > startTime + pauseAfterDuration)
             {
+                lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = toIndex;
+
                 startTime = (float)EditorApplication.timeSinceStartup;
                 //pauseAfterDuration = serializedSegments.GetArrayElementAtIndex(toIndex).FindPropertyRelative("pauseAfterDuration").floatValue;
                 playingPauseAfterSegment = false;
