@@ -561,7 +561,11 @@ public class LerpAnimatorEditor : Editor
             Transform lowerIndexTransform = (Transform)serializedTransforms.GetArrayElementAtIndex(i - 1).objectReferenceValue;
 
             if (higherIndexTransform != null && lowerIndexTransform != null && higherIndexTransform == lowerIndexTransform)
+            {
+                Debug.LogWarning("LerpAnimator: Duplicate transform detected. There should only be one reference for each. Nulling element");
                 serializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue = null;
+            }
+                
         }
             
         serializedObject.ApplyModifiedProperties();
@@ -582,32 +586,36 @@ public class LerpAnimatorEditor : Editor
                 editorSegmentsContainsSameTransforms = false;
         }
 
-        //If it does, delete transforms and data from end of collections
+        //If it does, user set lower array count. Delete transforms and data from end of collections
         if (editorSegmentsContainsSameTransforms)
         {
+            Debug.Log("User deleted element(s) from end of list. Serialized transforms: " + serializedTransforms.arraySize + ". EditorTransforms: " + editorTransforms.Count);
+
             int difference = editorTransforms.Count - serializedTransforms.arraySize;
 
             for (int j = 0; j < difference; j++)
             {
-                if (editorStartStates.Count > 0 && editorSegments.Count > 0)
+                if (editorStartStates.Count > 0)
                 {
                     editorTransforms.RemoveAt(editorTransforms.Count - 1);
 
                     //Delete from end of start states
                     editorStartStates.RemoveAt(editorStartStates.Count - 1);
                     serializedStartStates.arraySize--;
-
-                    for (int k = 0; k < editorSegments.Count; k++)
-                    {
-                        //Delete from end of transforms data in segments
-                        editorSegments[k].toTransformData.RemoveAt(editorSegments[k].toTransformData.Count - 1);
-
-                        serializedSegments.GetArrayElementAtIndex(k).FindPropertyRelative("toTransformData").arraySize--;
-                    }
-
-                    serializedObject.ApplyModifiedProperties();
                 }
+
+                for (int k = 0; k < editorSegments.Count; k++)
+                {
+                    //Delete from end of transforms data in segments
+                    editorSegments[k].toTransformData.RemoveAt(editorSegments[k].toTransformData.Count - 1);
+
+                    serializedSegments.GetArrayElementAtIndex(k).FindPropertyRelative("toTransformData").arraySize--;
+                }
+
+                serializedObject.ApplyModifiedProperties();
             }
+
+            Debug.Log("After processing, serialized transforms: " + serializedTransforms.arraySize + ". Editor transforms: " + editorTransforms.Count);
         }
 
         //Else if user deleted element other than last index(es)
