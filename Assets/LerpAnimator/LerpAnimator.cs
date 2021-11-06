@@ -78,6 +78,9 @@ public class LerpAnimator : MonoBehaviour
 
     public void StartSequence()
     {
+        if (Segments.Count < 1 || TransformsToActOn.Count < 1)
+            return;
+
         fromIndex = -1;
         toIndex = 0;
         timeOnStart = Time.time;
