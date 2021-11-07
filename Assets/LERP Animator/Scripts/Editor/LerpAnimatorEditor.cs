@@ -917,7 +917,7 @@ public class LerpAnimatorEditor : Editor
                         if (editorStartStates[i].position != editorSegments[toIndex].toTransformData[i].position)
                         {
                             editorTransforms[i].localPosition =
-                                Vector3.Lerp(editorStartStates[i].position,
+                                Vector3.LerpUnclamped(editorStartStates[i].position,
                                              editorSegments[toIndex].toTransformData[i].position,
                                              editorSegments[toIndex].curve.Evaluate(lerpStep));
                         }
@@ -925,13 +925,13 @@ public class LerpAnimatorEditor : Editor
                         if (editorSegments[toIndex].toTransformData[i].offset != Vector3.zero)
                         {
                             editorTransforms[i].localRotation = Quaternion.Euler(editorStartStates[i].offset) *
-                                Quaternion.Euler(Vector3.Lerp(Vector3.zero, editorSegments[toIndex].toTransformData[i].offset, editorSegments[toIndex].curve.Evaluate(lerpStep))); 
+                                Quaternion.Euler(Vector3.LerpUnclamped(Vector3.zero, editorSegments[toIndex].toTransformData[i].offset, editorSegments[toIndex].curve.Evaluate(lerpStep))); 
                         }
 
                         if (editorStartStates[i].scale != editorSegments[toIndex].toTransformData[i].scale)
                         {
                             editorTransforms[i].localScale =
-                                Vector3.Lerp(editorStartStates[i].scale,
+                                Vector3.LerpUnclamped(editorStartStates[i].scale,
                                              editorSegments[toIndex].toTransformData[i].scale,
                                              editorSegments[toIndex].curve.Evaluate(lerpStep));
                         }
@@ -948,7 +948,7 @@ public class LerpAnimatorEditor : Editor
                         if (editorSegments[fromIndex].toTransformData[i].position != editorSegments[toIndex].toTransformData[i].position)
                         {
                             editorTransforms[i].localPosition =
-                                Vector3.Lerp(editorSegments[fromIndex].toTransformData[i].position,
+                                Vector3.LerpUnclamped(editorSegments[fromIndex].toTransformData[i].position,
                                              editorSegments[toIndex].toTransformData[i].position,
                                              editorSegments[toIndex].curve.Evaluate(lerpStep));
                         }
@@ -956,13 +956,13 @@ public class LerpAnimatorEditor : Editor
                         if (editorSegments[toIndex].toTransformData[i].offset != Vector3.zero)
                         {
                             editorTransforms[i].localRotation = interSegmentRotations[i] *
-                                Quaternion.Euler(Vector3.Lerp(Vector3.zero, editorSegments[toIndex].toTransformData[i].offset, editorSegments[toIndex].curve.Evaluate(lerpStep)));
+                                Quaternion.Euler(Vector3.LerpUnclamped(Vector3.zero, editorSegments[toIndex].toTransformData[i].offset, editorSegments[toIndex].curve.Evaluate(lerpStep)));
                         }
                         
                         if (editorSegments[fromIndex].toTransformData[i].scale != editorSegments[toIndex].toTransformData[i].scale)
                         {
                             editorTransforms[i].localScale =
-                                Vector3.Lerp(editorSegments[fromIndex].toTransformData[i].scale,
+                                Vector3.LerpUnclamped(editorSegments[fromIndex].toTransformData[i].scale,
                                              editorSegments[toIndex].toTransformData[i].scale,
                                              editorSegments[toIndex].curve.Evaluate(lerpStep));
                         }

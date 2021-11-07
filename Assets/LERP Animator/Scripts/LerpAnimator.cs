@@ -110,7 +110,7 @@ public class LerpAnimator : MonoBehaviour
                     {
                         if (StartStates[i].position != Segments[toIndex].toTransformData[i].position)
                         {
-                            TransformsToActOn[i].localPosition = Vector3.Lerp(StartStates[i].position,
+                            TransformsToActOn[i].localPosition = Vector3.LerpUnclamped(StartStates[i].position,
                                                                               Segments[toIndex].toTransformData[i].position,
                                                                               Segments[toIndex].curve.Evaluate(lerpStep));
                         }
@@ -118,12 +118,12 @@ public class LerpAnimator : MonoBehaviour
                         if (Segments[toIndex].toTransformData[i].offset != Vector3.zero)
                         {
                             TransformsToActOn[i].localRotation = Quaternion.Euler(StartStates[i].offset) *
-                                    Quaternion.Euler(Vector3.Lerp(Vector3.zero, Segments[toIndex].toTransformData[i].offset, Segments[toIndex].curve.Evaluate(lerpStep)));
+                                    Quaternion.Euler(Vector3.LerpUnclamped(Vector3.zero, Segments[toIndex].toTransformData[i].offset, Segments[toIndex].curve.Evaluate(lerpStep)));
                         }
 
                         if (StartStates[i].scale != Segments[toIndex].toTransformData[i].scale)
                         {
-                            TransformsToActOn[i].localScale = Vector3.Lerp(StartStates[i].scale,
+                            TransformsToActOn[i].localScale = Vector3.LerpUnclamped(StartStates[i].scale,
                                                                        Segments[toIndex].toTransformData[i].scale,
                                                                        Segments[toIndex].curve.Evaluate(lerpStep));
                         }
@@ -139,7 +139,7 @@ public class LerpAnimator : MonoBehaviour
                     {
                         if (Segments[fromIndex].toTransformData[i].position != Segments[toIndex].toTransformData[i].position)
                         {
-                            TransformsToActOn[i].localPosition = Vector3.Lerp(Segments[fromIndex].toTransformData[i].position,
+                            TransformsToActOn[i].localPosition = Vector3.LerpUnclamped(Segments[fromIndex].toTransformData[i].position,
                                                                               Segments[toIndex].toTransformData[i].position,
                                                                               Segments[toIndex].curve.Evaluate(lerpStep));
                         }
@@ -147,12 +147,12 @@ public class LerpAnimator : MonoBehaviour
                         if (Segments[toIndex].toTransformData[i].offset != Vector3.zero)
                         {
                             TransformsToActOn[i].localRotation = interSegmentRotations[i] *
-                                    Quaternion.Euler(Vector3.Lerp(Vector3.zero, Segments[toIndex].toTransformData[i].offset, Segments[toIndex].curve.Evaluate(lerpStep)));
+                                    Quaternion.Euler(Vector3.LerpUnclamped(Vector3.zero, Segments[toIndex].toTransformData[i].offset, Segments[toIndex].curve.Evaluate(lerpStep)));
                         }
 
                         if (Segments[fromIndex].toTransformData[i].scale != Segments[toIndex].toTransformData[i].scale)
                         {
-                            TransformsToActOn[i].localScale = Vector3.Lerp(Segments[fromIndex].toTransformData[i].scale,
+                            TransformsToActOn[i].localScale = Vector3.LerpUnclamped(Segments[fromIndex].toTransformData[i].scale,
                                                                            Segments[toIndex].toTransformData[i].scale,
                                                                            Segments[toIndex].curve.Evaluate(lerpStep));
                         }

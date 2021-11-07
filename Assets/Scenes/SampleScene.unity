@@ -149,7 +149,7 @@ Transform:
   m_GameObject: {fileID: 7567703}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.039, y: 0, z: 0}
-  m_LocalScale: {x: 0.61366, y: 0.61366, z: 0.61366}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 1306014969}
   m_RootOrder: 1
@@ -783,8 +783,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eefb4c63eaf94f41a70a97adcf74538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartOnPlay: 1
-  Loop: 1
+  StartOnPlay: 0
+  Loop: 0
   TransformsToActOn:
   - {fileID: 245410006}
   - {fileID: 0}
@@ -880,12 +880,172 @@ MonoBehaviour:
     OnSegmentStart:
       m_PersistentCalls:
         m_Calls: []
+  - toTransformData:
+    - position: {x: 4.87, y: 1.689, z: 0}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 0, y: 0, z: 0}
+    - position: {x: 4.88, y: -0.81, z: 0}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    name: 
+    duration: 1
+    pauseAfter: 3
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    OnSegmentStart:
+      m_PersistentCalls:
+        m_Calls: []
+  - toTransformData:
+    - position: {x: 4.87, y: 1.689, z: 0}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 0, y: 0, z: 0}
+    - position: {x: 4.88, y: -0.81, z: 0}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    name: 
+    duration: 1
+    pauseAfter: 3
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    OnSegmentStart:
+      m_PersistentCalls:
+        m_Calls: []
+  - toTransformData:
+    - position: {x: 4.87, y: 1.689, z: 0}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 0, y: 0, z: 0}
+    - position: {x: 4.88, y: -0.81, z: 0}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    name: 
+    duration: 1
+    pauseAfter: 3
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    OnSegmentStart:
+      m_PersistentCalls:
+        m_Calls: []
+  - toTransformData:
+    - position: {x: 4.87, y: 1.689, z: 0}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 0, y: 0, z: 0}
+    - position: {x: 4.88, y: -0.81, z: 0}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    name: 
+    duration: 1
+    pauseAfter: 3
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    OnSegmentStart:
+      m_PersistentCalls:
+        m_Calls: []
   OnSequenceEnd:
     m_PersistentCalls:
       m_Calls: []
-  lastSelectedState: -1
-  ShowRotations: 0101
-  ShowSegmentEvents: 0000
+  lastSelectedState: 5
+  ShowRotations: 010101010100
+  ShowSegmentEvents: 000000000100
 --- !u!4 &188428722
 Transform:
   m_ObjectHideFlags: 0
@@ -1214,7 +1374,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 245410005}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.689, z: 0}
+  m_LocalPosition: {x: 4.87, y: 1.689, z: 0}
   m_LocalScale: {x: 2.7, y: 0.31009, z: 0.41084}
   m_Children: []
   m_Father: {fileID: 188428722}
@@ -1482,7 +1642,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 255246888}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 24.16, y: 0, z: 0}
+  m_LocalPosition: {x: 19.16, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 4.3559, z: 1}
   m_Children: []
   m_Father: {fileID: 775490876}
@@ -1575,7 +1735,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 290090254}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 22.16, y: 0, z: 0}
+  m_LocalPosition: {x: 18.16, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 4.3559, z: 1}
   m_Children: []
   m_Father: {fileID: 775490876}
@@ -1777,13 +1937,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 346309458}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.209, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0.00000055233505}
+  m_LocalPosition: {x: -2.209, y: 0, z: -0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 1306014969}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 179.99998, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180.00002, z: 0}
 --- !u!64 &346309460
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2578,7 +2738,7 @@ Transform:
   m_GameObject: {fileID: 518958504}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.803, y: 0, z: 0}
-  m_LocalScale: {x: 0.54679, y: 0.54679, z: 0.54679}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 1306014969}
   m_RootOrder: 2
@@ -2803,7 +2963,7 @@ MonoBehaviour:
   OnSequenceEnd:
     m_PersistentCalls:
       m_Calls: []
-  lastSelectedState: 1
+  lastSelectedState: -1
   ShowRotations: 000101
   ShowSegmentEvents: 000000
 --- !u!65 &554479888
@@ -2873,8 +3033,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 554479886}
-  m_LocalRotation: {x: 0.7070966, y: 0.5976373, z: 0.08957677, w: -0.36717853}
-  m_LocalPosition: {x: -135.18, y: 22.31, z: 10.23}
+  m_LocalRotation: {x: 0.22453067, y: 0.47836798, z: -0.36926737, w: -0.76445514}
+  m_LocalPosition: {x: -139.46, y: 21.3, z: 1.5}
   m_LocalScale: {x: 2.1397004, y: 1, z: 6.579402}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2907,7 +3067,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 563206949}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.16, y: 0, z: 0}
+  m_LocalPosition: {x: 17.16, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 4.3559, z: 1}
   m_Children: []
   m_Father: {fileID: 775490876}
@@ -3093,7 +3253,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 572115804}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.16, y: 0, z: 0}
+  m_LocalPosition: {x: 16.16, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 4.3559, z: 1}
   m_Children: []
   m_Father: {fileID: 775490876}
@@ -4345,7 +4505,7 @@ MonoBehaviour:
       offset: {x: 2520, y: 0, z: 0}
       scale: {x: 1, y: 4.3559, z: 1}
     name: 
-    duration: 6
+    duration: 3
     pauseAfter: 1
     curve:
       serializedVersion: 2
@@ -4450,7 +4610,7 @@ MonoBehaviour:
       scale: {x: 1, y: 4.3559, z: 1}
     name: 
     duration: 1
-    pauseAfter: 1
+    pauseAfter: 4
     curve:
       serializedVersion: 2
       m_Curve:
@@ -4481,9 +4641,9 @@ MonoBehaviour:
   OnSequenceEnd:
     m_PersistentCalls:
       m_Calls: []
-  lastSelectedState: 0
-  ShowRotations: 0000000001
-  ShowSegmentEvents: 00000000
+  lastSelectedState: -1
+  ShowRotations: 0000000101
+  ShowSegmentEvents: 00000001
 --- !u!1 &791704676
 GameObject:
   m_ObjectHideFlags: 0
@@ -4511,7 +4671,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 791704676}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 26.16, y: 0, z: 0}
+  m_LocalPosition: {x: 20.16, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 4.3559, z: 1}
   m_Children: []
   m_Father: {fileID: 775490876}
@@ -5519,7 +5679,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1060069049}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.16, y: 0, z: 0}
+  m_LocalPosition: {x: 15.16, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 4.3559, z: 1}
   m_Children: []
   m_Father: {fileID: 775490876}
@@ -6429,7 +6589,7 @@ MonoBehaviour:
       offset: {x: 1086.9, y: 0, z: 0}
       scale: {x: 2.1397004, y: 1, z: 6.579402}
     name: 
-    duration: 20
+    duration: 3
     pauseAfter: 1
     curve:
       serializedVersion: 2
@@ -6438,19 +6598,37 @@ MonoBehaviour:
         time: 0
         value: 0
         inSlope: 0
-        outSlope: 1
+        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 0
+        time: 0.15365411
+        value: 1.5744793
+        inSlope: 3.6384273
+        outSlope: 3.6384273
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.33333334
+        outWeight: 0.036868278
+      - serializedVersion: 3
+        time: 0.6356473
+        value: 0.4526645
+        inSlope: -2.1606383
+        outSlope: -2.1606383
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0.14007261
+        outSlope: 0.14007261
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.22695063
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -6495,7 +6673,7 @@ MonoBehaviour:
   OnSequenceEnd:
     m_PersistentCalls:
       m_Calls: []
-  lastSelectedState: 0
+  lastSelectedState: -1
   ShowRotations: 010100
   ShowSegmentEvents: 0000
 --- !u!65 &1268895065
@@ -6565,7 +6743,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1268895063}
-  m_LocalRotation: {x: 0.06017773, y: 0.000000098096606, z: 0.000000041872184, w: 0.9981877}
+  m_LocalRotation: {x: 0.000000023849767, y: 0.000000095399045, z: 0.00000004769952,
+    w: 1}
   m_LocalPosition: {x: -138.9, y: 19.85, z: -6.51}
   m_LocalScale: {x: 2.1397004, y: 1, z: 6.579402}
   m_Children: []
@@ -7003,7 +7182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eefb4c63eaf94f41a70a97adcf74538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartOnPlay: 0
+  StartOnPlay: 1
   Loop: 0
   TransformsToActOn:
   - {fileID: 1976219281}
@@ -7026,10 +7205,10 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
   - position: {x: -2.209, y: 0, z: -0}
-    offset: {x: 0, y: 0, z: 0}
+    offset: {x: -0, y: 179.99994, z: -0}
     scale: {x: 0, y: 0, z: 0}
   - position: {x: -1.187, y: 1.5, z: -0.11}
-    offset: {x: 0, y: 0, z: 0}
+    offset: {x: -0, y: 180.00006, z: 0}
     scale: {x: 0, y: 0, z: 0}
   Segments:
   - toTransformData:
@@ -7067,8 +7246,8 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.7594377
-        value: 1.2248147
+        time: 0.41922772
+        value: 1.2510483
         inSlope: 1
         outSlope: 1
         tangentMode: 0
@@ -7078,11 +7257,11 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
-        outSlope: 1
+        inSlope: 0.09816828
+        outSlope: 0.09816828
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.106663026
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -7125,8 +7304,8 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.74779445
-        value: 1.0881732
+        time: 0.4301675
+        value: 1.2471964
         inSlope: 1.0000001
         outSlope: 1.0000001
         tangentMode: 0
@@ -7136,11 +7315,11 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
-        outSlope: 1
+        inSlope: 0.255702
+        outSlope: 0.255702
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.10008292
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -7194,8 +7373,8 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.7653818
-        value: 1.0666493
+        time: 0.39270115
+        value: 1.1586446
         inSlope: 1.0000001
         outSlope: 1.0000001
         tangentMode: 0
@@ -7205,11 +7384,11 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
-        outSlope: 1
+        inSlope: 0.1390663
+        outSlope: 0.1390663
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.10038489
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -7263,8 +7442,8 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.71573305
-        value: 1.1029176
+        time: 0.40012026
+        value: 1.177018
         inSlope: 0.9999999
         outSlope: 0.9999999
         tangentMode: 0
@@ -7274,11 +7453,11 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
-        outSlope: 1
+        inSlope: 0.12077178
+        outSlope: 0.12077178
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.10490464
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -7318,7 +7497,7 @@ MonoBehaviour:
       scale: {x: 0, y: 0, z: 0}
     name: 
     duration: 1
-    pauseAfter: 0
+    pauseAfter: 3
     curve:
       serializedVersion: 2
       m_Curve:
@@ -7332,8 +7511,8 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.8346486
-        value: 1.0811071
+        time: 0.43346453
+        value: 1.1866179
         inSlope: 0.9999999
         outSlope: 0.9999999
         tangentMode: 0
@@ -7343,11 +7522,11 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
-        outSlope: 1
+        inSlope: 0.17121878
+        outSlope: 0.17121878
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.12149265
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -7401,8 +7580,8 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.7896252
-        value: 1.112931
+        time: 0.4022351
+        value: 1.1925514
         inSlope: 1
         outSlope: 1
         tangentMode: 0
@@ -7412,11 +7591,11 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
-        outSlope: 1
+        inSlope: 0.07063863
+        outSlope: 0.07063863
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.11185551
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -7440,7 +7619,7 @@ MonoBehaviour:
       m_Calls: []
   lastSelectedState: -1
   ShowRotations: 00000000000000
-  ShowSegmentEvents: 000101010101
+  ShowSegmentEvents: 000100000000
 --- !u!4 &1306014969
 Transform:
   m_ObjectHideFlags: 0
@@ -7974,7 +8153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StartOnPlay: 1
-  Loop: 0
+  Loop: 1
   TransformsToActOn:
   - {fileID: 388427616}
   - {fileID: 822905391}
@@ -8016,7 +8195,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 1.5
-    pauseAfter: 2
+    pauseAfter: 1
     curve:
       serializedVersion: 2
       m_Curve:
@@ -8062,7 +8241,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 3
-    pauseAfter: 2
+    pauseAfter: 0.5
     curve:
       serializedVersion: 2
       m_Curve:
@@ -8153,7 +8332,7 @@ MonoBehaviour:
       offset: {x: 0, y: -160, z: 0}
       scale: {x: 1, y: 1, z: 1}
     name: 
-    duration: 2
+    duration: 4
     pauseAfter: 0.8
     curve:
       serializedVersion: 2
@@ -8200,7 +8379,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 3
-    pauseAfter: 3
+    pauseAfter: 0
     curve:
       serializedVersion: 2
       m_Curve:
@@ -8951,8 +9130,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1519952980}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.81, z: 0}
+  m_LocalRotation: {x: 0.7349738, y: 0, z: 0, w: 0.6780956}
+  m_LocalPosition: {x: 4.88, y: -0.81, z: 0}
   m_LocalScale: {x: 2.7, y: 0.31009, z: 0.41084}
   m_Children: []
   m_Father: {fileID: 188428722}
@@ -10244,7 +10423,7 @@ Transform:
   m_GameObject: {fileID: 1976219280}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.601, y: 0, z: 0}
-  m_LocalScale: {x: 0.35028, y: 0.35028, z: 0.35028}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 1306014969}
   m_RootOrder: 0
@@ -10962,9 +11141,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2090649809}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000052054855}
   m_LocalPosition: {x: -1.187, y: 1.5, z: -0.11}
-  m_LocalScale: {x: 0.56627, y: 0.56627, z: 0.56627}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 1306014969}
   m_RootOrder: 5
@@ -18556,17 +18735,17 @@ PrefabInstance:
     - target: {fileID: 3758724360027866181, guid: d15d49128592fbf43a478f0ea33c1d44,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.26054
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3758724360027866181, guid: d15d49128592fbf43a478f0ea33c1d44,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.26054
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3758724360027866181, guid: d15d49128592fbf43a478f0ea33c1d44,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.26054
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3758724360027866181, guid: d15d49128592fbf43a478f0ea33c1d44,
         type: 3}
