@@ -208,7 +208,15 @@ public class LerpAnimator : MonoBehaviour
 
             if (Loop)
             {
-                StartSequence();
+                if (Segments[toIndex - 1].pauseAfter > 0)
+                {
+                    timeOnStart = Time.time;
+                    timeOnPauseEnd = Time.time + Segments[toIndex].pauseAfter;
+
+                    StartCoroutine(RunLastSegmentPause());
+                }
+
+                else StartSequence();
             }
         }
     }
@@ -221,6 +229,15 @@ public class LerpAnimator : MonoBehaviour
         timeOnStart = Time.time;
 
         StartCoroutine(RunSegment());
+    }
+
+    private IEnumerator RunLastSegmentPause()
+    {
+        while (Time.time < timeOnPauseEnd)
+            yield return null;
+
+        if (Loop)
+            StartSequence();
     }
 
     private bool CalculatingInterpolationStep(out float step)
