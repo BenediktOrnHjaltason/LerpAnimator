@@ -394,7 +394,7 @@ public class LerpAnimatorEditor : Editor
         GUI.enabled = true;
 
         GUILayout.EndHorizontal();
-        EditorGUILayout.HelpBox("NOTE! Adding segment auto samples from scene", MessageType.Info);
+        EditorGUILayout.HelpBox("Adding segment auto samples from scene", MessageType.Info);
 
 
         EditorGUILayout.Space(20);
@@ -718,12 +718,12 @@ public class LerpAnimatorEditor : Editor
 
         //Insert data for transforms allready in array
 
-        int indexAdded_Segments = serializedSegments.arraySize -1;
+        int indexAdded = serializedSegments.arraySize -1;
 
-        lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = indexAdded_Segments;
+        lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = indexAdded;
 
-        serializedSegments.GetArrayElementAtIndex(indexAdded_Segments).FindPropertyRelative("duration").floatValue = 1;
-        serializedSegments.GetArrayElementAtIndex(indexAdded_Segments).FindPropertyRelative("curve").animationCurveValue = AnimationCurve.Linear(0, 0, 1, 1);
+        serializedSegments.GetArrayElementAtIndex(indexAdded).FindPropertyRelative("duration").floatValue = 1;
+        serializedSegments.GetArrayElementAtIndex(indexAdded).FindPropertyRelative("curve").animationCurveValue = AnimationCurve.Linear(0, 0, 1, 1);
 
         
         CollectEditorSegments();
@@ -731,13 +731,16 @@ public class LerpAnimatorEditor : Editor
 
         editorShowRotationOffsets.Add(false);
         editorShowSegmentEvents.Add(false);
+
         serializedShowRotations.arraySize++;
         serializedShowSegmentEvents.arraySize++;
+        serializedShowRotations.GetArrayElementAtIndex(serializedShowRotations.arraySize - 1).boolValue =
+            serializedShowSegmentEvents.GetArrayElementAtIndex(serializedShowSegmentEvents.arraySize - 1).boolValue = false;
 
         serializedObject.ApplyModifiedProperties();
 
         //Sample to new segment from current scene
-        SampleAllFromScene(indexAdded_Segments);
+        SampleAllFromScene(indexAdded);
     }
 
     private void RemoveSegment()
