@@ -113,10 +113,6 @@ public class LerpAnimatorEditor : Editor
     {
         handlingUndoRedo = true;
 
-        CollectEditorTransforms();
-        CollectEditorStartStates();
-        CollectEditorSegments();
-
         delayedCollectTimerStart = (float)EditorApplication.timeSinceStartup; 
     }
 
@@ -772,7 +768,7 @@ public class LerpAnimatorEditor : Editor
         {
             for (int i = 0; i < editorTransforms.Count; i++)
             {
-                if (editorTransforms[i])
+                if (editorTransforms[i] != null)
                 {
                     editorTransforms[i].localPosition =
                         serializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value;
@@ -791,7 +787,7 @@ public class LerpAnimatorEditor : Editor
         {
             for (int i = 0; i < editorTransforms.Count; i++)
             {
-                if (editorTransforms[i])
+                if (editorTransforms[i] != null)
                 {
                     editorTransforms[i].localPosition =
                     serializedSegments.GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value;
@@ -1006,6 +1002,8 @@ public class LerpAnimatorEditor : Editor
             CollectEditorTransforms();
             CollectEditorStartStates();
             CollectEditorSegments();
+            CollectEditorShowRotations();
+            CollectEditorShowSegmentEvents();
 
             handlingUndoRedo = false;
         }
@@ -1060,8 +1058,6 @@ public class LerpAnimatorEditor : Editor
             lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = toIndex;
         }
     }
-
-
 
     #endregion
 }
