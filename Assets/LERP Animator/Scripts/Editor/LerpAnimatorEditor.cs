@@ -816,7 +816,7 @@ public class LerpAnimatorEditor : Editor
         {
             for (int i = 0; i < editorTransforms.Count; i++)
             {
-                if (editorTransforms[i])
+                if (editorTransforms[i] != null)
                 {
                     serializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value
                     = editorTransforms[i].transform.localPosition;
@@ -837,7 +837,7 @@ public class LerpAnimatorEditor : Editor
         {
             for (int i = 0; i < editorTransforms.Count; i++)
             {
-                if (editorTransforms[i])
+                if (editorTransforms[i] != null)
                 {
                     serializedSegments.GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value
                     = editorTransforms[i].transform.localPosition;
@@ -909,7 +909,7 @@ public class LerpAnimatorEditor : Editor
             {
                 for (int i = 0; i < editorTransforms.Count; i++)
                 {
-                    if (editorTransforms[i])
+                    if (editorTransforms[i] != null)
                     {
                         if (editorStartStates[i].position != editorSegments[toIndex].toTransformData[i].position)
                         {
@@ -940,7 +940,7 @@ public class LerpAnimatorEditor : Editor
             {
                 for (int i = 0; i < editorTransforms.Count; i++)
                 {
-                    if (editorTransforms[i])
+                    if (editorTransforms[i] != null)
                     {
                         if (editorSegments[fromIndex].toTransformData[i].position != editorSegments[toIndex].toTransformData[i].position)
                         {
