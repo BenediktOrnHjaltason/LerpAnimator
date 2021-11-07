@@ -62,8 +62,8 @@ public class LerpAnimatorEditor : Editor
 
     private void OnEnable()
     {
-        logo = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LerpAnimator/Editor/T_LerpAnimatorLogo.png", typeof(Texture));
-        toolHandleReminder = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LerpAnimator/Editor/T_ToolHandleReminder.png", typeof(Texture));
+        logo = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Scripts/Editor/T_LerpAnimatorLogo.png", typeof(Texture));
+        toolHandleReminder = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Scripts/Editor//T_ToolHandleReminder.png", typeof(Texture));
 
         serializedStartOnPlay = serializedObject.FindProperty("StartOnPlay");
         serializedLoop = serializedObject.FindProperty("Loop");
@@ -280,10 +280,10 @@ public class LerpAnimatorEditor : Editor
                     EditorGUI.ProgressBar(rect, lerpStep, "");
 
                 }
-                else if (playingPauseAfterSegment && i == toIndex -1)
+                else if (playingPauseAfterSegment && i == toIndex)
                 {
                     var rect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight);
-                    EditorGUI.ProgressBar(rect, 0, string.Format("Pause: {0:#0.0}", (((startTime + pauseAfterDuration - EditorApplication.timeSinceStartup)))));
+                    EditorGUI.ProgressBar(rect, 0, string.Format("Pause: {0:#0.0}", (((startTime + pauseAfterSegmentDuration - EditorApplication.timeSinceStartup)))));
                 }
                 GUILayout.EndHorizontal();
 
@@ -307,8 +307,7 @@ public class LerpAnimatorEditor : Editor
                 
                 EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("duration"));
 
-                if (i != editorSegments.Count - 1)
-                    EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("pauseAfter"));
+                EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("pauseAfter"));
 
                 EditorGUILayout.EndHorizontal();
 
@@ -862,25 +861,12 @@ public class LerpAnimatorEditor : Editor
 
     #region Playback
 
-    private void SampleInterSegmentRotations()
-    {
-        //Sample current rotations
-        interSegmentRotations = new List<Quaternion>();
-
-        foreach (Transform transform in editorTransforms)
-            if (transform)
-                interSegmentRotations.Add(transform.localRotation);
-            
-            //We need something in the array to keep the number of elements correct
-            else interSegmentRotations.Add(Quaternion.identity);
-    }
-
     private double startTime;
     private float lerpStep;
     private int fromIndex;
     private int toIndex;
     private bool editorPlaybackRunning;
-    private float pauseAfterDuration;
+    private float pauseAfterSegmentDuration;
 
     public void StartEditorPlayback(int fromIndex)
     {
@@ -900,6 +886,7 @@ public class LerpAnimatorEditor : Editor
 
         reciprocal = 1 / editorSegments[toIndex].duration;
 
+        playingPauseAfterSegment = false;
         editorPlaybackRunning = true;
     }
 
@@ -986,43 +973,17 @@ public class LerpAnimatorEditor : Editor
 
             if (lerpStep > 1 )
             {
-                //Was it the last segment?
-                if (toIndex + 1 > editorSegments.Count -1)
+                //Pause after segment?
+                pauseAfterSegmentDuration = serializedSegments.GetArrayElementAtIndex(toIndex).FindPropertyRelative("pauseAfter").floatValue;
+
+                if (pauseAfterSegmentDuration > 0)
                 {
-                    if (serializedLoop.boolValue == true)
-                    {
-                        lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = 0;
-                        StartEditorPlayback(-1);
-                    }
-
-                    else editorPlaybackRunning = false;
-                }
-
-                //Go to next segment
-                else
-                {
-                    SampleInterSegmentRotations();
-
-                    fromIndex = fromIndex == -1 ? 0 : ++fromIndex;
-                    toIndex++;
-
-                    reciprocal = 1 / editorSegments[toIndex].duration;
-
-                    pauseAfterDuration = serializedSegments.GetArrayElementAtIndex(fromIndex).FindPropertyRelative("pauseAfter").floatValue;
-
+                    editorPlaybackRunning = false;
+                    playingPauseAfterSegment = true;
                     startTime = (float)EditorApplication.timeSinceStartup;
-
-                    
-
-                    if (pauseAfterDuration > 0)
-                    {
-                        editorPlaybackRunning = false;
-                        playingPauseAfterSegment = true;
-                        startTime = (float)EditorApplication.timeSinceStartup;
-                    }
-
-                    else lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = toIndex;
                 }
+
+                else NextSegmentOrStop();
             }
         }
 
@@ -1030,14 +991,12 @@ public class LerpAnimatorEditor : Editor
         {
             Repaint();
 
-            if (EditorApplication.timeSinceStartup > startTime + pauseAfterDuration)
+            if (EditorApplication.timeSinceStartup > startTime + pauseAfterSegmentDuration)
             {
-                lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = toIndex;
-
-                startTime = (float)EditorApplication.timeSinceStartup;
-                //pauseAfterDuration = serializedSegments.GetArrayElementAtIndex(toIndex).FindPropertyRelative("pauseAfterDuration").floatValue;
                 playingPauseAfterSegment = false;
                 editorPlaybackRunning = true;
+
+                NextSegmentOrStop();
             }
         }
 
@@ -1059,6 +1018,50 @@ public class LerpAnimatorEditor : Editor
             CheckForTransformsArrayChanged();
         }
     }
+
+    private void SampleInterSegmentRotations()
+    {
+        //Sample current rotations
+        interSegmentRotations = new List<Quaternion>();
+
+        foreach (Transform transform in editorTransforms)
+            if (transform)
+                interSegmentRotations.Add(transform.localRotation);
+
+            //We need something in the array to keep the number of elements correct
+            else interSegmentRotations.Add(Quaternion.identity);
+    }
+
+    private void NextSegmentOrStop()
+    {
+        SampleInterSegmentRotations();
+
+        //Was it the last segment?
+        if (toIndex + 1 > editorSegments.Count - 1)
+        {
+            if (serializedLoop.boolValue == true)
+            {
+                lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = 0;
+                StartEditorPlayback(-1);
+            }
+
+            else editorPlaybackRunning = false;
+        }
+
+        else
+        {
+            fromIndex = fromIndex == -1 ? 0 : ++fromIndex;
+            toIndex++;
+
+            reciprocal = 1 / editorSegments[toIndex].duration;
+
+            startTime = (float)EditorApplication.timeSinceStartup;
+
+            lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = toIndex;
+        }
+    }
+
+
 
     #endregion
 }
