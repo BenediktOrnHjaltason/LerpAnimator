@@ -18,6 +18,8 @@ public class TransformData
 [System.Serializable]
 public class Segment
 {
+    public UnityEvent OnLerpStart;
+
     public List<TransformData> toTransformData;
 
     public string name;
@@ -28,7 +30,7 @@ public class Segment
 
     public AnimationCurve curve;
 
-    public UnityEvent OnSegmentStart;
+    public UnityEvent OnLerpEnd;
 }
 
 public enum EEditorOrGame
@@ -53,9 +55,6 @@ public class LerpAnimator : MonoBehaviour
     [SerializeField] List<TransformData> StartStates;
 
     public List<Segment> Segments;
-
-    [Tooltip("The events that will be triggered when sequence ends in play mode")]
-    [SerializeField] UnityEvent OnSequenceEnd;
 
     public int lastSelectedState;
 
@@ -98,7 +97,7 @@ public class LerpAnimator : MonoBehaviour
 
     private IEnumerator RunSegment()
     {
-        Segments[toIndex].OnSegmentStart?.Invoke();
+        Segments[toIndex].OnLerpStart?.Invoke();
 
         while (CalculatingInterpolationStep(out lerpStep))
         {
@@ -180,6 +179,8 @@ public class LerpAnimator : MonoBehaviour
             }
         }
 
+        Segments[toIndex].OnLerpEnd?.Invoke();
+
         //Start next segment
         if (toIndex < Segments.Count - 1)
         {
@@ -204,8 +205,6 @@ public class LerpAnimator : MonoBehaviour
 
         else
         {
-            OnSequenceEnd?.Invoke();
-
             if (Loop)
             {
                 if (Segments[toIndex - 1].pauseAfter > 0)

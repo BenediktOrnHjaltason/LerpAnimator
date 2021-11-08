@@ -203,13 +203,18 @@ public class LerpAnimatorEditor : Editor
 
     public override void OnInspectorGUI()
     {
+        GUILayout.BeginHorizontal();
+
         GUILayout.Box(logo);
 
         GUI.enabled = !editorPlaybackRunning && !playingPauseAfterSegment && !EditorApplication.isPlaying;
 
-        GUILayout.BeginHorizontal();
+        GUILayout.BeginVertical();
+
+        GUILayout.Space(10);
         EditorGUILayout.PropertyField(serializedStartOnPlay);
         EditorGUILayout.PropertyField(serializedLoop);
+        EditorGUILayout.EndVertical();
         EditorGUILayout.EndHorizontal();
 
         GUILayout.Space(20);
@@ -284,7 +289,7 @@ public class LerpAnimatorEditor : Editor
                 GUILayout.EndHorizontal();
 
                 GUI.enabled = !editorPlaybackRunning && !playingPauseAfterSegment && !EditorApplication.isPlaying;
-                bool showEvents = EditorGUILayout.Foldout(serializedShowSegmentEvents.GetArrayElementAtIndex(i).boolValue, "EventsOnStart", true);
+                bool showEvents = EditorGUILayout.Foldout(serializedShowSegmentEvents.GetArrayElementAtIndex(i).boolValue, "Events", true);
 
                 if (showEvents != editorShowSegmentEvents[i])
                 {
@@ -295,7 +300,8 @@ public class LerpAnimatorEditor : Editor
 
                 if (editorShowSegmentEvents[i])
                 {
-                    EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("OnSegmentStart"));
+                    EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("OnLerpStart"));
+                    EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("OnLerpEnd"));
                 }
 
                 EditorGUILayout.BeginHorizontal();
@@ -396,13 +402,7 @@ public class LerpAnimatorEditor : Editor
         GUILayout.EndHorizontal();
         EditorGUILayout.HelpBox("Adding segment auto samples from scene", MessageType.Info);
 
-
         EditorGUILayout.Space(20);
-
-        GUI.enabled = !EditorApplication.isPlaying && !editorPlaybackRunning && !playingPauseAfterSegment;
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("OnSequenceEnd"));
-        GUI.enabled = true;
-
 
         serializedObject.ApplyModifiedProperties();
     }
