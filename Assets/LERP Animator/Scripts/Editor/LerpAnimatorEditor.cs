@@ -91,6 +91,13 @@ public class LerpAnimatorEditor : Editor
         CollectEditorShowRotations();
         CollectEditorShowSegmentEvents();
 
+        if (serializedSegments.arraySize < 1)
+        {
+            serializedObject.FindProperty("lastSelectedState").intValue = -1;
+            serializedObject.ApplyModifiedProperties();
+        }
+            
+
         lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue;
 
         nextChangeCheck = EditorApplication.timeSinceStartup + 0.5f;

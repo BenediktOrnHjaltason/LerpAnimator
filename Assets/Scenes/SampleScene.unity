@@ -567,7 +567,10 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
   Segments:
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 40.055447, y: 31.24466, z: 2.3307078}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
@@ -601,10 +604,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 40.055447, y: 31.24466, z: 2.3307078}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
@@ -638,12 +644,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  OnSequenceEnd:
-    m_PersistentCalls:
-      m_Calls: []
   lastSelectedState: -1
   ShowRotations: 010100
   ShowSegmentEvents: 0100
@@ -800,7 +803,10 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 2.7, y: 0.31009, z: 0.41084}
   Segments:
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 4.87, y: 1.689, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
@@ -837,10 +843,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 0, y: 1.689, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
@@ -877,10 +886,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 4.87, y: 1.689, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
@@ -917,10 +929,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 4.87, y: 1.689, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
@@ -957,10 +972,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 4.87, y: 1.689, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
@@ -997,10 +1015,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 4.87, y: 1.689, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
@@ -1037,12 +1058,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  OnSequenceEnd:
-    m_PersistentCalls:
-      m_Calls: []
   lastSelectedState: 5
   ShowRotations: 010101010100
   ShowSegmentEvents: 000000000100
@@ -2028,7 +2046,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 388427615}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0.00000013907092}
+  m_LocalRotation: {x: 0, y: -0.93969274, z: 0, w: 0.34201995}
   m_LocalPosition: {x: -0.004, y: 0.986, z: -0.032}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2273,7 +2291,10 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
   Segments:
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.70132, y: 0.411412, z: 10.306449}
@@ -2313,12 +2334,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  OnSequenceEnd:
-    m_PersistentCalls:
-      m_Calls: []
   lastSelectedState: -1
   ShowRotations: 0100
   ShowSegmentEvents: 00
@@ -2849,7 +2867,10 @@ MonoBehaviour:
     offset: {x: 6.900028, y: 0.000011593383, z: 0.00000550584}
     scale: {x: 2.1397004, y: 1, z: 6.579402}
   Segments:
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -137.61, y: 26.66, z: 5.39}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.1397004, y: 1, z: 6.579402}
@@ -2883,10 +2904,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -135.18, y: 22.31, z: 10.23}
       offset: {x: -92.38, y: 0, z: 0}
       scale: {x: 2.1397004, y: 1, z: 6.579402}
@@ -2920,10 +2944,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -135.18, y: 22.31, z: 10.23}
       offset: {x: 37.41, y: 142.03, z: 0}
       scale: {x: 2.1397004, y: 1, z: 6.579402}
@@ -2957,12 +2984,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  OnSequenceEnd:
-    m_PersistentCalls:
-      m_Calls: []
   lastSelectedState: -1
   ShowRotations: 000101
   ShowSegmentEvents: 000000
@@ -3706,7 +3730,10 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0.11729657, y: 0, z: 1}
   Segments:
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -56.522392, y: 13.222156, z: 11.555662}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.25672, y: 0.2, z: 0.25672}
@@ -3746,10 +3773,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -56.522392, y: 13.222156, z: 11.555662}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.25672, y: 0.2, z: 0.25672}
@@ -3789,10 +3819,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -56.522392, y: 13.222156, z: 11.555662}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.25672, y: 0.2, z: 0.25672}
@@ -3832,12 +3865,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  OnSequenceEnd:
-    m_PersistentCalls:
-      m_Calls: []
   lastSelectedState: -1
   ShowRotations: 00000001
   ShowSegmentEvents: 000000
@@ -4037,7 +4067,10 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0.69582725, y: 1, z: 0.034391765}
   Segments:
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 0.984, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.69582725, y: 1, z: 0.034391765}
@@ -4071,12 +4104,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  OnSequenceEnd:
-    m_PersistentCalls:
-      m_Calls: []
   lastSelectedState: -1
   ShowRotations: 0000
   ShowSegmentEvents: 00
@@ -4430,7 +4460,10 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 4.3559, z: 1}
   Segments:
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 14.16, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 4.3559, z: 1}
@@ -4479,10 +4512,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 14.16, y: 0, z: 0}
       offset: {x: 360, y: 0, z: 0}
       scale: {x: 1, y: 4.3559, z: 1}
@@ -4531,10 +4567,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 20.16, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 4.3559, z: 1}
@@ -4583,10 +4622,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 14.16, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 4.3559, z: 1}
@@ -4635,12 +4677,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  OnSequenceEnd:
-    m_PersistentCalls:
-      m_Calls: []
   lastSelectedState: -1
   ShowRotations: 0000000101
   ShowSegmentEvents: 00000001
@@ -4839,7 +4878,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 822905390}
-  m_LocalRotation: {x: -0.000000044703494, y: 0.000000029802326, z: 0.7426515, w: 0.66967815}
+  m_LocalRotation: {x: -0.000000049199468, y: 0.00000002158688, z: 0.6150806, w: 0.7884643}
   m_LocalPosition: {x: 0.01499, y: 0.03237, z: -0.00008}
   m_LocalScale: {x: 0.1, y: 0.099999994, z: 0.1}
   m_Children:
@@ -5415,6 +5454,192 @@ RectTransform:
   m_AnchoredPosition: {x: -2.47, y: 0.99}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &991651135
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 991651136}
+  - component: {fileID: 991651139}
+  - component: {fileID: 991651138}
+  - component: {fileID: 991651137}
+  m_Layer: 0
+  m_Name: Walkway4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &991651136
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 991651135}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 26.14, y: 13.85, z: 0}
+  m_LocalScale: {x: 32.277184, y: 1.1988606, z: 6.6792326}
+  m_Children: []
+  m_Father: {fileID: 1734771880}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &991651137
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 991651135}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &991651138
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 991651135}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &991651139
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 991651135}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &999572111
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 999572112}
+  - component: {fileID: 999572115}
+  - component: {fileID: 999572114}
+  - component: {fileID: 999572113}
+  m_Layer: 0
+  m_Name: Walkway3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &999572112
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 999572111}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -38.7, y: 13.85, z: 0}
+  m_LocalScale: {x: 32.277184, y: 1.1988606, z: 6.6792326}
+  m_Children: []
+  m_Father: {fileID: 1734771880}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &999572113
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 999572111}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &999572114
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 999572111}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &999572115
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 999572111}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1042919417
 GameObject:
   m_ObjectHideFlags: 0
@@ -5479,7 +5704,10 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
   Segments:
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 3.458, y: 5.57, z: -1.113}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
@@ -5513,10 +5741,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 3.458, y: 5.57, z: -1.113}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
@@ -5550,12 +5781,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  OnSequenceEnd:
-    m_PersistentCalls:
-      m_Calls: []
   lastSelectedState: 1
   ShowRotations: 010101
   ShowSegmentEvents: 0000
@@ -5925,7 +6153,10 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
   Segments:
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 0, y: 0, z: -1.975}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
@@ -5956,12 +6187,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  OnSequenceEnd:
-    m_PersistentCalls:
-      m_Calls: []
   lastSelectedState: 0
   ShowRotations: 0101
   ShowSegmentEvents: 00
@@ -6584,7 +6812,10 @@ MonoBehaviour:
     offset: {x: 0.0000027329813, y: 0.000010931925, z: 0.0000054659627}
     scale: {x: 2.1397004, y: 1, z: 6.579402}
   Segments:
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -138.9, y: 19.85, z: -6.51}
       offset: {x: 1086.9, y: 0, z: 0}
       scale: {x: 2.1397004, y: 1, z: 6.579402}
@@ -6633,10 +6864,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -138.9, y: 19.85, z: -6.51}
       offset: {x: 0, y: 151.55, z: 0}
       scale: {x: 2.1397004, y: 1, z: 6.579402}
@@ -6667,12 +6901,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  OnSequenceEnd:
-    m_PersistentCalls:
-      m_Calls: []
   lastSelectedState: -1
   ShowRotations: 010100
   ShowSegmentEvents: 0000
@@ -6805,7 +7036,10 @@ MonoBehaviour:
     offset: {x: -0, y: 0, z: 270}
     scale: {x: 1, y: 0.25048676, z: 1}
   Segments:
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -5.5980015, y: 0.5000019, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 0.25048676, z: 1}
@@ -6848,10 +7082,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -5.5980015, y: 0.5000019, z: 0}
       offset: {x: 0, y: 0, z: 90}
       scale: {x: 1, y: 0.25048676, z: 1}
@@ -6894,10 +7131,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -5.5980015, y: 0.5000019, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 0.25048676, z: 1}
@@ -6940,10 +7180,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -5.5980015, y: 0.5000019, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 0.25048676, z: 1}
@@ -6986,10 +7229,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -5.5980015, y: 0.5000019, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 0.25048676, z: 1}
@@ -7032,10 +7278,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -5.5980015, y: 0.5000019, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 0.25048676, z: 1}
@@ -7078,10 +7327,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -5.5980015, y: 0.5000019, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 0.25048676, z: 1}
@@ -7124,12 +7376,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  OnSequenceEnd:
-    m_PersistentCalls:
-      m_Calls: []
   lastSelectedState: -1
   ShowRotations: 0001010101010101
   ShowSegmentEvents: 00000000000000
@@ -7182,7 +7431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eefb4c63eaf94f41a70a97adcf74538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartOnPlay: 1
+  StartOnPlay: 0
   Loop: 0
   TransformsToActOn:
   - {fileID: 1976219281}
@@ -7211,7 +7460,10 @@ MonoBehaviour:
     offset: {x: -0, y: 180.00006, z: 0}
     scale: {x: 0, y: 0, z: 0}
   Segments:
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 0.601, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.35028, y: 0.35028, z: 0.35028}
@@ -7232,7 +7484,7 @@ MonoBehaviour:
       scale: {x: 0, y: 0, z: 0}
     name: 
     duration: 1
-    pauseAfter: 0
+    pauseAfter: 3
     curve:
       serializedVersion: 2
       m_Curve:
@@ -7266,10 +7518,24 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1306014970}
+          m_MethodName: FireEvent1
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - OnLerpStart:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+    toTransformData:
     - position: {x: 0.601, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.35028, y: 0.35028, z: 0.35028}
@@ -7290,7 +7556,7 @@ MonoBehaviour:
       scale: {x: 0, y: 0, z: 0}
     name: 
     duration: 1
-    pauseAfter: 0
+    pauseAfter: 3
     curve:
       serializedVersion: 2
       m_Curve:
@@ -7324,11 +7590,11 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 1306014970}
-          m_MethodName: FireEvent1
+          m_MethodName: FireEvent2
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -7338,7 +7604,10 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 0.601, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.35028, y: 0.35028, z: 0.35028}
@@ -7359,7 +7628,7 @@ MonoBehaviour:
       scale: {x: 0, y: 0, z: 0}
     name: 
     duration: 1
-    pauseAfter: 0
+    pauseAfter: 3
     curve:
       serializedVersion: 2
       m_Curve:
@@ -7393,11 +7662,11 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 1306014970}
-          m_MethodName: FireEvent2
+          m_MethodName: FireEvent3
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -7407,7 +7676,10 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 0.601, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.35028, y: 0.35028, z: 0.35028}
@@ -7428,7 +7700,7 @@ MonoBehaviour:
       scale: {x: 0, y: 0, z: 0}
     name: 
     duration: 1
-    pauseAfter: 0
+    pauseAfter: 3
     curve:
       serializedVersion: 2
       m_Curve:
@@ -7462,11 +7734,11 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 1306014970}
-          m_MethodName: FireEvent3
+          m_MethodName: FireEvent4
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -7476,7 +7748,10 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 0.601, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.35028, y: 0.35028, z: 0.35028}
@@ -7531,11 +7806,11 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 1306014970}
-          m_MethodName: FireEvent4
+          m_MethodName: FireEvent5
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -7545,7 +7820,10 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 0.601, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.35028, y: 0.35028, z: 0.35028}
@@ -7600,26 +7878,12 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1306014970}
-          m_MethodName: FireEvent5
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  OnSequenceEnd:
-    m_PersistentCalls:
-      m_Calls: []
+        m_Calls: []
   lastSelectedState: -1
   ShowRotations: 00000000000000
-  ShowSegmentEvents: 000100000000
+  ShowSegmentEvents: 000000000100
 --- !u!4 &1306014969
 Transform:
   m_ObjectHideFlags: 0
@@ -7806,7 +8070,10 @@ MonoBehaviour:
     offset: {x: 6.962383, y: 5.3283763, z: 294.6451}
     scale: {x: 2.1397004, y: 1, z: 12.988231}
   Segments:
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -135.21286, y: 24.03, z: 37.05}
       offset: {x: 542.4, y: 0, z: 0}
       scale: {x: 2.1397004, y: 1, z: 12.988231}
@@ -7837,10 +8104,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -135.21286, y: 24.03, z: 37.05}
       offset: {x: 0, y: 0, z: 350.56}
       scale: {x: 2.1397004, y: 1, z: 12.988231}
@@ -7871,10 +8141,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -135.21286, y: 24.03, z: 37.05}
       offset: {x: 0, y: 960.4, z: 0}
       scale: {x: 2.1397004, y: 1, z: 12.988231}
@@ -7905,12 +8178,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  OnSequenceEnd:
-    m_PersistentCalls:
-      m_Calls: []
   lastSelectedState: 0
   ShowRotations: 01010100
   ShowSegmentEvents: 000000
@@ -8090,7 +8360,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1370006863}
-  m_LocalRotation: {x: -0.9659258, y: 0.00000008438895, z: 0.00000016868265, w: 0.25881913}
+  m_LocalRotation: {x: -0.9512512, y: -0.044943362, z: 0.16773136, w: 0.2548871}
   m_LocalPosition: {x: 0.1475, y: 0.0001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -8131,7 +8401,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1412770803}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.231, y: 31.79, z: -11.945}
+  m_LocalPosition: {x: -94.81, y: 29.66, z: 22.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 388427616}
@@ -8153,7 +8423,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StartOnPlay: 1
-  Loop: 1
+  Loop: 0
   TransformsToActOn:
   - {fileID: 388427616}
   - {fileID: 822905391}
@@ -8177,7 +8447,10 @@ MonoBehaviour:
     offset: {x: 330, y: 180.00002, z: 180}
     scale: {x: 1, y: 1, z: 1}
   Segments:
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -0.004, y: 0.986, z: -0.032}
       offset: {x: 0, y: 900, z: 0}
       scale: {x: 1, y: 1, z: 1}
@@ -8220,10 +8493,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -0.004, y: 0.986, z: -0.032}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
@@ -8266,10 +8542,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -0.004, y: 0.986, z: -0.032}
       offset: {x: 0, y: -500, z: 0}
       scale: {x: 1, y: 1, z: 1}
@@ -8287,7 +8566,7 @@ MonoBehaviour:
       scale: {x: 1, y: 1, z: 1}
     name: 
     duration: 3
-    pauseAfter: 0
+    pauseAfter: 1
     curve:
       serializedVersion: 2
       m_Curve:
@@ -8312,10 +8591,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -0.004, y: 0.986, z: -0.032}
       offset: {x: 0, y: 1080, z: 0}
       scale: {x: 1, y: 1, z: 1}
@@ -8332,7 +8614,7 @@ MonoBehaviour:
       offset: {x: 0, y: -160, z: 0}
       scale: {x: 1, y: 1, z: 1}
     name: 
-    duration: 4
+    duration: 5
     pauseAfter: 0.8
     curve:
       serializedVersion: 2
@@ -8358,10 +8640,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -0.004, y: 0.986, z: -0.032}
       offset: {x: 0, y: -180, z: 0}
       scale: {x: 1, y: 1, z: 1}
@@ -8404,15 +8689,105 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  OnSequenceEnd:
-    m_PersistentCalls:
-      m_Calls: []
-  lastSelectedState: 0
-  ShowRotations: 000000000000
+  lastSelectedState: 3
+  ShowRotations: 010000000000
   ShowSegmentEvents: 0000000000
+--- !u!1 &1412783357
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1412783358}
+  - component: {fileID: 1412783361}
+  - component: {fileID: 1412783360}
+  - component: {fileID: 1412783359}
+  m_Layer: 0
+  m_Name: Walkway1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1412783358
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1412783357}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -38.7, y: -1.5, z: 0}
+  m_LocalScale: {x: 32.277184, y: 1.1988606, z: 6.6792326}
+  m_Children: []
+  m_Father: {fileID: 1734771880}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1412783359
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1412783357}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1412783360
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1412783357}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &1412783361
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1412783357}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1428828943
 GameObject:
   m_ObjectHideFlags: 0
@@ -8479,7 +8854,10 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 1, z: 1}
   Segments:
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 0, y: -0.421, z: -2.225}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 14.156, y: 1, z: 1}
@@ -8516,10 +8894,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 0, y: -0.421, z: -2.225}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 14.156, y: 1, z: 1}
@@ -8556,10 +8937,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 0, y: -0.421, z: -2.225}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 14.156, y: 1, z: 1}
@@ -8596,12 +8980,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  OnSequenceEnd:
-    m_PersistentCalls:
-      m_Calls: []
   lastSelectedState: -1
   ShowRotations: 01000000
   ShowSegmentEvents: 000000
@@ -9247,7 +9628,10 @@ MonoBehaviour:
     offset: {x: 270, y: -0, z: 0}
     scale: {x: 1, y: 1, z: 1}
   Segments:
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -4.13, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.9151, y: 0.12954, z: 6.5683}
@@ -9287,10 +9671,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -4.13, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.9151, y: 0.12954, z: 6.5683}
@@ -9330,10 +9717,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -4.13, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.9151, y: 0.12954, z: 6.5683}
@@ -9373,10 +9763,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -4.13, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.9151, y: 0.12954, z: 6.5683}
@@ -9416,10 +9809,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -4.13, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.9151, y: 0.12954, z: 6.5683}
@@ -9459,10 +9855,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -4.13, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.9151, y: 0.12954, z: 6.5683}
@@ -9502,10 +9901,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -4.13, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.9151, y: 0.12954, z: 6.5683}
@@ -9545,10 +9947,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -4.13, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.9151, y: 0.12954, z: 6.5683}
@@ -9588,10 +9993,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -4.13, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.9151, y: 0.12954, z: 6.5683}
@@ -9631,10 +10039,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -4.13, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.9151, y: 0.12954, z: 6.5683}
@@ -9674,10 +10085,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -4.13, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.9151, y: 0.12954, z: 6.5683}
@@ -9717,12 +10131,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  OnSequenceEnd:
-    m_PersistentCalls:
-      m_Calls: []
   lastSelectedState: -1
   ShowRotations: 010101010101010101010100
   ShowSegmentEvents: 0000000000000000000000
@@ -9860,7 +10271,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1608666642}
-  m_LocalRotation: {x: -0.8660254, y: -0.00000011910308, z: -0.00000025000395, w: 0.50000006}
+  m_LocalRotation: {x: 0.8660254, y: 0.00000011910309, z: 0.00000025000395, w: -0.5000001}
   m_LocalPosition: {x: 0.1183, y: 0.2899, z: -0.2025}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -9875,6 +10286,41 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 596832465}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1734771879
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1734771880}
+  m_Layer: 0
+  m_Name: Bridge
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1734771880
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1734771879}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -229.41, y: 19.987871, z: 14.687527}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1412783358}
+  - {fileID: 1866491576}
+  - {fileID: 999572112}
+  - {fileID: 991651136}
+  - {fileID: 2119557438}
+  m_Father: {fileID: 0}
+  m_RootOrder: 21
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1765160669
 GameObject:
   m_ObjectHideFlags: 0
@@ -10085,6 +10531,99 @@ Transform:
   m_Father: {fileID: 1306014969}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1866491575
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1866491576}
+  - component: {fileID: 1866491579}
+  - component: {fileID: 1866491578}
+  - component: {fileID: 1866491577}
+  m_Layer: 0
+  m_Name: Walkway2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1866491576
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1866491575}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 26.14, y: -1.5, z: 0}
+  m_LocalScale: {x: 32.277184, y: 1.1988606, z: 6.6792326}
+  m_Children: []
+  m_Father: {fileID: 1734771880}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1866491577
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1866491575}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1866491578
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1866491575}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &1866491579
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1866491575}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1906642610
 GameObject:
   m_ObjectHideFlags: 0
@@ -10294,7 +10833,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1924188497}
-  m_LocalRotation: {x: 0.000000044345096, y: 0.0000000010988543, z: 0.4090621, w: -0.9125066}
+  m_LocalRotation: {x: 0.000000044345096, y: 0.0000000010988539, z: 0.40906215, w: -0.9125066}
   m_LocalPosition: {x: 0.04669, y: 0.02671, z: -0.03732}
   m_LocalScale: {x: 0.099999994, y: 0.09999999, z: 0.09999999}
   m_Children:
@@ -10655,7 +11194,10 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 2.1397004, y: 1, z: 6.579402}
   Segments:
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -138.9, y: 13.265866, z: -6.51}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.1397004, y: 1, z: 6.579402}
@@ -10686,10 +11228,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -138.9, y: 13.265866, z: -6.51}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.1397004, y: 1, z: 6.579402}
@@ -10720,10 +11265,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: -138.9, y: 13.265866, z: -6.51}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.1397004, y: 1, z: 6.579402}
@@ -10754,12 +11302,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  OnSequenceEnd:
-    m_PersistentCalls:
-      m_Calls: []
   lastSelectedState: 2
   ShowRotations: 01010100
   ShowSegmentEvents: 000000
@@ -11302,6 +11847,36 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2098650466}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2119557437
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2119557438}
+  m_Layer: 0
+  m_Name: BridgeBoxBase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2119557438
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119557437}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.06, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1734771880}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &37076611183311621
 Transform:
   m_ObjectHideFlags: 0
@@ -20607,7 +21182,10 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
   Segments:
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 0.965, y: 0.957, z: 0.911}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
@@ -20653,10 +21231,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 0.965, y: 0.957, z: 0.911}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
@@ -20702,10 +21283,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - toTransformData:
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
     - position: {x: 0.965, y: 0.957, z: 0.911}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
@@ -20751,12 +21335,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    OnSegmentStart:
+    OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  OnSequenceEnd:
-    m_PersistentCalls:
-      m_Calls: []
   lastSelectedState: 2
   ShowRotations: 01010100
   ShowSegmentEvents: 000000
