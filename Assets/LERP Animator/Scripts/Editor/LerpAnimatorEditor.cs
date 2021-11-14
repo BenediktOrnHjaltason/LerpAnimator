@@ -117,6 +117,8 @@ public class LerpAnimatorEditor : Editor
     bool handlingUndoRedo = false;
     float delayedCollectTimerStart;
     const float delayAmount = 0.05f;
+    
+
     private void OnUndoRedoPerformed()
     {
         handlingUndoRedo = true;
@@ -246,6 +248,7 @@ public class LerpAnimatorEditor : Editor
             editorPlaybackRunning = false;
             playingPauseAfterSegment = false;
             ApplyFromDatastore(-1);
+
         }
         GUI.enabled = true;
 
@@ -341,6 +344,8 @@ public class LerpAnimatorEditor : Editor
                             ApplyFromDatastore(i);
 
                             lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
+
+
                         }
 
                         GUILayout.EndHorizontal();
@@ -410,18 +415,25 @@ public class LerpAnimatorEditor : Editor
     /// <summary>
     /// Checks if user increased or decreased array size by adjusting number, or replaced or nulled element
     /// </summary>
+    private int undoGroupOnChangeChecked;
     private void CheckForTransformsArrayChanged()
     {
+        undoGroupOnChangeChecked = Undo.GetCurrentGroup();
+
         //If user adjusts array count
         if (editorTransforms.Count != serializedTransforms.arraySize)
         {
             if (serializedTransforms.arraySize > editorTransforms.Count)
             {
                 OnUserIncreasedTransformsArraySize();
+
+                Undo.CollapseUndoOperations(undoGroupOnChangeChecked - 1);              
             }
             else
             {
                 OnUserDecreasedTransformsArraySize();
+
+                Undo.CollapseUndoOperations(undoGroupOnChangeChecked - 1);
             }
         }
 
@@ -441,6 +453,8 @@ public class LerpAnimatorEditor : Editor
                         editorTransforms[i] = null;
 
                         ResetDataForSingleElement(i);
+
+                        Undo.CollapseUndoOperations(undoGroupOnChangeChecked - 1);                      
                     }
 
                     else if(IsDuplicate(i, serializedTransform))
@@ -451,6 +465,9 @@ public class LerpAnimatorEditor : Editor
                         serializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue = null;
 
                         serializedObject.ApplyModifiedProperties();
+
+
+                        Undo.CollapseUndoOperations(undoGroupOnChangeChecked - 1);
                     }
 
                     else
@@ -460,6 +477,8 @@ public class LerpAnimatorEditor : Editor
                         editorTransforms[i] = serializedTransform;
 
                         SampleSingleFromSceneToStartStatesAndSegments(i);
+
+                        Undo.CollapseUndoOperations(undoGroupOnChangeChecked - 1);
                     }
                 }
             }
@@ -673,8 +692,12 @@ public class LerpAnimatorEditor : Editor
 
     #region User Operation
 
+    private int undoGroupOnSegmentAdjusted;
+
     private void AddSegment()
     {
+        undoGroupOnSegmentAdjusted = Undo.GetCurrentGroup();
+
         serializedSegments.arraySize++;
 
         //Remove rotation offsets data if inherited from previous segment
@@ -713,10 +736,16 @@ public class LerpAnimatorEditor : Editor
 
         //Sample to new segment from current scene
         SampleAllFromScene(indexAdded);
+
+        //Undo.RecordObject(target as LerpAnimator, "Added segment");
+
+        Undo.CollapseUndoOperations(undoGroupOnSegmentAdjusted);
     }
 
     private void RemoveSegment()
     {
+        undoGroupOnSegmentAdjusted = Undo.GetCurrentGroup();
+
         serializedSegments.arraySize--;
         serializedObject.ApplyModifiedProperties();
 
@@ -734,6 +763,8 @@ public class LerpAnimatorEditor : Editor
         serializedObject.FindProperty("ShowSegmentEvents").arraySize--;
 
         editorSegments.RemoveAt(editorSegments.Count - 1);
+
+        Undo.CollapseUndoOperations(undoGroupOnSegmentAdjusted);
     }
 
     public void ApplyFromDatastore(int segmentIndex)
@@ -977,12 +1008,26 @@ public class LerpAnimatorEditor : Editor
 
             handlingUndoRedo = false;
             Repaint();
+
+            string debug = "Undo/Redo | Current group index: " + Undo.GetCurrentGroup() + ". ";
+
+            debug += "Editor transforms: " + editorTransforms.Count + ". Serialized: " + serializedTransforms.arraySize + "\n";
+
+            debug += "Editor start states: " + editorStartStates.Count + ". Serialized " + serializedStartStates.arraySize + "\n";
+
+            for (int i = 0;  i < serializedSegments.arraySize; i++ )
+            {
+                debug += "serialized toTransformData in segment " + i + ": " + serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").arraySize +
+                    (i <= editorSegments.Count ? ". Editor: " + editorSegments[i].toTransformData.Count + "\n" : "\n");
+            }
+
+            Debug.Log(debug);
         }
 
         //Handles periodic checks for when user makes changes in serializedTransforms array
         if(!handlingUndoRedo && EditorApplication.timeSinceStartup > nextChangeCheck)
         {
-            nextChangeCheck = EditorApplication.timeSinceStartup + 0.5f;
+            nextChangeCheck = EditorApplication.timeSinceStartup + 0.3f;
 
             CheckForTransformsArrayChanged();
         }
