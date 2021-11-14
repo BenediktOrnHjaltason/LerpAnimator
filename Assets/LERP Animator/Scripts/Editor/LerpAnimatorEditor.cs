@@ -114,14 +114,19 @@ public class LerpAnimatorEditor : Editor
     /// Handles when Undo/Redo is performed by user. Because Undo.undoRedoPerformed is fired before changes are registered in serializedObject,
     /// a delay is used to wait for it to update before collecting data again.
     /// </summary>
-    bool handlingUndoRedo = false;
-    float delayedCollectTimerStart;
-    const float delayAmount = 0.05f;
+    private bool handlingUndoRedo = false;
+    private float delayedCollectTimerStart;
+    private const float delayAmount = 0.05f;
     
 
     private void OnUndoRedoPerformed()
     {
         handlingUndoRedo = true;
+
+        if (playingPauseAfterSegment)
+            playingPauseAfterSegment = false;
+        if (editorPlaybackRunning)
+            editorPlaybackRunning = false;
 
         delayedCollectTimerStart = (float)EditorApplication.timeSinceStartup; 
     }

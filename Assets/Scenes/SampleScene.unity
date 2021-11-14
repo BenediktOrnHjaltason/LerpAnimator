@@ -959,7 +959,6 @@ MonoBehaviour:
   TransformsToActOn:
   - {fileID: 245410006}
   - {fileID: 1213565975}
-  - {fileID: 2052681450}
   - {fileID: 1984905444}
   - {fileID: 1182525418}
   - {fileID: 1519952981}
@@ -967,134 +966,71 @@ MonoBehaviour:
   - {fileID: 1155324307}
   - {fileID: 2098650467}
   - {fileID: 908989053}
+  - {fileID: 2052681450}
   StartStates:
-  - position: {x: 4.87, y: 1.689, z: 0}
-    offset: {x: -0, y: 9.999998, z: 0}
+  - position: {x: 0.05, y: 1.689, z: 0.2}
+    offset: {x: -0, y: 20.000006, z: 0}
     scale: {x: 2.7, y: 0.31009, z: 0.41084}
   - position: {x: 0, y: 1.189, z: 0}
-    offset: {x: -0, y: 9.999999, z: 0}
-    scale: {x: 2.7, y: 0.31009, z: 0.41084}
-  - position: {x: 0, y: 0.69, z: 0}
-    offset: {x: -0, y: 19.999998, z: 0}
+    offset: {x: -0, y: 20.000006, z: 0}
     scale: {x: 2.7, y: 0.31009, z: 0.41084}
   - position: {x: 0, y: 0.19, z: 0}
-    offset: {x: -0, y: 9.999999, z: 0}
+    offset: {x: -0, y: 20.000006, z: 0}
     scale: {x: 2.7, y: 0.31009, z: 0.41084}
   - position: {x: 0, y: -0.31, z: 0}
-    offset: {x: -0, y: 9.999999, z: 0}
+    offset: {x: -0, y: 20.000006, z: 0}
     scale: {x: 2.7, y: 0.31009, z: 0.41084}
-  - position: {x: 4.88, y: -0.81, z: 0}
-    offset: {x: 78.99844, y: 114.50401, z: 114.90754}
+  - position: {x: -0.012999535, y: -0.838, z: -0.009000003}
+    offset: {x: -0, y: 20.000006, z: 0}
     scale: {x: 2.7, y: 0.31009, z: 0.41084}
   - position: {x: 0, y: -1.31, z: 0}
-    offset: {x: -0, y: 0, z: 0}
+    offset: {x: -0, y: 20.00001, z: 0}
     scale: {x: 2.7, y: 0.31009, z: 0.41084}
   - position: {x: 0, y: -1.81, z: 0}
-    offset: {x: -0, y: 0, z: 0}
+    offset: {x: -0, y: 20.00001, z: 0}
     scale: {x: 2.7, y: 0.31009, z: 0.41084}
   - position: {x: 0, y: -2.31, z: 0}
-    offset: {x: -0, y: 0, z: 0}
+    offset: {x: -0, y: 20.00001, z: 0}
     scale: {x: 2.7, y: 0.31009, z: 0.41084}
   - position: {x: 0, y: -2.81, z: 0}
-    offset: {x: -0, y: 0, z: 0}
+    offset: {x: -0, y: 20.00001, z: 0}
+    scale: {x: 2.7, y: 0.31009, z: 0.41084}
+  - position: {x: -0, y: 0.69, z: -0}
+    offset: {x: -0, y: 20.000006, z: 0}
     scale: {x: 2.7, y: 0.31009, z: 0.41084}
   Segments:
   - OnLerpStart:
       m_PersistentCalls:
         m_Calls: []
     toTransformData:
-    - position: {x: 4.87, y: 1.689, z: 0}
-      offset: {x: 0, y: 20, z: 0}
-      scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: 1.189, z: 0}
-      offset: {x: 0, y: 20, z: 0}
-      scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: 0.69, z: 0}
-      offset: {x: 0, y: 20, z: 0}
-      scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: 0.19, z: 0}
-      offset: {x: 0, y: 20, z: 0}
-      scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: -0.31, z: 0}
-      offset: {x: 0, y: 20, z: 0}
-      scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 4.88, y: -0.81, z: 0}
-      offset: {x: 0, y: 20, z: 0}
-      scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: -1.31, z: 0}
-      offset: {x: 0, y: 20, z: 0}
-      scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: -1.81, z: 0}
-      offset: {x: 0, y: 20, z: 0}
-      scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: -2.31, z: 0}
-      offset: {x: 0, y: 20, z: 0}
-      scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: -2.81, z: 0}
-      offset: {x: 0, y: 20, z: 0}
-      scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    name: 
-    duration: 1
-    pauseAfter: 0
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    OnLerpEnd:
-      m_PersistentCalls:
-        m_Calls: []
-  - OnLerpStart:
-      m_PersistentCalls:
-        m_Calls: []
-    toTransformData:
-    - position: {x: 4.87, y: 1.689, z: 0}
+    - position: {x: 0.05, y: 1.689, z: 0.2}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: 1.189, z: 0}
+    - position: {x: 1.1730042, y: 1.189, z: -0.43100023}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: 0.69, z: 0}
+    - position: {x: 1.1730042, y: 0.19, z: -0.43100023}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: 0.19, z: 0}
+    - position: {x: 1.1730042, y: -0.31, z: -0.43100023}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: -0.31, z: 0}
+    - position: {x: 1.16, y: -0.838, z: -0.44}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 4.88, y: -0.81, z: 0}
+    - position: {x: 1.1730042, y: -1.31, z: -0.43100023}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: -1.31, z: 0}
+    - position: {x: 1.1730042, y: -1.81, z: -0.43100023}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: -1.81, z: 0}
+    - position: {x: 1.1730042, y: -2.31, z: -0.43100023}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: -2.31, z: 0}
+    - position: {x: 1.1730042, y: -2.81, z: -0.43100023}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: -2.81, z: 0}
+    - position: {x: 1.1730042, y: 0.69, z: -0.43100023}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
     name: 
@@ -1131,34 +1067,34 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
     toTransformData:
-    - position: {x: 4.87, y: 1.689, z: 0}
+    - position: {x: 0.05, y: 1.689, z: 0.2}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: 1.189, z: 0}
+    - position: {x: 1.1730042, y: 1.189, z: -0.43100023}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: 0.69, z: 0}
+    - position: {x: 2.5830002, y: 0.19, z: -0.941}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: 0.19, z: 0}
+    - position: {x: 2.5830002, y: -0.31, z: -0.941}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: -0.31, z: 0}
+    - position: {x: 2.57, y: -0.838, z: -0.95}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 4.88, y: -0.81, z: 0}
+    - position: {x: 2.5830002, y: -1.31, z: -0.941}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: -1.31, z: 0}
+    - position: {x: 2.5830002, y: -1.81, z: -0.941}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: -1.81, z: 0}
+    - position: {x: 2.5830002, y: -2.31, z: -0.941}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: -2.31, z: 0}
+    - position: {x: 2.5830002, y: -2.81, z: -0.941}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    - position: {x: 0, y: -2.81, z: 0}
+    - position: {x: 2.5830002, y: 0.69, z: -0.941}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
     name: 
@@ -1191,9 +1127,201 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  lastSelectedState: 0
-  ShowRotations: 010000
-  ShowSegmentEvents: 000000
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
+    - position: {x: 0.05, y: 1.689, z: 0.2}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 1.1730042, y: 1.189, z: -0.43100023}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 3.7529984, y: 0.19, z: -1.3709998}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 3.7529984, y: -0.31, z: -1.3709998}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 3.74, y: -0.838, z: -1.38}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 3.7529984, y: -1.31, z: -1.3709998}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 3.7529984, y: -1.81, z: -1.3709998}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 3.7529984, y: -2.31, z: -1.3709998}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 3.7529984, y: -2.81, z: -1.3709998}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 2.5830002, y: 0.69, z: -0.941}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    name: 
+    duration: 1
+    pauseAfter: 0
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    OnLerpEnd:
+      m_PersistentCalls:
+        m_Calls: []
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
+    - position: {x: 0.05, y: 1.689, z: 0.2}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 1.1730042, y: 1.189, z: -0.43100023}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 3.7529984, y: 0.19, z: -1.3709998}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 5.163002, y: -0.31, z: -1.881}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 5.15, y: -0.838, z: -1.89}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 5.163002, y: -1.31, z: -1.881}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 5.163002, y: -1.81, z: -1.881}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 5.163002, y: -2.31, z: -1.881}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 5.163002, y: -2.81, z: -1.881}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 2.5830002, y: 0.69, z: -0.941}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    name: 
+    duration: 1
+    pauseAfter: 0
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    OnLerpEnd:
+      m_PersistentCalls:
+        m_Calls: []
+  - OnLerpStart:
+      m_PersistentCalls:
+        m_Calls: []
+    toTransformData:
+    - position: {x: 0.05, y: 1.689, z: 0.2}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 1.1730042, y: 1.189, z: -0.43100023}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 3.7529984, y: 0.19, z: -1.3709998}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 5.163002, y: -0.31, z: -1.881}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 6.56, y: -0.838, z: -2.4}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 6.572998, y: -1.31, z: -2.3910003}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 6.572998, y: -1.81, z: -2.3910003}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 6.572998, y: -2.31, z: -2.3910003}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 6.572998, y: -2.81, z: -2.3910003}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    - position: {x: 2.5830002, y: 0.69, z: -0.941}
+      offset: {x: 0, y: 0, z: 0}
+      scale: {x: 2.7, y: 0.31009, z: 0.41084}
+    name: 
+    duration: 1
+    pauseAfter: 0
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    OnLerpEnd:
+      m_PersistentCalls:
+        m_Calls: []
+  lastSelectedState: -1
+  ShowRotations: 0000000000
+  ShowSegmentEvents: 0000000000
 --- !u!4 &188428722
 Transform:
   m_ObjectHideFlags: 0
@@ -1521,13 +1649,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 245410005}
-  m_LocalRotation: {x: 0, y: 0.25881904, z: 0, w: 0.9659259}
-  m_LocalPosition: {x: 4.87, y: 1.689, z: 0}
+  m_LocalRotation: {x: 0, y: 0.17364825, z: 0, w: 0.9848078}
+  m_LocalPosition: {x: 0.05, y: 1.689, z: 0.2}
   m_LocalScale: {x: 2.7, y: 0.31009, z: 0.41084}
   m_Children: []
   m_Father: {fileID: 188428722}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 20, z: 0}
 --- !u!65 &245410007
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2269,7 +2397,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 388427615}
-  m_LocalRotation: {x: 0, y: -0.93969274, z: 0, w: 0.34201995}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.004, y: 0.986, z: -0.032}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -5380,7 +5508,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 822905390}
-  m_LocalRotation: {x: -0.000000049199468, y: 0.00000002158688, z: 0.6150806, w: 0.7884643}
+  m_LocalRotation: {x: -0.000000044703494, y: 0.000000029802326, z: 0.7426515, w: 0.66967815}
   m_LocalPosition: {x: 0.01499, y: 0.03237, z: -0.00008}
   m_LocalScale: {x: 0.1, y: 0.099999994, z: 0.1}
   m_Children:
@@ -5631,7 +5759,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 908989052}
-  m_LocalRotation: {x: 0, y: 0.1736482, z: 0, w: 0.9848078}
+  m_LocalRotation: {x: 0, y: 0.17364827, z: 0, w: 0.9848077}
   m_LocalPosition: {x: 0, y: -2.81, z: 0}
   m_LocalScale: {x: 2.7, y: 0.31009, z: 0.41084}
   m_Children: []
@@ -6315,7 +6443,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1055449032}
-  m_LocalRotation: {x: 0, y: 0.1736482, z: 0, w: 0.9848078}
+  m_LocalRotation: {x: 0, y: 0.17364827, z: 0, w: 0.9848077}
   m_LocalPosition: {x: 0, y: -1.31, z: 0}
   m_LocalScale: {x: 2.7, y: 0.31009, z: 0.41084}
   m_Children: []
@@ -6796,7 +6924,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1155324306}
-  m_LocalRotation: {x: 0, y: 0.1736482, z: 0, w: 0.9848078}
+  m_LocalRotation: {x: 0, y: 0.17364827, z: 0, w: 0.9848077}
   m_LocalPosition: {x: 0, y: -1.81, z: 0}
   m_LocalScale: {x: 2.7, y: 0.31009, z: 0.41084}
   m_Children: []
@@ -6889,13 +7017,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1182525417}
-  m_LocalRotation: {x: 0, y: 0.25881907, z: 0, w: 0.9659259}
+  m_LocalRotation: {x: 0, y: 0.17364825, z: 0, w: 0.9848078}
   m_LocalPosition: {x: 0, y: -0.31, z: 0}
   m_LocalScale: {x: 2.7, y: 0.31009, z: 0.41084}
   m_Children: []
   m_Father: {fileID: 188428722}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 20, z: 0}
 --- !u!65 &1182525419
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7106,13 +7234,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1213565974}
-  m_LocalRotation: {x: 0, y: 0.25881907, z: 0, w: 0.9659259}
+  m_LocalRotation: {x: 0, y: 0.17364825, z: 0, w: 0.9848078}
   m_LocalPosition: {x: 0, y: 1.189, z: 0}
   m_LocalScale: {x: 2.7, y: 0.31009, z: 0.41084}
   m_Children: []
   m_Father: {fileID: 188428722}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 20, z: 0}
 --- !u!65 &1213565976
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9030,7 +9158,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1370006863}
-  m_LocalRotation: {x: -0.9512512, y: -0.044943362, z: 0.16773136, w: 0.2548871}
+  m_LocalRotation: {x: -0.9659258, y: 0.00000008438895, z: 0.00000016868265, w: 0.25881913}
   m_LocalPosition: {x: 0.1475, y: 0.0001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -9362,7 +9490,7 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  lastSelectedState: 3
+  lastSelectedState: -1
   ShowRotations: 010000000000
   ShowSegmentEvents: 0000000000
 --- !u!1 &1412783357
@@ -10181,13 +10309,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1519952980}
-  m_LocalRotation: {x: 0.70992976, y: 0.17550395, z: 0.19022483, w: 0.6549906}
-  m_LocalPosition: {x: 4.88, y: -0.81, z: 0}
+  m_LocalRotation: {x: 0, y: 0.17364825, z: 0, w: 0.9848078}
+  m_LocalPosition: {x: -0.012999535, y: -0.838, z: -0.009000003}
   m_LocalScale: {x: 2.7, y: 0.31009, z: 0.41084}
   m_Children: []
   m_Father: {fileID: 188428722}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 20, z: 0}
 --- !u!65 &1519952982
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10941,7 +11069,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1608666642}
-  m_LocalRotation: {x: 0.8660254, y: 0.00000011910309, z: 0.00000025000395, w: -0.5000001}
+  m_LocalRotation: {x: -0.8660254, y: -0.00000011910308, z: -0.00000025000395, w: 0.50000006}
   m_LocalPosition: {x: 0.1183, y: 0.2899, z: -0.2025}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -11877,7 +12005,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1924188497}
-  m_LocalRotation: {x: 0.000000044345096, y: 0.0000000010988539, z: 0.40906215, w: -0.9125066}
+  m_LocalRotation: {x: 0.000000044345096, y: 0.0000000010988543, z: 0.4090621, w: -0.9125066}
   m_LocalPosition: {x: 0.04669, y: 0.02671, z: -0.03732}
   m_LocalScale: {x: 0.099999994, y: 0.09999999, z: 0.09999999}
   m_Children:
@@ -12130,13 +12258,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1984905443}
-  m_LocalRotation: {x: 0, y: 0.25881907, z: 0, w: 0.9659259}
+  m_LocalRotation: {x: 0, y: 0.17364825, z: 0, w: 0.9848078}
   m_LocalPosition: {x: 0, y: 0.19, z: 0}
   m_LocalScale: {x: 2.7, y: 0.31009, z: 0.41084}
   m_Children: []
   m_Father: {fileID: 188428722}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 20, z: 0}
 --- !u!65 &1984905445
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12545,13 +12673,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2052681449}
-  m_LocalRotation: {x: 0, y: 0.34202015, z: 0, w: 0.9396926}
-  m_LocalPosition: {x: 0, y: 0.69, z: 0}
+  m_LocalRotation: {x: 0, y: 0.17364825, z: 0, w: 0.9848078}
+  m_LocalPosition: {x: -0, y: 0.69, z: -0}
   m_LocalScale: {x: 2.7, y: 0.31009, z: 0.41084}
   m_Children: []
   m_Father: {fileID: 188428722}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 20, z: 0}
 --- !u!65 &2052681451
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12824,7 +12952,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2098650466}
-  m_LocalRotation: {x: 0, y: 0.1736482, z: 0, w: 0.9848078}
+  m_LocalRotation: {x: 0, y: 0.17364827, z: 0, w: 0.9848077}
   m_LocalPosition: {x: 0, y: -2.31, z: 0}
   m_LocalScale: {x: 2.7, y: 0.31009, z: 0.41084}
   m_Children: []
