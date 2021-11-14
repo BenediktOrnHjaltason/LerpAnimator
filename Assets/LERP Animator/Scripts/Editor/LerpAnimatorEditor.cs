@@ -1009,7 +1009,7 @@ public class LerpAnimatorEditor : Editor
             handlingUndoRedo = false;
             Repaint();
 
-            string debug = "Undo/Redo | Current group index: " + Undo.GetCurrentGroup() + ". ";
+            string debug = "Undo/Redo";
 
             debug += "Editor transforms: " + editorTransforms.Count + ". Serialized: " + serializedTransforms.arraySize + "\n";
 
@@ -1022,6 +1022,12 @@ public class LerpAnimatorEditor : Editor
             }
 
             Debug.Log(debug);
+
+            lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue;
+
+            if (lastSelectedState == -1 || (lastSelectedState > -1 && lastSelectedState <= serializedStartStates.arraySize))
+                ApplyFromDatastore(lastSelectedState);
+
         }
 
         //Handles periodic checks for when user makes changes in serializedTransforms array
