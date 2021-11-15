@@ -721,6 +721,7 @@ public class LerpAnimatorEditor : Editor
         lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = indexAdded;
 
         serializedSegments.GetArrayElementAtIndex(indexAdded).FindPropertyRelative("duration").floatValue = 1;
+        serializedSegments.GetArrayElementAtIndex(indexAdded).FindPropertyRelative("pauseAfter").floatValue = 0;
         serializedSegments.GetArrayElementAtIndex(indexAdded).FindPropertyRelative("curve").animationCurveValue = AnimationCurve.Linear(0, 0, 1, 1);
 
         
