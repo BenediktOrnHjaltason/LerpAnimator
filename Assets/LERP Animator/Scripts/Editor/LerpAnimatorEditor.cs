@@ -453,7 +453,7 @@ public class LerpAnimatorEditor : Editor
                 {
                     if (serializedTransform == null)
                     {
-                        Debug.Log("User nulled reference on list element");
+                        //User nulled reference on list element
 
                         editorTransforms[i] = null;
 
@@ -477,7 +477,7 @@ public class LerpAnimatorEditor : Editor
 
                     else
                     {
-                        Debug.Log("User inserted new transform reference on list element");
+                        //User inserted new transform reference on list element");
 
                         editorTransforms[i] = serializedTransform;
 
@@ -599,7 +599,7 @@ public class LerpAnimatorEditor : Editor
         //If it does, user set lower array count. Delete transforms and data from end of collections
         if (editorSegmentsContainsSameTransforms)
         {
-            Debug.Log("User deleted element(s) from end of list. Serialized transforms: " + serializedTransforms.arraySize + ". EditorTransforms: " + editorTransforms.Count);
+            //User deleted element(s) from end of list.
 
             int difference = editorTransforms.Count - serializedTransforms.arraySize;
 
@@ -624,14 +624,12 @@ public class LerpAnimatorEditor : Editor
 
                 serializedObject.ApplyModifiedProperties();
             }
-
-            Debug.Log("After processing, serialized transforms: " + serializedTransforms.arraySize + ". Editor transforms: " + editorTransforms.Count);
         }
 
         //Else if user deleted element other than last index(es)
         else
         {
-            Debug.Log("User deleted element in middle of list");
+            //User deleted element in middle of list
 
             for (int i = 0; i < serializedTransforms.arraySize; i++)
             {
@@ -1014,25 +1012,10 @@ public class LerpAnimatorEditor : Editor
             handlingUndoRedo = false;
             Repaint();
 
-            string debug = "Undo/Redo";
-
-            debug += "Editor transforms: " + editorTransforms.Count + ". Serialized: " + serializedTransforms.arraySize + "\n";
-
-            debug += "Editor start states: " + editorStartStates.Count + ". Serialized " + serializedStartStates.arraySize + "\n";
-
-            for (int i = 0;  i < serializedSegments.arraySize; i++ )
-            {
-                debug += "serialized toTransformData in segment " + i + ": " + serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").arraySize +
-                    (i <= editorSegments.Count ? ". Editor: " + editorSegments[i].toTransformData.Count + "\n" : "\n");
-            }
-
-            Debug.Log(debug);
-
             lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue;
 
             if (lastSelectedState == -1 || (lastSelectedState > -1 && lastSelectedState <= serializedStartStates.arraySize))
                 ApplyFromDatastore(lastSelectedState);
-
         }
 
         //Handles periodic checks for when user makes changes in serializedTransforms array
