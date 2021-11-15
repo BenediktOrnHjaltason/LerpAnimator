@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using UnityEngine.Events;
 
 
 [CustomEditor(typeof(LerpAnimator))]
@@ -62,8 +60,8 @@ public class LerpAnimatorEditor : Editor
 
     private void OnEnable()
     {
-        logo = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Scripts/Editor/T_LerpAnimatorLogo.png", typeof(Texture));
-        toolHandleReminder = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Scripts/Editor//T_ToolHandleReminder.png", typeof(Texture));
+        logo = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Textures/T_LerpAnimatorLogo.png", typeof(Texture));
+        toolHandleReminder = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Textures/T_ToolHandleReminder.png", typeof(Texture));
 
         serializedStartOnPlay = serializedObject.FindProperty("StartOnPlay");
         serializedLoop = serializedObject.FindProperty("Loop");
@@ -74,7 +72,6 @@ public class LerpAnimatorEditor : Editor
 
         serializedShowRotations = serializedObject.FindProperty("ShowRotations");
         serializedShowSegmentEvents = serializedObject.FindProperty("ShowSegmentEvents");
-
 
         EditorApplication.update += OnEditorUpdate;
         Undo.undoRedoPerformed += OnUndoRedoPerformed;
@@ -97,7 +94,6 @@ public class LerpAnimatorEditor : Editor
             serializedObject.ApplyModifiedProperties();
         }
             
-
         lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue;
 
         nextChangeCheck = EditorApplication.timeSinceStartup + 0.5f;
