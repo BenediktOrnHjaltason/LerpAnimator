@@ -49,7 +49,7 @@ public class LerpAnimator : MonoBehaviour
     [SerializeField] bool Loop;
 
     [Tooltip("The transforms that will be affected by this Lerp Animator")]
-#if UNITY_2020_3_OR_NEWER
+#if UNITY_2020_2_OR_NEWER
 [NonReorderable]
 #endif
     [SerializeField] List<Transform> TransformsToActOn;
