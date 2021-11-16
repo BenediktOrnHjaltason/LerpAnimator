@@ -57,9 +57,9 @@ public class LerpAnimator : MonoBehaviour
     [Tooltip("The start states for this animatic")]
     [SerializeField] List<TransformData> StartStates;
 
-    public List<Segment> Segments;
+    [SerializeField] List<Segment> Segments;
 
-    public int lastSelectedState;
+    [SerializeField] int lastSelectedState;
 
     [SerializeField] List<bool> ShowRotations;
 
