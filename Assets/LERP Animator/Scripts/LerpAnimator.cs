@@ -198,7 +198,7 @@ public class LerpAnimator : MonoBehaviour
             if(Segments[toIndex - 1].pauseAfter > 0)
             {
                 timeOnStart = Time.time;
-                timeOnPauseEnd = Time.time + Segments[toIndex - 1].pauseAfter;
+                timeOnPauseEnd = Time.time + Segments[toIndex -1].pauseAfter;
 
                 StartCoroutine(RunPauseAfterSegment());
             }
@@ -210,7 +210,7 @@ public class LerpAnimator : MonoBehaviour
         {
             if (Loop)
             {
-                if (Segments[toIndex - 1].pauseAfter > 0)
+                if (Segments[toIndex].pauseAfter > 0)
                 {
                     timeOnStart = Time.time;
                     timeOnPauseEnd = Time.time + Segments[toIndex].pauseAfter;
