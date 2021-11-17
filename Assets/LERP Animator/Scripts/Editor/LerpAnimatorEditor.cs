@@ -210,7 +210,8 @@ public class LerpAnimatorEditor : Editor
     #endregion
 
     #region GUI
-    
+
+    private string progressBarName;
 
     public override void OnInspectorGUI()
     {
@@ -289,7 +290,7 @@ public class LerpAnimatorEditor : Editor
                 if (editorPlaybackRunning && i == toIndex)
                 {
                     var rect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight);
-                    EditorGUI.ProgressBar(rect, lerpStep, "");
+                    EditorGUI.ProgressBar(rect, lerpStep, progressBarName);
 
                 }
                 else if (playingPauseAfterSegment && i == toIndex)
@@ -297,6 +298,13 @@ public class LerpAnimatorEditor : Editor
                     var rect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight);
                     EditorGUI.ProgressBar(rect, 0, string.Format("Pause: {0:#0.0}", (((startTime + pauseAfterSegmentDuration - EditorApplication.timeSinceStartup)))));
                 }
+                else
+                {
+                    GUI.enabled = !EditorApplication.isPlaying && !editorPlaybackRunning && !playingPauseAfterSegment;
+                    EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("Name"));
+                    GUI.enabled = true;
+                }
+
                 GUILayout.EndHorizontal();
 
                 GUI.enabled = !editorPlaybackRunning && !playingPauseAfterSegment && !EditorApplication.isPlaying;
@@ -887,6 +895,8 @@ public class LerpAnimatorEditor : Editor
 
         reciprocal = 1 / editorSegments[toIndex].duration;
 
+        progressBarName = serializedSegments.GetArrayElementAtIndex(toIndex).FindPropertyRelative("Name").stringValue;
+
         playingPauseAfterSegment = false;
         editorPlaybackRunning = true;
     }
@@ -1063,6 +1073,8 @@ public class LerpAnimatorEditor : Editor
             startTime = (float)EditorApplication.timeSinceStartup;
 
             lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = toIndex;
+
+            progressBarName = serializedSegments.GetArrayElementAtIndex(toIndex).FindPropertyRelative("Name").stringValue;
         }
     }
 

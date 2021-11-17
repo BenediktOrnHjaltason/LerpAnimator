@@ -18,6 +18,8 @@ public class TransformData
 [System.Serializable]
 public class Segment
 {
+    public string Name;
+
     public UnityEvent OnLerpStart;
 
     public List<TransformData> toTransformData;
