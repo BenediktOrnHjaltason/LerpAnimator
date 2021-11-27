@@ -30,12 +30,12 @@ namespace SpheroidGames.LerpAnimator
         //Properties for accessing parts of serializedObject
 
         /// <summary>
-        /// Wether sequence should start when play in scene starts
+        /// whether sequence should start when play in scene starts
         /// </summary>
         private SerializedProperty serializedStartOnPlay;
 
         /// <summary>
-        /// Wether sequence will loop in game play mode
+        /// whether sequence will loop in game play mode
         /// </summary>
         private SerializedProperty serializedLoop;
 
@@ -216,8 +216,6 @@ namespace SpheroidGames.LerpAnimator
 
         public override void OnInspectorGUI()
         {
-            GUILayout.BeginHorizontal();
-
             GUILayout.Box(logo);
 
             GUI.enabled = !editorPlaybackRunning && !playingPauseAfterSegment && !EditorApplication.isPlaying;
@@ -228,7 +226,6 @@ namespace SpheroidGames.LerpAnimator
             EditorGUILayout.PropertyField(serializedStartOnPlay);
             EditorGUILayout.PropertyField(serializedLoop);
             EditorGUILayout.EndVertical();
-            EditorGUILayout.EndHorizontal();
 
             GUILayout.Space(20);
 
