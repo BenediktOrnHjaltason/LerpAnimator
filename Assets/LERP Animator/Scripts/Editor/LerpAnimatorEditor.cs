@@ -578,7 +578,6 @@ namespace SpheroidGames.LerpAnimator
 
                 if (higherIndexTransform != null && lowerIndexTransform != null && higherIndexTransform == lowerIndexTransform)
                 {
-                    Debug.LogWarning("LerpAnimator: Duplicate transform detected. There should only be one reference for each. Nulling element");
                     serializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue = null;
                 }
             }
