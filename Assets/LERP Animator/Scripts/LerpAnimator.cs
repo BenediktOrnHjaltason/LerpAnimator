@@ -38,12 +38,6 @@ namespace SpheroidGames.LerpAnimator
         public UnityEvent OnLerpEnd;
     }
 
-    public enum EEditorOrGame
-    {
-        EDITOR,
-        GAME
-    }
-
     [System.Serializable]
     public class LerpAnimator : MonoBehaviour
     {
@@ -101,7 +95,7 @@ namespace SpheroidGames.LerpAnimator
             StartCoroutine(RunSegment());
         }
 
-        private List<Quaternion> interSegmentRotations;
+        private List<Quaternion> interSegmentRotations = new List<Quaternion>();
 
         private IEnumerator RunSegment()
         {
@@ -270,7 +264,7 @@ namespace SpheroidGames.LerpAnimator
         private void SampleInterSegmentRotations()
         {
             //Sample current rotations
-            interSegmentRotations = new List<Quaternion>();
+            interSegmentRotations.Clear();
 
             foreach (Transform transform in TransformsToActOn)
                 if (transform != null)

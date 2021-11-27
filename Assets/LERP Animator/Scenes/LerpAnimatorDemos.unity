@@ -1539,7 +1539,7 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0.69582725, y: 1, z: 0.034391765}
   Segments:
-  - Name: 
+  - Name: Open door
     OnLerpStart:
       m_PersistentCalls:
         m_Calls: []
@@ -1580,7 +1580,7 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
-  - Name: 
+  - Name: Close door
     OnLerpStart:
       m_PersistentCalls:
         m_Calls: []
@@ -1692,7 +1692,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eefb4c63eaf94f41a70a97adcf74538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartOnPlay: 0
+  StartOnPlay: 1
   Loop: 0
   TransformsToActOn:
   - {fileID: 1942488989}
@@ -1809,7 +1809,7 @@ MonoBehaviour:
       scale: {x: 1, y: 4.3559, z: 1}
     name: 
     duration: 3
-    pauseAfter: 2
+    pauseAfter: 1
     curve:
       serializedVersion: 2
       m_Curve:
@@ -1865,7 +1865,7 @@ MonoBehaviour:
       scale: {x: 1, y: 4.3559, z: 1}
     name: 
     duration: 1.5
-    pauseAfter: 3
+    pauseAfter: 1
     curve:
       serializedVersion: 2
       m_Curve:
@@ -1921,7 +1921,7 @@ MonoBehaviour:
       scale: {x: 1, y: 4.3559, z: 1}
     name: 
     duration: 1
-    pauseAfter: 4
+    pauseAfter: 1
     curve:
       serializedVersion: 2
       m_Curve:
@@ -1950,7 +1950,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   lastSelectedState: -1
-  ShowRotations: 0000000000
+  ShowRotations: 0000000001
   ShowSegmentEvents: 00000000
 --- !u!1 &791704676
 GameObject:
@@ -3166,7 +3166,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   lastSelectedState: -1
-  ShowRotations: 0001010101010101
+  ShowRotations: 0000000000000001
   ShowSegmentEvents: 00000000000000
 --- !u!4 &1269025458
 Transform:

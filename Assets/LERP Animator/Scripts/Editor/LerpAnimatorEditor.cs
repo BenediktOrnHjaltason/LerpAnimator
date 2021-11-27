@@ -902,7 +902,7 @@ namespace SpheroidGames.LerpAnimator
             editorPlaybackRunning = true;
         }
 
-        private List<Quaternion> interSegmentRotations;
+        private List<Quaternion> interSegmentRotations = new List<Quaternion>();
         private readonly double lerpFrequency = 0.0166; //60 times per second
         private double nextLerpUpdate;
         private float reciprocal;
@@ -1027,7 +1027,11 @@ namespace SpheroidGames.LerpAnimator
             }
 
             //Handles periodic checks for when user makes changes in serializedTransforms array
-            if (!handlingUndoRedo && EditorApplication.timeSinceStartup > nextChangeCheck)
+            if (!handlingUndoRedo && 
+                !editorPlaybackRunning &&
+                !playingPauseAfterSegment &&
+                !EditorApplication.isPlaying &&
+                EditorApplication.timeSinceStartup > nextChangeCheck)
             {
                 nextChangeCheck = EditorApplication.timeSinceStartup + 0.3f;
 
@@ -1038,7 +1042,7 @@ namespace SpheroidGames.LerpAnimator
         private void SampleInterSegmentRotations()
         {
             //Sample current rotations
-            interSegmentRotations = new List<Quaternion>();
+            interSegmentRotations.Clear();
 
             foreach (Transform transform in editorTransforms)
                 if (transform)
