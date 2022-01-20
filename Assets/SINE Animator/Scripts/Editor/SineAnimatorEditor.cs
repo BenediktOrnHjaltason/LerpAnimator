@@ -33,6 +33,12 @@ namespace SpheroidGames.SineAnimator
 
         private SerializedProperty serializedValueMode;
 
+        private SerializedProperty serializedRadius;
+        private float editorRadius;
+
+        private SerializedProperty serializedSpeed;
+        private float editorSpeed;
+
         private Transform targetTransform;
 
         private UnityEvent currentAnimationFunction = new UnityEvent();
@@ -55,6 +61,13 @@ namespace SpheroidGames.SineAnimator
 
             serializedAnimationMode = serializedObject.FindProperty("animationMode");
             serializedValueMode = serializedObject.FindProperty("valueMode");
+
+            serializedRadius = serializedObject.FindProperty("radius");
+            editorRadius = serializedRadius.floatValue;
+
+            serializedSpeed = serializedObject.FindProperty("speed");
+            editorSpeed = serializedSpeed.floatValue;
+
 
             EditorApplication.update += OnEditorUpdate;
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
@@ -109,6 +122,7 @@ namespace SpheroidGames.SineAnimator
                     break;
 
                 case 2:     //RingOfMotion
+                    CalculateDegreesDelta();
                     currentAnimationFunction.AddListener(RingOfMotion);
                     break;
 
@@ -152,11 +166,23 @@ namespace SpheroidGames.SineAnimator
 
             EditorGUILayout.EndVertical();
 
+            GUI.enabled = true;
+
             GUILayout.Space(20);
 
-
+            EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(serializedTransforms, true);
-            GUI.enabled = true;
+
+            if (EditorGUI.EndChangeCheck())
+                CalculateDegreesDelta();
+
+            GUILayout.Space(20);
+
+            editorRadius = serializedRadius.floatValue = EditorGUILayout.Slider("Radius", serializedRadius.floatValue, 1, 5);
+
+            GUILayout.Space(20);
+
+            editorSpeed = serializedSpeed.floatValue = EditorGUILayout.Slider("Speed", serializedSpeed.floatValue, 1, 5);
 
             GUILayout.Space(20);
 
@@ -171,8 +197,9 @@ namespace SpheroidGames.SineAnimator
             }
             GUI.enabled = true;
 
-            serializedObject.ApplyModifiedProperties();
+            
 
+            serializedObject.ApplyModifiedProperties();
         }
 
         #endregion
@@ -338,17 +365,41 @@ namespace SpheroidGames.SineAnimator
 
         #region Animation Functions
 
-        Quaternion rot;
+        private Quaternion rot;
+        private Vector3 basePoint;
+
+        /// <summary>
+        /// Used to place the objects around the center
+        /// </summary>
+        private float degreesDelta;
+
+        /// <summary>
+        /// Used to move objects around with sine wave
+        /// </summary>
+        private float radiansDelta;
+
+        private Vector3 direction;
 
         private void RingOfMotion()
         {
             for (int i = 0; i < editorTransforms.Count; i++)
             {
                 //Find the new rotation
-                rot = targetTransform.rotation * Quaternion.Euler(0, 0, (360 / editorTransforms.Count) * (i + 1));
+                rot = targetTransform.rotation * Quaternion.Euler(0, 0, degreesDelta * (i + 1));
+                basePoint = targetTransform.position + (rot * Vector3.right);
+                direction = (basePoint - targetTransform.position);
 
-                editorTransforms[i].position = targetTransform.position + (rot * Vector3.right);
+
+
+
+                editorTransforms[i].position = basePoint /*+ (direction * 0.3f)*/ + (direction * editorRadius) + (direction * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorSpeed) + 1) / 2) )));
             }        
+        }
+
+        private void CalculateDegreesDelta()
+        {
+            degreesDelta = 360 / editorTransforms.Count;
+            radiansDelta = (Mathf.PI * 2) / editorTransforms.Count; 
         }
 
         #endregion
@@ -419,3 +470,6 @@ namespace SpheroidGames.SineAnimator
         #endregion
     }
 }
+
+
+//editorTransforms[i].position = basePoint + ((basePoint - targetTransform.position) * (((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) ) + 1 ) / 2) * editorSpeed) * editorRadius); 
