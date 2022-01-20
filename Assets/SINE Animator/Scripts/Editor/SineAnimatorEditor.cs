@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.Events;
 
 namespace SpheroidGames.SineAnimator
 {
     [CustomEditor(typeof(SineAnimator))]
-    public class LerpAnimatorEditor : Editor
+    public class SineAnimatorEditor : Editor
     {
         Texture logo;
 
@@ -32,6 +33,10 @@ namespace SpheroidGames.SineAnimator
 
         private SerializedProperty serializedValueMode;
 
+        private Transform targetTransform;
+
+        private UnityEvent currentAnimationFunction = new UnityEvent();
+
 
         /// <summary>
         /// Used for managing periodic checks for changes in serializedTransforms array
@@ -42,7 +47,7 @@ namespace SpheroidGames.SineAnimator
 
         private void OnEnable()
         {
-            logo = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Textures/T_LerpAnimatorLogo.png", typeof(Texture));
+            logo = (Texture)AssetDatabase.LoadAssetAtPath("Assets/SINE Animator/Textures/T_SineAnimatorLogo.png", typeof(Texture));
 
             serializedStartOnPlay = serializedObject.FindProperty("StartOnPlay");
 
@@ -56,9 +61,13 @@ namespace SpheroidGames.SineAnimator
 
             editorTransforms = new List<Transform>();
 
+            targetTransform = ((SineAnimator)target).gameObject.transform;
+
             CollectEditorTransforms();
 
             nextChangeCheck = EditorApplication.timeSinceStartup + 0.5f;
+
+            SetAnimationFunction();
         }
 
 
@@ -87,6 +96,27 @@ namespace SpheroidGames.SineAnimator
             delayedCollectTimerStart = (float)EditorApplication.timeSinceStartup;
         }
 
+        private void SetAnimationFunction()
+        {
+            currentAnimationFunction.RemoveAllListeners();
+
+            switch(serializedAnimationMode.enumValueIndex)
+            {
+                case 0:     //PositionLerp
+                    break;
+
+                case 1:     //ScaleLerp
+                    break;
+
+                case 2:     //RingOfMotion
+                    currentAnimationFunction.AddListener(RingOfMotion);
+                    break;
+
+                case 3:     //WallOfMotion
+                    break;
+            }
+        }
+
         #endregion
 
         #region Editor data copies
@@ -106,8 +136,6 @@ namespace SpheroidGames.SineAnimator
         #endregion
 
         #region GUI
-
-        private string progressBarName;
 
         public override void OnInspectorGUI()
         {
@@ -133,13 +161,17 @@ namespace SpheroidGames.SineAnimator
             GUILayout.Space(20);
 
             GUI.enabled = !handlingUndoRedo;
-
-            if (GUILayout.Button("Preview animation"))
+            if (!editorPlaybackRunning && GUILayout.Button("Preview animation"))
             {
                 StartEditorPlayback();
             }
-
+            else if (editorPlaybackRunning && GUILayout.Button("Stop animation"))
+            {
+                StopEditorPlayback();
+            }
             GUI.enabled = true;
+
+            serializedObject.ApplyModifiedProperties();
 
         }
 
@@ -304,6 +336,23 @@ namespace SpheroidGames.SineAnimator
 
         #endregion
 
+        #region Animation Functions
+
+        Quaternion rot;
+
+        private void RingOfMotion()
+        {
+            for (int i = 0; i < editorTransforms.Count; i++)
+            {
+                //Find the new rotation
+                rot = targetTransform.rotation * Quaternion.Euler(0, 0, (360 / editorTransforms.Count) * (i + 1));
+
+                editorTransforms[i].position = targetTransform.position + (rot * Vector3.right);
+            }        
+        }
+
+        #endregion
+
 
         #region Playback
 
@@ -313,14 +362,24 @@ namespace SpheroidGames.SineAnimator
 
         public void StartEditorPlayback()
         {
+
+            if (editorTransforms.Count == 0)
+                return;
+
             startTime = (float)EditorApplication.timeSinceStartup;
 
             nextAnimationUpdate = startTime + animationFrequency;
 
+            SetAnimationFunction();
+
             editorPlaybackRunning = true;
         }
 
-        private List<Quaternion> interSegmentRotations = new List<Quaternion>();
+        private void StopEditorPlayback()
+        {
+            editorPlaybackRunning = false;
+        }
+
         private readonly double animationFrequency = 0.0166; //60 times per second
         private double nextAnimationUpdate;
 
@@ -331,7 +390,9 @@ namespace SpheroidGames.SineAnimator
                 nextAnimationUpdate += animationFrequency;
                 Repaint();
 
+                currentAnimationFunction?.Invoke();
             }
+
 
             //Handles UndoRedo
             if (handlingUndoRedo && EditorApplication.timeSinceStartup - delayedCollectTimerStart > delayAmount)
@@ -352,6 +413,7 @@ namespace SpheroidGames.SineAnimator
 
                 CheckForTransformsArrayChanged();
             }
+
         }
 
         #endregion
