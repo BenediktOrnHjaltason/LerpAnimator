@@ -386,13 +386,13 @@ namespace SpheroidGames.SineAnimator
             {
                 //Find the new rotation
                 rot = targetTransform.rotation * Quaternion.Euler(0, 0, degreesDelta * (i + 1));
-                basePoint = targetTransform.position + (rot * Vector3.right);
+                basePoint = (targetTransform.position + (rot * (Vector3.right) * 0.1f));
                 direction = (basePoint - targetTransform.position);
 
 
 
 
-                editorTransforms[i].position = basePoint /*+ (direction * 0.3f)*/ + (direction * editorRadius) + (direction * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorSpeed) + 1) / 2) )));
+                editorTransforms[i].position = basePoint + (direction * editorRadius) + (direction * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorSpeed) + 1) / 2) )));
             }        
         }
 
