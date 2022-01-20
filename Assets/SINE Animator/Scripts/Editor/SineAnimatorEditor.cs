@@ -39,6 +39,9 @@ namespace SpheroidGames.SineAnimator
         private SerializedProperty serializedSpeed;
         private float editorSpeed;
 
+        private SerializedProperty serializedAmplitude;
+        private float editorAmplitude;
+
         private Transform targetTransform;
 
         private UnityEvent currentAnimationFunction = new UnityEvent();
@@ -67,6 +70,9 @@ namespace SpheroidGames.SineAnimator
 
             serializedSpeed = serializedObject.FindProperty("speed");
             editorSpeed = serializedSpeed.floatValue;
+
+            serializedAmplitude = serializedObject.FindProperty("amplitude");
+            editorAmplitude = serializedAmplitude.floatValue;
 
 
             EditorApplication.update += OnEditorUpdate;
@@ -178,13 +184,18 @@ namespace SpheroidGames.SineAnimator
 
             GUILayout.Space(20);
 
-            editorRadius = serializedRadius.floatValue = EditorGUILayout.Slider("Radius", serializedRadius.floatValue, 1, 5);
+            editorRadius = serializedRadius.floatValue = EditorGUILayout.Slider("Radius", serializedRadius.floatValue, 1, 400);
 
             GUILayout.Space(20);
 
-            editorSpeed = serializedSpeed.floatValue = EditorGUILayout.Slider("Speed", serializedSpeed.floatValue, 1, 5);
+            editorSpeed = serializedSpeed.floatValue = EditorGUILayout.Slider("Speed", serializedSpeed.floatValue, 1, 20);
 
             GUILayout.Space(20);
+
+            editorAmplitude = serializedAmplitude.floatValue = EditorGUILayout.Slider("Amplitude", serializedAmplitude.floatValue, 1, 20);
+
+            GUILayout.Space(20);
+
 
             GUI.enabled = !handlingUndoRedo;
             if (!editorPlaybackRunning && GUILayout.Button("Preview animation"))
@@ -386,7 +397,7 @@ namespace SpheroidGames.SineAnimator
             {
                 //Find the new rotation
                 rot = targetTransform.rotation * Quaternion.Euler(0, 0, degreesDelta * (i + 1));
-                basePoint = (targetTransform.position + (rot * (Vector3.right) * 0.1f));
+                basePoint = (targetTransform.position + (rot * (Vector3.right) * 0.01f));
                 direction = (basePoint - targetTransform.position);
 
 
