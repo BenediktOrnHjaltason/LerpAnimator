@@ -32,6 +32,7 @@ namespace SpheroidGames.SineAnimator
         private SerializedProperty serializedAnimationMode;
 
         private SerializedProperty serializedValueMode;
+        private int editorValueMode;
 
         private SerializedProperty serializedRadius;
         private float editorRadius;
@@ -67,6 +68,7 @@ namespace SpheroidGames.SineAnimator
 
             serializedAnimationMode = serializedObject.FindProperty("animationMode");
             serializedValueMode = serializedObject.FindProperty("valueMode");
+            editorValueMode = (int)serializedValueMode.intValue;
 
             serializedRadius = serializedObject.FindProperty("radius");
             editorRadius = serializedRadius.floatValue;
@@ -167,18 +169,24 @@ namespace SpheroidGames.SineAnimator
         {
             GUILayout.Box(logo);
 
-            GUI.enabled = !editorPlaybackRunning && !EditorApplication.isPlaying;
+            //GUI.enabled = !editorPlaybackRunning && !EditorApplication.isPlaying;
 
             GUILayout.BeginVertical();
 
             GUILayout.Space(10);
             EditorGUILayout.PropertyField(serializedStartOnPlay);
             EditorGUILayout.PropertyField(serializedAnimationMode);
+
+            EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(serializedValueMode);
+            if (EditorGUI.EndChangeCheck())
+            {
+                editorValueMode = (int)serializedValueMode.intValue;
+            }
 
             EditorGUILayout.EndVertical();
 
-            GUI.enabled = true;
+            //GUI.enabled = true;
 
             GUILayout.Space(20);
 
@@ -401,12 +409,21 @@ namespace SpheroidGames.SineAnimator
         {
             for (int i = 0; i < editorTransforms.Count; i++)
             {
+                if (editorTransforms[i] == null)
+                    continue;
+
                 //Find the new rotation
                 rot = targetTransform.rotation * Quaternion.Euler(0, 0, degreesDelta * (i + 1));
                 basePoint = (targetTransform.position + (rot * (Vector3.right) * 0.01f));
                 direction = (basePoint - targetTransform.position);
 
-                editorTransforms[i].position = basePoint + (direction * editorRadius) + (direction * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorSpeed) + 1) / 2) * editorAmplitude )));
+
+                if (editorValueMode == 0) //Actual value
+                    editorTransforms[i].position = basePoint + (direction * editorRadius) + (direction * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorSpeed) + 1) / 2) * editorAmplitude )));
+
+                else //Absolute value
+                    editorTransforms[i].position = basePoint + (direction * editorRadius) + (direction * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorSpeed)   * editorAmplitude))));
+
             }        
 
             if (editorRingSpin != 0)
