@@ -42,6 +42,9 @@ namespace SpheroidGames.SineAnimator
         private SerializedProperty serializedAmplitude;
         private float editorAmplitude;
 
+        private SerializedProperty serializedRingSpin;
+        private float editorRingSpin;
+
         private Transform targetTransform;
 
         private UnityEvent currentAnimationFunction = new UnityEvent();
@@ -73,6 +76,9 @@ namespace SpheroidGames.SineAnimator
 
             serializedAmplitude = serializedObject.FindProperty("amplitude");
             editorAmplitude = serializedAmplitude.floatValue;
+
+            serializedRingSpin = serializedObject.FindProperty("ringSpin");
+            editorRingSpin = serializedRingSpin.floatValue;
 
 
             EditorApplication.update += OnEditorUpdate;
@@ -185,15 +191,15 @@ namespace SpheroidGames.SineAnimator
             GUILayout.Space(20);
 
             editorRadius = serializedRadius.floatValue = EditorGUILayout.Slider("Radius", serializedRadius.floatValue, 1, 400);
-
             GUILayout.Space(20);
 
             editorSpeed = serializedSpeed.floatValue = EditorGUILayout.Slider("Speed", serializedSpeed.floatValue, 1, 20);
-
             GUILayout.Space(20);
 
-            editorAmplitude = serializedAmplitude.floatValue = EditorGUILayout.Slider("Amplitude", serializedAmplitude.floatValue, 1, 20);
+            editorAmplitude = serializedAmplitude.floatValue = EditorGUILayout.Slider("Amplitude", serializedAmplitude.floatValue, 1, 200);
+            GUILayout.Space(20);
 
+            editorRingSpin = serializedRingSpin.floatValue = EditorGUILayout.Slider("Ring spin", serializedRingSpin.floatValue, -10, 10);
             GUILayout.Space(20);
 
 
@@ -400,11 +406,13 @@ namespace SpheroidGames.SineAnimator
                 basePoint = (targetTransform.position + (rot * (Vector3.right) * 0.01f));
                 direction = (basePoint - targetTransform.position);
 
-
-
-
-                editorTransforms[i].position = basePoint + (direction * editorRadius) + (direction * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorSpeed) + 1) / 2) )));
+                editorTransforms[i].position = basePoint + (direction * editorRadius) + (direction * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorSpeed) + 1) / 2) * editorAmplitude )));
             }        
+
+            if (editorRingSpin != 0)
+            {
+                targetTransform.Rotate(targetTransform.forward, editorRingSpin);
+            }
         }
 
         private void CalculateDegreesDelta()

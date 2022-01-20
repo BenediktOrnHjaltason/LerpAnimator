@@ -41,6 +41,8 @@ namespace SpheroidGames.SineAnimator
         //Ring of movement specific
         [SerializeField] float radius;
 
+        [SerializeField] float ringSpin;
+
 
         private UnityEvent currentMode = new UnityEvent();
 
