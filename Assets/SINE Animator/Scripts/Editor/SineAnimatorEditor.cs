@@ -145,6 +145,8 @@ namespace SpheroidGames.SineAnimator
                     break;
 
                 case 1:     //ScaleLerp
+                    CollectDoubleScales();
+                    currentAnimationFunction.AddListener(ScaleLerp);
                     break;
 
                 case 2:     //RingPlane
@@ -247,8 +249,11 @@ namespace SpheroidGames.SineAnimator
             editorFrequency = serializedFrequency.floatValue = EditorGUILayout.Slider("Frequency", serializedFrequency.floatValue, 0.01f, 30);
             GUILayout.Space(20);
 
+            if (editorAnimationMode == 1)
+                editorAmplitude = serializedAmplitude.floatValue = EditorGUILayout.Slider("Amplitude", serializedAmplitude.floatValue, 0, 1);
 
-            if (editorAnimationMode == 2 || editorAnimationMode == 3)
+
+            else if (editorAnimationMode == 2 || editorAnimationMode == 3)
                 editorAmplitude = serializedAmplitude.floatValue = EditorGUILayout.Slider("Amplitude", serializedAmplitude.floatValue, 0.01f, 2000);
 
             else
@@ -453,10 +458,10 @@ namespace SpheroidGames.SineAnimator
                     continue;
 
                 
-                if (editorValueMode == 0)
+                if (editorValueMode == 0) //Value
                     editorTransforms[i].position = originalPositions[i] -
                         editorTransforms[i].forward * Mathf.Sin((float)EditorApplication.timeSinceStartup * editorFrequency) * editorAmplitude;
-                else
+                else //Absolute value
                     editorTransforms[i].position = originalPositions[i] -
                         editorTransforms[i].forward * Mathf.Abs(Mathf.Sin((float)EditorApplication.timeSinceStartup * editorFrequency)) * editorAmplitude;
 
@@ -469,6 +474,36 @@ namespace SpheroidGames.SineAnimator
 
             foreach (Transform tr in editorTransforms)
                 originalPositions.Add(tr.position);
+        }
+
+        List<Vector3> doubleScales = new List<Vector3>();
+        List<Vector3> originalScales = new List<Vector3>();
+        private void ScaleLerp()
+        {
+            for (int i = 0; i < editorTransforms.Count; i++)
+            {
+                if (editorTransforms[i] == null)
+                    continue;
+
+                if (editorValueMode == 0)
+                    editorTransforms[i].localScale = Vector3.LerpUnclamped(originalScales[i], doubleScales[i], Mathf.Sin((float)EditorApplication.timeSinceStartup * editorFrequency) * editorAmplitude);
+
+                else
+                    editorTransforms[i].localScale = Vector3.LerpUnclamped(originalScales[i], doubleScales[i], Mathf.Abs(Mathf.Sin((float)EditorApplication.timeSinceStartup * editorFrequency)) * editorAmplitude);
+
+            }
+        }
+
+        private void CollectDoubleScales()
+        {
+            originalScales.Clear();
+            doubleScales.Clear();
+
+            foreach (Transform tr in editorTransforms)
+            {
+                originalScales.Add(tr.localScale);
+                doubleScales.Add(tr.localScale * 2);
+            }
         }
 
 
