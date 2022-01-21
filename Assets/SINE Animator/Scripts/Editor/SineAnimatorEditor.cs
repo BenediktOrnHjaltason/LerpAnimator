@@ -30,6 +30,7 @@ namespace SpheroidGames.SineAnimator
         private SerializedProperty serializedTransforms;
 
         private SerializedProperty serializedAnimationMode;
+        private int editorAnimationMode;
 
         private SerializedProperty serializedValueMode;
         private int editorValueMode;
@@ -70,6 +71,8 @@ namespace SpheroidGames.SineAnimator
             serializedTransforms = serializedObject.FindProperty("TransformsToActOn");
 
             serializedAnimationMode = serializedObject.FindProperty("animationMode");
+            editorAnimationMode = serializedAnimationMode.intValue;
+
             serializedValueMode = serializedObject.FindProperty("valueMode");
             editorValueMode = (int)serializedValueMode.intValue;
 
@@ -137,6 +140,8 @@ namespace SpheroidGames.SineAnimator
             switch(serializedAnimationMode.enumValueIndex)
             {
                 case 0:     //PositionLerp
+                    CollectOriginalPositions();
+                    currentAnimationFunction.AddListener(PositionLerp);
                     break;
 
                 case 1:     //ScaleLerp
@@ -144,7 +149,7 @@ namespace SpheroidGames.SineAnimator
 
                 case 2:     //RingPlane
                     CalculateDegreesDelta();
-                    currentAnimationFunction.AddListener(RingOfMotion);
+                    currentAnimationFunction.AddListener(RingPlane);
                     break;
                 case 3: //RingCarousel
                     CalculateDegreesDelta();
@@ -190,7 +195,10 @@ namespace SpheroidGames.SineAnimator
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(serializedAnimationMode);
             if (EditorGUI.EndChangeCheck())
+            {
+                editorAnimationMode = serializedAnimationMode.intValue;
                 SetAnimationFunction();
+            }
 
 
             if (serializedAnimationMode.intValue == 2 || serializedAnimationMode.intValue == 3) //RingOfMotion
@@ -211,24 +219,40 @@ namespace SpheroidGames.SineAnimator
 
             GUILayout.Space(20);
 
-            EditorGUI.BeginChangeCheck();
-            EditorGUILayout.PropertyField(serializedTransforms, true);
+             EditorGUI.BeginChangeCheck();
+                EditorGUILayout.PropertyField(serializedTransforms, true);
 
             if (EditorGUI.EndChangeCheck())
-                CalculateDegreesDelta();
+            {
+                if (editorAnimationMode == 0) //Position Lerp
+                {
+                    CollectOriginalPositions();
+                }
+
+                if (editorAnimationMode == 2 || editorAnimationMode == 3) //Rings
+                {
+                    CalculateDegreesDelta();
+                }
+            }
+                
+            
 
             GUILayout.Space(20);
 
-            editorRadius = serializedRadius.floatValue = EditorGUILayout.Slider("Radius", serializedRadius.floatValue, 1, 400);
+            if (editorAnimationMode == 2 || editorAnimationMode == 3)
+                editorRadius = serializedRadius.floatValue = EditorGUILayout.Slider("Radius", serializedRadius.floatValue, 1, 400);
+
             GUILayout.Space(20);
 
             editorFrequency = serializedFrequency.floatValue = EditorGUILayout.Slider("Frequency", serializedFrequency.floatValue, 1, 20);
             GUILayout.Space(20);
 
-            editorAmplitude = serializedAmplitude.floatValue = EditorGUILayout.Slider("Amplitude", serializedAmplitude.floatValue, 1, 1000);
+            editorAmplitude = serializedAmplitude.floatValue = EditorGUILayout.Slider("Amplitude", serializedAmplitude.floatValue, 1, 2000);
             GUILayout.Space(20);
 
-            editorRingSpin = serializedRingSpin.floatValue = EditorGUILayout.Slider("Ring spin", serializedRingSpin.floatValue, -10, 10);
+            if (editorAnimationMode == 2 || editorAnimationMode == 3)
+                editorRingSpin = serializedRingSpin.floatValue = EditorGUILayout.Slider("Ring spin", serializedRingSpin.floatValue, -10, 10);
+
             GUILayout.Space(20);
 
 
@@ -411,6 +435,36 @@ namespace SpheroidGames.SineAnimator
 
         #region Animation Functions
 
+        private List<Vector3> originalPositions = new List<Vector3>();
+
+
+        private void PositionLerp()
+        {
+            for(int i = 0; i < editorTransforms.Count; i++)
+            {
+                if (editorTransforms[i] == null)
+                    continue;
+
+                
+                if (editorValueMode == 0)
+                    editorTransforms[i].position = originalPositions[i] +
+                        editorTransforms[i].forward * Mathf.Sin((float)EditorApplication.timeSinceStartup * editorFrequency) * editorAmplitude;
+                else
+                    editorTransforms[i].position = originalPositions[i] +
+                        editorTransforms[i].forward * Mathf.Abs(Mathf.Sin((float)EditorApplication.timeSinceStartup * editorFrequency)) * editorAmplitude;
+
+            }
+        }
+
+        private void CollectOriginalPositions()
+        {
+            originalPositions.Clear();
+
+            foreach (Transform tr in editorTransforms)
+                originalPositions.Add(tr.position);
+        }
+
+
         private Quaternion rot;
         private Vector3 basePoint;
 
@@ -426,7 +480,7 @@ namespace SpheroidGames.SineAnimator
 
         private Vector3 direction;
 
-        private void RingOfMotion()
+        private void RingPlane()
         {
             for (int i = 0; i < editorTransforms.Count; i++)
             {
