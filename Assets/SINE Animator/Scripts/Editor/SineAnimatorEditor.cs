@@ -240,14 +240,21 @@ namespace SpheroidGames.SineAnimator
             GUILayout.Space(20);
 
             if (editorAnimationMode == 2 || editorAnimationMode == 3)
-                editorRadius = serializedRadius.floatValue = EditorGUILayout.Slider("Radius", serializedRadius.floatValue, 1, 400);
+                editorRadius = serializedRadius.floatValue = EditorGUILayout.Slider("Radius", serializedRadius.floatValue, 0.01f, 400);
 
             GUILayout.Space(20);
 
-            editorFrequency = serializedFrequency.floatValue = EditorGUILayout.Slider("Frequency", serializedFrequency.floatValue, 1, 20);
+            editorFrequency = serializedFrequency.floatValue = EditorGUILayout.Slider("Frequency", serializedFrequency.floatValue, 0.01f, 30);
             GUILayout.Space(20);
 
-            editorAmplitude = serializedAmplitude.floatValue = EditorGUILayout.Slider("Amplitude", serializedAmplitude.floatValue, 1, 2000);
+
+            if (editorAnimationMode == 2 || editorAnimationMode == 3)
+                editorAmplitude = serializedAmplitude.floatValue = EditorGUILayout.Slider("Amplitude", serializedAmplitude.floatValue, 0.01f, 2000);
+
+            else
+                editorAmplitude = serializedAmplitude.floatValue = EditorGUILayout.Slider("Amplitude", serializedAmplitude.floatValue, 0.01f, 200);
+
+
             GUILayout.Space(20);
 
             if (editorAnimationMode == 2 || editorAnimationMode == 3)
@@ -447,10 +454,10 @@ namespace SpheroidGames.SineAnimator
 
                 
                 if (editorValueMode == 0)
-                    editorTransforms[i].position = originalPositions[i] +
+                    editorTransforms[i].position = originalPositions[i] -
                         editorTransforms[i].forward * Mathf.Sin((float)EditorApplication.timeSinceStartup * editorFrequency) * editorAmplitude;
                 else
-                    editorTransforms[i].position = originalPositions[i] +
+                    editorTransforms[i].position = originalPositions[i] -
                         editorTransforms[i].forward * Mathf.Abs(Mathf.Sin((float)EditorApplication.timeSinceStartup * editorFrequency)) * editorAmplitude;
 
             }
