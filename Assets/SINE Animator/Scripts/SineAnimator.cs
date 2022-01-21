@@ -12,7 +12,8 @@ namespace SpheroidGames.SineAnimator
         {
             PositionLerp,
             ScaleLerp,
-            RingOfMotion,
+            RingPlane,
+            RingCarousel,
             WallOfMotion
         }
 
@@ -33,15 +34,17 @@ namespace SpheroidGames.SineAnimator
 
         [SerializeField] ValueMode valueMode;
 
-        [SerializeField] float speed;
+        [SerializeField] float frequency;
 
         [SerializeField] float amplitude;
-
+        
 
         //Ring of movement specific
         [SerializeField] float radius;
 
         [SerializeField] float ringSpin;
+
+        [SerializeField] bool ringObjectsFaceOutward;
 
 
         private UnityEvent currentMode = new UnityEvent();
@@ -61,7 +64,7 @@ namespace SpheroidGames.SineAnimator
                 case AnimationMode.ScaleLerp:
                     currentMode.AddListener(ScaleLerp);
                     break;
-                case AnimationMode.RingOfMotion:
+                case AnimationMode.RingPlane:
                     currentMode.AddListener(RingOfMotion);
                     startRotation = transform.rotation;
                     break;
@@ -94,7 +97,7 @@ namespace SpheroidGames.SineAnimator
         
         private IEnumerator RunAnimation()
         {
-            if (animationMode == AnimationMode.RingOfMotion)
+            if (animationMode == AnimationMode.RingPlane)
                 InitializeRing();
 
             while(animationRunning)

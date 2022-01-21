@@ -37,14 +37,17 @@ namespace SpheroidGames.SineAnimator
         private SerializedProperty serializedRadius;
         private float editorRadius;
 
-        private SerializedProperty serializedSpeed;
-        private float editorSpeed;
+        private SerializedProperty serializedFrequency;
+        private float editorFrequency;
 
         private SerializedProperty serializedAmplitude;
         private float editorAmplitude;
 
         private SerializedProperty serializedRingSpin;
         private float editorRingSpin;
+
+        private SerializedProperty serializedRingObjectsFaceOutward;
+        private bool editorRingObjectsFaceOutward;
 
         private Transform targetTransform;
 
@@ -73,14 +76,18 @@ namespace SpheroidGames.SineAnimator
             serializedRadius = serializedObject.FindProperty("radius");
             editorRadius = serializedRadius.floatValue;
 
-            serializedSpeed = serializedObject.FindProperty("speed");
-            editorSpeed = serializedSpeed.floatValue;
+            serializedFrequency = serializedObject.FindProperty("frequency");
+            editorFrequency = serializedFrequency.floatValue;
 
             serializedAmplitude = serializedObject.FindProperty("amplitude");
             editorAmplitude = serializedAmplitude.floatValue;
 
             serializedRingSpin = serializedObject.FindProperty("ringSpin");
             editorRingSpin = serializedRingSpin.floatValue;
+
+            serializedRingObjectsFaceOutward = serializedObject.FindProperty("ringObjectsFaceOutward");
+            editorRingObjectsFaceOutward = serializedRingObjectsFaceOutward.boolValue;
+
 
 
             EditorApplication.update += OnEditorUpdate;
@@ -135,12 +142,16 @@ namespace SpheroidGames.SineAnimator
                 case 1:     //ScaleLerp
                     break;
 
-                case 2:     //RingOfMotion
+                case 2:     //RingPlane
                     CalculateDegreesDelta();
                     currentAnimationFunction.AddListener(RingOfMotion);
                     break;
+                case 3: //RingCarousel
+                    CalculateDegreesDelta();
+                    currentAnimationFunction.AddListener(RingCarousel);
+                    break;
 
-                case 3:     //WallOfMotion
+                case 4:     //WallOfMotion
                     break;
             }
         }
@@ -175,7 +186,17 @@ namespace SpheroidGames.SineAnimator
 
             GUILayout.Space(10);
             EditorGUILayout.PropertyField(serializedStartOnPlay);
+
+            EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(serializedAnimationMode);
+            if (EditorGUI.EndChangeCheck())
+                SetAnimationFunction();
+
+
+            if (serializedAnimationMode.intValue == 2 || serializedAnimationMode.intValue == 3) //RingOfMotion
+                EditorGUILayout.PropertyField(serializedRingObjectsFaceOutward);
+
+
 
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(serializedValueMode);
@@ -201,10 +222,10 @@ namespace SpheroidGames.SineAnimator
             editorRadius = serializedRadius.floatValue = EditorGUILayout.Slider("Radius", serializedRadius.floatValue, 1, 400);
             GUILayout.Space(20);
 
-            editorSpeed = serializedSpeed.floatValue = EditorGUILayout.Slider("Speed", serializedSpeed.floatValue, 1, 20);
+            editorFrequency = serializedFrequency.floatValue = EditorGUILayout.Slider("Frequency", serializedFrequency.floatValue, 1, 20);
             GUILayout.Space(20);
 
-            editorAmplitude = serializedAmplitude.floatValue = EditorGUILayout.Slider("Amplitude", serializedAmplitude.floatValue, 1, 200);
+            editorAmplitude = serializedAmplitude.floatValue = EditorGUILayout.Slider("Amplitude", serializedAmplitude.floatValue, 1, 1000);
             GUILayout.Space(20);
 
             editorRingSpin = serializedRingSpin.floatValue = EditorGUILayout.Slider("Ring spin", serializedRingSpin.floatValue, -10, 10);
@@ -413,23 +434,61 @@ namespace SpheroidGames.SineAnimator
                     continue;
 
                 //Find the new rotation
-                rot = targetTransform.rotation * Quaternion.Euler(0, 0, degreesDelta * (i + 1));
-                basePoint = (targetTransform.position + (rot * (Vector3.right) * 0.01f));
-                direction = (basePoint - targetTransform.position);
+                CalculateRingDistribution(i);
 
 
                 if (editorValueMode == 0) //Actual value
-                    editorTransforms[i].position = basePoint + (direction * editorRadius) + (direction * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorSpeed) + 1) / 2) * editorAmplitude )));
+                    editorTransforms[i].position = basePoint + (direction * editorRadius) + (direction * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude )));
 
                 else //Absolute value
-                    editorTransforms[i].position = basePoint + (direction * editorRadius) + (direction * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorSpeed)   * editorAmplitude))));
+                    editorTransforms[i].position = basePoint + (direction * editorRadius) + (direction * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency)   * editorAmplitude))));
 
+                if (serializedRingObjectsFaceOutward.boolValue == true)
+                    editorTransforms[i].rotation = Quaternion.LookRotation(direction, targetTransform.forward);
             }        
 
             if (editorRingSpin != 0)
             {
                 targetTransform.Rotate(targetTransform.forward, editorRingSpin);
             }
+        }
+
+        
+
+        private void RingCarousel()
+        {
+            for (int i = 0; i < editorTransforms.Count; i++)
+            {
+                if (editorTransforms[i] == null)
+                    continue;
+
+                CalculateRingDistribution(i);
+
+                if (editorValueMode == 0) //Actual value
+                    editorTransforms[i].position = basePoint + (direction * editorRadius) + (targetTransform.forward * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude)));
+
+                else
+                    editorTransforms[i].position = basePoint + (direction * editorRadius) + (targetTransform.forward * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude))));
+
+                if (serializedRingObjectsFaceOutward.boolValue == true)
+                    editorTransforms[i].rotation = Quaternion.LookRotation(direction, targetTransform.forward);
+
+            }
+
+            if (editorRingSpin != 0)
+            {
+                targetTransform.Rotate(targetTransform.forward, editorRingSpin, Space.Self);
+            }
+        }
+
+        /// <summary>
+        /// Calculates the data neccessary to place objects around the ring
+        /// </summary>
+        private void CalculateRingDistribution(int i)
+        {
+            rot = targetTransform.rotation * Quaternion.Euler(0, 0, degreesDelta * (i + 1));
+            basePoint = (targetTransform.position + (rot * (Vector3.right) * 0.01f));
+            direction = (basePoint - targetTransform.position);
         }
 
         private void CalculateDegreesDelta()
