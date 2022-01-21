@@ -471,13 +471,13 @@ namespace SpheroidGames.SineAnimator
                     editorTransforms[i].position = 
                         basePoint + 
                         (direction * editorRadius) + 
-                        (targetTransform.forward * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude * 0.1f)));
+                        (targetTransform.forward * 0.01f * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude))) ;
 
                 else
                     editorTransforms[i].position = 
                         basePoint + 
                         (direction * editorRadius) + 
-                        (targetTransform.forward * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude * 0.1f))));
+                        (targetTransform.forward * 0.01f * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude)))) ;
 
                 if (serializedRingObjectsFaceOutward.boolValue == true)
                     editorTransforms[i].rotation = Quaternion.LookRotation(direction, targetTransform.forward);
