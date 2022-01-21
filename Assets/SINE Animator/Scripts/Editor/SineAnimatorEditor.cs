@@ -438,10 +438,15 @@ namespace SpheroidGames.SineAnimator
 
 
                 if (editorValueMode == 0) //Actual value
-                    editorTransforms[i].position = basePoint + (direction * editorRadius) + (direction * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude )));
+                    editorTransforms[i].position = 
+                        basePoint + 
+                        (direction * editorRadius) + 
+                        (direction * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude )));
 
                 else //Absolute value
-                    editorTransforms[i].position = basePoint + (direction * editorRadius) + (direction * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency)   * editorAmplitude))));
+                    editorTransforms[i].position = basePoint + 
+                        (direction * editorRadius) + 
+                        (direction * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency)   * editorAmplitude))));
 
                 if (serializedRingObjectsFaceOutward.boolValue == true)
                     editorTransforms[i].rotation = Quaternion.LookRotation(direction, targetTransform.forward);
@@ -449,11 +454,9 @@ namespace SpheroidGames.SineAnimator
 
             if (editorRingSpin != 0)
             {
-                targetTransform.Rotate(targetTransform.forward, editorRingSpin);
+                targetTransform.Rotate(targetTransform.forward, editorRingSpin, Space.World);
             }
         }
-
-        
 
         private void RingCarousel()
         {
@@ -465,10 +468,16 @@ namespace SpheroidGames.SineAnimator
                 CalculateRingDistribution(i);
 
                 if (editorValueMode == 0) //Actual value
-                    editorTransforms[i].position = basePoint + (direction * editorRadius) + (targetTransform.forward * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude)));
+                    editorTransforms[i].position = 
+                        basePoint + 
+                        (direction * editorRadius) + 
+                        (targetTransform.forward * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude * 0.1f)));
 
                 else
-                    editorTransforms[i].position = basePoint + (direction * editorRadius) + (targetTransform.forward * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude))));
+                    editorTransforms[i].position = 
+                        basePoint + 
+                        (direction * editorRadius) + 
+                        (targetTransform.forward * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude * 0.1f))));
 
                 if (serializedRingObjectsFaceOutward.boolValue == true)
                     editorTransforms[i].rotation = Quaternion.LookRotation(direction, targetTransform.forward);
@@ -477,7 +486,7 @@ namespace SpheroidGames.SineAnimator
 
             if (editorRingSpin != 0)
             {
-                targetTransform.Rotate(targetTransform.forward, editorRingSpin, Space.Self);
+                targetTransform.Rotate(targetTransform.forward, editorRingSpin, Space.World);
             }
         }
 
@@ -564,7 +573,4 @@ namespace SpheroidGames.SineAnimator
 
         #endregion
     }
-}
-
-
-//editorTransforms[i].position = basePoint + ((basePoint - targetTransform.position) * (((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) ) + 1 ) / 2) * editorSpeed) * editorRadius); 
+} 
