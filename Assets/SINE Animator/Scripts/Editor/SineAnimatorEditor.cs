@@ -32,6 +32,8 @@ namespace SpheroidGames.SineAnimator
         private SerializedProperty serializedAnimationMode;
         private int editorAnimationMode;
 
+        private int previousAnimationMode = -1;
+
         private SerializedProperty serializedValueMode;
         private int editorValueMode;
 
@@ -49,6 +51,9 @@ namespace SpheroidGames.SineAnimator
 
         private SerializedProperty serializedRingObjectsFaceOutward;
         private bool editorRingObjectsFaceOutward;
+
+        private SerializedProperty serializedWallWidth;
+
 
         private Transform targetTransform;
 
@@ -90,6 +95,10 @@ namespace SpheroidGames.SineAnimator
 
             serializedRingObjectsFaceOutward = serializedObject.FindProperty("ringObjectsFaceOutward");
             editorRingObjectsFaceOutward = serializedRingObjectsFaceOutward.boolValue;
+
+            serializedWallWidth = serializedObject.FindProperty("wallWidth");
+
+
 
 
 
@@ -145,7 +154,7 @@ namespace SpheroidGames.SineAnimator
                     break;
 
                 case 1:     //ScaleLerp
-                    CollectDoubleScales();
+                    CollectScales();
                     currentAnimationFunction.AddListener(ScaleLerp);
                     break;
 
@@ -159,6 +168,8 @@ namespace SpheroidGames.SineAnimator
                     break;
 
                 case 4:     //WallOfMotion
+                    CalculateWallDistanceDelta();
+                    currentAnimationFunction.AddListener(Wall);
                     break;
             }
         }
@@ -187,8 +198,6 @@ namespace SpheroidGames.SineAnimator
         {
             GUILayout.Box(logo);
 
-            //GUI.enabled = !editorPlaybackRunning && !EditorApplication.isPlaying;
-
             GUILayout.BeginVertical();
 
             GUILayout.Space(10);
@@ -200,12 +209,16 @@ namespace SpheroidGames.SineAnimator
             {
                 editorAnimationMode = serializedAnimationMode.intValue;
                 SetAnimationFunction();
+
+                if (previousAnimationMode == 1)
+                    ApplyOriginalScales();
+
+                previousAnimationMode = editorAnimationMode;
             }
 
 
             if (serializedAnimationMode.intValue == 2 || serializedAnimationMode.intValue == 3) //RingOfMotion
                 EditorGUILayout.PropertyField(serializedRingObjectsFaceOutward);
-
 
 
             EditorGUI.BeginChangeCheck();
@@ -217,7 +230,6 @@ namespace SpheroidGames.SineAnimator
 
             EditorGUILayout.EndVertical();
 
-            //GUI.enabled = true;
 
             GUILayout.Space(20);
 
@@ -262,8 +274,18 @@ namespace SpheroidGames.SineAnimator
 
             GUILayout.Space(20);
 
-            if (editorAnimationMode == 2 || editorAnimationMode == 3)
+            if (editorAnimationMode == 2 || editorAnimationMode == 3) 
                 editorRingSpin = serializedRingSpin.floatValue = EditorGUILayout.Slider("Ring spin", serializedRingSpin.floatValue, -10, 10);
+
+            else if (editorAnimationMode == 4) //Wall
+            {
+                EditorGUI.BeginChangeCheck();
+                serializedWallWidth.floatValue = EditorGUILayout.Slider("Wall width", serializedWallWidth.floatValue, 0.1f, 100);
+
+                if (EditorGUI.EndChangeCheck())
+                    CalculateWallDistanceDelta();
+            }
+                
 
             GUILayout.Space(20);
 
@@ -476,8 +498,8 @@ namespace SpheroidGames.SineAnimator
                 originalPositions.Add(tr.position);
         }
 
-        List<Vector3> doubleScales = new List<Vector3>();
-        List<Vector3> originalScales = new List<Vector3>();
+        private readonly List<Vector3> doubleScales = new List<Vector3>();
+        private readonly List<Vector3> originalScales = new List<Vector3>();
         private void ScaleLerp()
         {
             for (int i = 0; i < editorTransforms.Count; i++)
@@ -494,7 +516,7 @@ namespace SpheroidGames.SineAnimator
             }
         }
 
-        private void CollectDoubleScales()
+        private void CollectScales()
         {
             originalScales.Clear();
             doubleScales.Clear();
@@ -503,6 +525,20 @@ namespace SpheroidGames.SineAnimator
             {
                 originalScales.Add(tr.localScale);
                 doubleScales.Add(tr.localScale * 2);
+            }
+        }
+
+        private void ApplyOriginalScales()
+        {
+            if (originalScales.Count != editorTransforms.Count)
+                return;
+
+            for (int i = 0; i < editorTransforms.Count; i++)
+            {
+                if (editorTransforms[i] == null) 
+                    continue;
+
+                editorTransforms[i].localScale = originalScales[i];
             }
         }
 
@@ -602,6 +638,30 @@ namespace SpheroidGames.SineAnimator
             radiansDelta = (Mathf.PI * 2) / editorTransforms.Count; 
         }
 
+        private float wallDistanceDelta;
+        private float halfDistance;
+        private void Wall()
+        {
+            for (int i = 0; i < editorTransforms.Count; i++)
+            {
+                if (editorTransforms[i] == null)
+                    continue;
+
+                editorTransforms[i].position = targetTransform.position - 
+                    (targetTransform.right * halfDistance) + 
+                    targetTransform.right * wallDistanceDelta * i + 
+                    targetTransform.up * (Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude );
+            }
+        }
+
+        private void CalculateWallDistanceDelta()
+        {
+            wallDistanceDelta = serializedWallWidth.floatValue / editorTransforms.Count;
+            halfDistance = serializedWallWidth.floatValue / 2;
+
+            CalculateDegreesDelta();
+        }
+
         #endregion
 
 
@@ -629,6 +689,9 @@ namespace SpheroidGames.SineAnimator
         private void StopEditorPlayback()
         {
             editorPlaybackRunning = false;
+
+            if (editorAnimationMode == 1) //ScaleLerp
+                ApplyOriginalScales();
         }
 
         private readonly double animationFrequency = 0.0166; //60 times per second

@@ -14,7 +14,7 @@ namespace SpheroidGames.SineAnimator
             ScaleLerp,
             RingPlane,
             RingCarousel,
-            WallOfMotion
+            Wall
         }
 
         public enum ValueMode
@@ -46,6 +46,8 @@ namespace SpheroidGames.SineAnimator
 
         [SerializeField] bool ringObjectsFaceOutward;
 
+        [SerializeField] float wallWidth;
+
 
         private UnityEvent currentMode = new UnityEvent();
 
@@ -68,7 +70,7 @@ namespace SpheroidGames.SineAnimator
                     currentMode.AddListener(RingOfMotion);
                     startRotation = transform.rotation;
                     break;
-                case AnimationMode.WallOfMotion:
+                case AnimationMode.Wall:
                     currentMode.AddListener(WallOfMotion);
                     break;
             }
