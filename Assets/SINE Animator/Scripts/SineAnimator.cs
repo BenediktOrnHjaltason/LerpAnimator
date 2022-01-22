@@ -8,10 +8,13 @@ namespace SpheroidGames.SineAnimator
     [System.Serializable]
     public class SineAnimator : MonoBehaviour
     {
-        public enum AnimationMode
+        public enum Mode
         {
-            PositionLerp,
-            ScaleLerp,
+            /// <summary>
+            /// Bobs in position along the forward vector
+            /// </summary>
+            PositionBobber,
+            ScaleBobber,
             RingPlane,
             RingCarousel,
             Wall
@@ -30,7 +33,7 @@ namespace SpheroidGames.SineAnimator
 
         [SerializeField] List<Transform> TransformsToActOn;
 
-        [SerializeField] AnimationMode animationMode;
+        [SerializeField] Mode animationMode;
 
         [SerializeField] ValueMode valueMode;
 
@@ -56,27 +59,41 @@ namespace SpheroidGames.SineAnimator
 
         private void Start()
         {
+            if (StartOnPlay)
+                StartAnimation();
+        }
+
+        public void SetAnimationFunction()
+        {
             currentMode.RemoveAllListeners();
 
             switch (animationMode)
             {
-                case AnimationMode.PositionLerp:
-                    currentMode.AddListener(PositionLerp);
+                case Mode.PositionBobber:
+                    CollectOriginalPositions();
+                    currentMode.AddListener(PositionBobber);
                     break;
-                case AnimationMode.ScaleLerp:
-                    currentMode.AddListener(ScaleLerp);
+
+                case Mode.ScaleBobber:
+                    CollectScales();
+                    currentMode.AddListener(ScaleBobber);
                     break;
-                case AnimationMode.RingPlane:
-                    currentMode.AddListener(RingOfMotion);
-                    startRotation = transform.rotation;
+
+                case Mode.RingPlane:
+                    CalculateDegreesDelta();
+                    currentMode.AddListener(RingPlane);
                     break;
-                case AnimationMode.Wall:
-                    currentMode.AddListener(WallOfMotion);
+
+                case Mode.RingCarousel:
+                    CalculateDegreesDelta();
+                    currentMode.AddListener(RingCarousel);
+                    break;
+
+                case Mode.Wall:
+                    CalculateWallDistanceDelta();
+                    currentMode.AddListener(Wall);
                     break;
             }
-
-            if (StartOnPlay)
-                StartAnimation();
         }
 
         private bool animationRunning;
@@ -85,6 +102,8 @@ namespace SpheroidGames.SineAnimator
         {
             if (TransformsToActOn.Count < 1)
                 return;
+
+            SetAnimationFunction();
 
             animationRunning = true;
 
@@ -99,8 +118,6 @@ namespace SpheroidGames.SineAnimator
         
         private IEnumerator RunAnimation()
         {
-            if (animationMode == AnimationMode.RingPlane)
-                InitializeRing();
 
             while(animationRunning)
             {
@@ -109,39 +126,198 @@ namespace SpheroidGames.SineAnimator
                 yield return null;
             }
         }
-        
 
-        private void PositionLerp()
-        {
 
-        }
+        #region Animation Functions
 
-        private void ScaleLerp()
-        {
-
-        }
-
-        private void InitializeRing()
-        {
-
-        }
-
-        Quaternion startRotation;
-        private void RingOfMotion()
+        #region Position Bobber
+        private void PositionBobber()
         {
             for (int i = 0; i < TransformsToActOn.Count; i++)
             {
-                transform.rotation =
-                 startRotation *
-                    Quaternion.Euler(0, 0, (360 / TransformsToActOn.Count) * i);
+                if (TransformsToActOn[i] == null)
+                    continue;
 
-                TransformsToActOn[i].position = transform.position + transform.right;
+
+                if (valueMode == ValueMode.Value)
+                    TransformsToActOn[i].position = originalPositions[i] -
+                        TransformsToActOn[i].forward * Mathf.Sin(Time.time * frequency) * amplitude;
+                else //Absolute value
+                    TransformsToActOn[i].position = originalPositions[i] -
+                        TransformsToActOn[i].forward * Mathf.Abs(Mathf.Sin(Time.time * frequency)) * amplitude;
+
             }
         }
 
-        private void WallOfMotion()
+        private List<Vector3> originalPositions = new List<Vector3>();
+        private void CollectOriginalPositions()
         {
+            originalPositions.Clear();
 
+            foreach (Transform tr in TransformsToActOn)
+                originalPositions.Add(tr.position);
         }
+
+        #endregion
+
+        #region Scale Bobber
+        private readonly List<Vector3> doubleScales = new List<Vector3>();
+        private readonly List<Vector3> originalScales = new List<Vector3>();
+        private void ScaleBobber()
+        {
+            for (int i = 0; i < TransformsToActOn.Count; i++)
+            {
+                if (TransformsToActOn[i] == null)
+                    continue;
+
+                if (valueMode == ValueMode.Value)
+                    TransformsToActOn[i].localScale = Vector3.LerpUnclamped(originalScales[i], doubleScales[i], Mathf.Sin(Time.time * frequency) * amplitude);
+
+                else
+                    TransformsToActOn[i].localScale = Vector3.LerpUnclamped(originalScales[i], doubleScales[i], Mathf.Abs(Mathf.Sin(Time.time * frequency)) * amplitude);
+
+            }
+        }
+
+        private void CollectScales()
+        {
+            originalScales.Clear();
+            doubleScales.Clear();
+
+            foreach (Transform tr in TransformsToActOn)
+            {
+                originalScales.Add(tr.localScale);
+                doubleScales.Add(tr.localScale * 2);
+            }
+        }
+
+        #endregion
+
+        #region Rings
+
+        private Quaternion rot;
+        private Vector3 basePoint;
+
+        /// <summary>
+        /// Used to place the objects around the center
+        /// </summary>
+        private float degreesDelta;
+
+        /// <summary>
+        /// Used to move objects around with sine wave
+        /// </summary>
+        private float radiansDelta;
+
+        private Vector3 direction;
+
+        /// <summary>
+        /// Calculates the data neccessary to place objects around the ring
+        /// </summary>
+        private void CalculateRingDistribution(int i)
+        {
+            rot = transform.rotation * Quaternion.Euler(0, 0, degreesDelta * (i + 1));
+            basePoint = (transform.position + (rot * (Vector3.right) * 0.01f));
+            direction = (basePoint - transform.position);
+        }
+
+        /// <summary>
+        /// Calculates the data neccessary to place objects on sine wave
+        /// </summary>
+        private void CalculateDegreesDelta()
+        {
+            degreesDelta = 360 / TransformsToActOn.Count;
+            radiansDelta = (Mathf.PI * 2) / TransformsToActOn.Count;
+        }
+
+        private void RingPlane()
+        {
+            for (int i = 0; i < TransformsToActOn.Count; i++)
+            {
+                if (TransformsToActOn[i] == null)
+                    continue;
+
+                CalculateRingDistribution(i);
+
+                if (valueMode == ValueMode.Value) //Actual value
+                    TransformsToActOn[i].position =
+                        basePoint +
+                        (direction * radius) +
+                        (direction * ((((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) + 1) / 2) * amplitude)));
+
+                else //Absolute value
+                    TransformsToActOn[i].position = basePoint +
+                        (direction * radius) +
+                        (direction * (Mathf.Abs((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) * amplitude))));
+
+                if (ringObjectsFaceOutward)
+                    TransformsToActOn[i].rotation = Quaternion.LookRotation(direction, transform.forward);
+            }
+
+            if (ringSpin != 0)
+            {
+                transform.Rotate(transform.forward, ringSpin, Space.World);
+            }
+        }
+
+        private void RingCarousel()
+        {
+            for (int i = 0; i < TransformsToActOn.Count; i++)
+            {
+                if (TransformsToActOn[i] == null)
+                    continue;
+
+                CalculateRingDistribution(i);
+
+                if (valueMode == ValueMode.Value) //Actual value
+                    TransformsToActOn[i].position =
+                        basePoint +
+                        (direction * radius) +
+                        (transform.forward * 0.01f * ((((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) + 1) / 2) * amplitude)));
+
+                else
+                    TransformsToActOn[i].position =
+                        basePoint +
+                        (direction * radius) +
+                        (transform.forward * 0.01f * (Mathf.Abs((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) * amplitude))));
+
+                if (ringObjectsFaceOutward)
+                    TransformsToActOn[i].rotation = Quaternion.LookRotation(direction, transform.forward);
+
+            }
+
+            if (ringSpin != 0)
+            {
+                transform.Rotate(transform.forward, ringSpin, Space.World);
+            }
+        }
+        #endregion
+
+        #region Wall
+        private float wallDistanceDelta;
+        private float halfDistance;
+        private void Wall()
+        {
+            for (int i = 0; i < TransformsToActOn.Count; i++)
+            {
+                if (TransformsToActOn[i] == null)
+                    continue;
+
+                TransformsToActOn[i].position = transform.position -
+                    (transform.right * halfDistance) +
+                    transform.right * wallDistanceDelta * i +
+                    transform.up * (Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) * amplitude);
+            }
+        }
+
+        private void CalculateWallDistanceDelta()
+        {
+            wallDistanceDelta = wallWidth / TransformsToActOn.Count;
+            halfDistance = wallWidth / 2;
+
+            CalculateDegreesDelta();
+        }
+        #endregion
+
+        #endregion
     }
 }

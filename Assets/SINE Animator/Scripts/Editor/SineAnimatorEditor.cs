@@ -150,12 +150,12 @@ namespace SpheroidGames.SineAnimator
             {
                 case 0:     //PositionLerp
                     CollectOriginalPositions();
-                    currentAnimationFunction.AddListener(PositionLerp);
+                    currentAnimationFunction.AddListener(PositionBobber);
                     break;
 
                 case 1:     //ScaleLerp
                     CollectScales();
-                    currentAnimationFunction.AddListener(ScaleLerp);
+                    currentAnimationFunction.AddListener(ScaleBobber);
                     break;
 
                 case 2:     //RingPlane
@@ -209,6 +209,7 @@ namespace SpheroidGames.SineAnimator
             {
                 editorAnimationMode = serializedAnimationMode.intValue;
                 SetAnimationFunction();
+                ((SineAnimator)target).SetAnimationFunction();
 
                 if (previousAnimationMode == 1)
                     ApplyOriginalScales();
@@ -472,7 +473,7 @@ namespace SpheroidGames.SineAnimator
         private List<Vector3> originalPositions = new List<Vector3>();
 
 
-        private void PositionLerp()
+        private void PositionBobber()
         {
             for(int i = 0; i < editorTransforms.Count; i++)
             {
@@ -500,7 +501,7 @@ namespace SpheroidGames.SineAnimator
 
         private readonly List<Vector3> doubleScales = new List<Vector3>();
         private readonly List<Vector3> originalScales = new List<Vector3>();
-        private void ScaleLerp()
+        private void ScaleBobber()
         {
             for (int i = 0; i < editorTransforms.Count; i++)
             {
@@ -632,6 +633,9 @@ namespace SpheroidGames.SineAnimator
             direction = (basePoint - targetTransform.position);
         }
 
+        /// <summary>
+        /// Calculates the data neccessary to place objects on sine wave
+        /// </summary>
         private void CalculateDegreesDelta()
         {
             degreesDelta = 360 / editorTransforms.Count;
