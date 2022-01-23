@@ -201,6 +201,9 @@ namespace SpheroidGames.SineAnimator
             GUILayout.BeginVertical();
 
             GUILayout.Space(10);
+
+            GUI.enabled = !EditorApplication.isPlaying && !handlingUndoRedo;
+
             EditorGUILayout.PropertyField(serializedStartOnPlay);
 
             EditorGUI.BeginChangeCheck();
@@ -286,12 +289,9 @@ namespace SpheroidGames.SineAnimator
                 if (EditorGUI.EndChangeCheck())
                     CalculateWallDistanceDelta();
             }
-                
 
             GUILayout.Space(20);
 
-
-            GUI.enabled = !handlingUndoRedo;
             if (!editorPlaybackRunning && GUILayout.Button("Preview animation"))
             {
                 StartEditorPlayback();
@@ -300,9 +300,8 @@ namespace SpheroidGames.SineAnimator
             {
                 StopEditorPlayback();
             }
-            GUI.enabled = true;
 
-            
+            GUI.enabled = true;
 
             serializedObject.ApplyModifiedProperties();
         }
