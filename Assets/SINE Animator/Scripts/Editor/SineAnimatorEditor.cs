@@ -49,8 +49,7 @@ namespace SpheroidGames.SineAnimator
         private SerializedProperty serializedRingSpin;
         private float editorRingSpin;
 
-        private SerializedProperty serializedRingObjectsFaceOutward;
-        private bool editorRingObjectsFaceOutward;
+        private SerializedProperty serializedRingObjectsFace;
 
         private SerializedProperty serializedWallWidth;
 
@@ -93,8 +92,7 @@ namespace SpheroidGames.SineAnimator
             serializedRingSpin = serializedObject.FindProperty("ringSpin");
             editorRingSpin = serializedRingSpin.floatValue;
 
-            serializedRingObjectsFaceOutward = serializedObject.FindProperty("ringObjectsFaceOutward");
-            editorRingObjectsFaceOutward = serializedRingObjectsFaceOutward.boolValue;
+            serializedRingObjectsFace = serializedObject.FindProperty("ringObjectsFace");
 
             serializedWallWidth = serializedObject.FindProperty("wallWidth");
 
@@ -221,10 +219,6 @@ namespace SpheroidGames.SineAnimator
             }
 
 
-            if (serializedAnimationMode.intValue == 2 || serializedAnimationMode.intValue == 3) //RingOfMotion
-                EditorGUILayout.PropertyField(serializedRingObjectsFaceOutward);
-
-
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(serializedValueMode);
             if (EditorGUI.EndChangeCheck())
@@ -252,9 +246,24 @@ namespace SpheroidGames.SineAnimator
                     CalculateDegreesDelta();
                 }
             }
-                
-            
 
+            GUILayout.Space(20);
+
+            if (editorAnimationMode == SineAnimator.Mode.RingPlane || editorAnimationMode == SineAnimator.Mode.RingCarousel)
+            {
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("Objects face");
+
+                
+                if (GUILayout.Button("Outward"))
+                    RingObjectsFaceDirection(SineAnimator.RingObjectsFace.Outward);
+
+                if (GUILayout.Button("Inward"))
+                    RingObjectsFaceDirection(SineAnimator.RingObjectsFace.Inward);
+
+                EditorGUILayout.EndHorizontal();
+            }
+                
             GUILayout.Space(20);
 
             if (editorAnimationMode == SineAnimator.Mode.RingPlane || editorAnimationMode == SineAnimator.Mode.RingCarousel)
@@ -292,14 +301,17 @@ namespace SpheroidGames.SineAnimator
 
             GUILayout.Space(20);
 
-            if (!editorPlaybackRunning && GUILayout.Button("Preview animation"))
+            if (!editorPlaybackRunning && GUILayout.Button("Preview"))
             {
                 StartEditorPlayback();
             }
-            else if (editorPlaybackRunning && GUILayout.Button("Stop animation"))
+            else if (editorPlaybackRunning && GUILayout.Button("Stop"))
             {
                 StopEditorPlayback();
             }
+
+
+            GUILayout.Space(20);
 
             GUI.enabled = true;
 
@@ -570,9 +582,6 @@ namespace SpheroidGames.SineAnimator
                     ((editorValueMode == SineAnimator.ValueMode.Value) ?
                     (direction * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude ))) :
                     (direction * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude))))); 
-
-                if (serializedRingObjectsFaceOutward.boolValue == true)
-                    editorTransforms[i].rotation = Quaternion.LookRotation(direction, targetTransform.forward);
             }        
 
             if (editorRingSpin != 0)
@@ -592,15 +601,12 @@ namespace SpheroidGames.SineAnimator
 
                 CalculateRingDistribution(i);
 
-                    editorTransforms[i].position = 
-                        basePoint + 
-                        (direction * editorRadius) + 
-                        ((editorValueMode == SineAnimator.ValueMode.Value) ?
-                        (targetTransform.forward * 0.01f * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude))) :
-                        (targetTransform.forward * 0.01f * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude)))));
-
-                if (serializedRingObjectsFaceOutward.boolValue == true)
-                    editorTransforms[i].rotation = Quaternion.LookRotation(direction, targetTransform.forward);
+                editorTransforms[i].position = 
+                basePoint + 
+                (direction * editorRadius) + 
+                ((editorValueMode == SineAnimator.ValueMode.Value) ?
+                (targetTransform.forward * 0.01f * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude))) :
+                (targetTransform.forward * 0.01f * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude)))));
             }
 
             if (editorRingSpin != 0)
@@ -610,6 +616,22 @@ namespace SpheroidGames.SineAnimator
                 previousTime = (float)EditorApplication.timeSinceStartup;
             }
         }
+
+        private void RingObjectsFaceDirection(SineAnimator.RingObjectsFace lookDirection)
+        {
+            for (int i = 0; i < editorTransforms.Count; i++)
+            {
+                CalculateRingDistribution(i);
+
+                if (lookDirection == SineAnimator.RingObjectsFace.Outward)
+                    editorTransforms[i].rotation = Quaternion.LookRotation(direction, targetTransform.forward);
+
+                else if (lookDirection == SineAnimator.RingObjectsFace.Inward)
+                    editorTransforms[i].rotation = Quaternion.LookRotation(-direction, targetTransform.forward);
+            }
+        }
+
+
 
         /// <summary>
         /// Calculates the data neccessary to place objects around the ring

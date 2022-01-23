@@ -10,9 +10,6 @@ namespace SpheroidGames.SineAnimator
     {
         public enum Mode
         {
-            /// <summary>
-            /// Bobs in position along the forward vector
-            /// </summary>
             PositionBobber,
             ScaleBobber,
             RingPlane,
@@ -24,6 +21,13 @@ namespace SpheroidGames.SineAnimator
         {
             Value,
             AbsoluteValue
+        }
+
+        public enum RingObjectsFace
+        {
+            NA,
+            Inward,
+            Outward
         }
 
         [Tooltip("Wether sequence should start when game starts")]
@@ -47,9 +51,9 @@ namespace SpheroidGames.SineAnimator
 
         [SerializeField] float ringSpin;
 
-        [SerializeField] bool ringObjectsFaceOutward;
-
         [SerializeField] float wallWidth;
+
+        [SerializeField] RingObjectsFace ringObjectsFace;
 
 
         private UnityEvent currentMode = new UnityEvent();
@@ -238,9 +242,6 @@ namespace SpheroidGames.SineAnimator
                 ((valueMode == ValueMode.Value) ?
                 (direction * ((((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) + 1) / 2) * amplitude))) :
                 (direction * (Mathf.Abs((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) * amplitude)))));
-
-                if (ringObjectsFaceOutward)
-                    TransformsToActOn[i].rotation = Quaternion.LookRotation(direction, transform.forward);
             }
 
             if (ringSpin != 0)
@@ -264,9 +265,6 @@ namespace SpheroidGames.SineAnimator
                 ((valueMode == ValueMode.Value) ?
                 (transform.forward * 0.01f * ((((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) + 1) / 2) * amplitude))) :
                 (transform.forward * 0.01f * (Mathf.Abs((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) * amplitude)))));
-
-                if (ringObjectsFaceOutward)
-                    TransformsToActOn[i].rotation = Quaternion.LookRotation(direction, transform.forward);
             }
 
             if (ringSpin != 0)
