@@ -30,12 +30,12 @@ namespace SpheroidGames.SineAnimator
         private SerializedProperty serializedTransforms;
 
         private SerializedProperty serializedAnimationMode;
-        private int editorAnimationMode;
+        private SineAnimator.Mode editorAnimationMode;
 
-        private int previousAnimationMode = -1;
+        private SineAnimator.Mode previousAnimationMode = SineAnimator.Mode.PositionBobber;
 
         private SerializedProperty serializedValueMode;
-        private int editorValueMode;
+        private SineAnimator.ValueMode editorValueMode;
 
         private SerializedProperty serializedRadius;
         private float editorRadius;
@@ -76,10 +76,10 @@ namespace SpheroidGames.SineAnimator
             serializedTransforms = serializedObject.FindProperty("TransformsToActOn");
 
             serializedAnimationMode = serializedObject.FindProperty("animationMode");
-            editorAnimationMode = serializedAnimationMode.intValue;
+            editorAnimationMode = previousAnimationMode = (SineAnimator.Mode)serializedAnimationMode.intValue;
 
             serializedValueMode = serializedObject.FindProperty("valueMode");
-            editorValueMode = (int)serializedValueMode.intValue;
+            editorValueMode = (SineAnimator.ValueMode)serializedValueMode.intValue;
 
             serializedRadius = serializedObject.FindProperty("radius");
             editorRadius = serializedRadius.floatValue;
@@ -210,11 +210,11 @@ namespace SpheroidGames.SineAnimator
             EditorGUILayout.PropertyField(serializedAnimationMode);
             if (EditorGUI.EndChangeCheck())
             {
-                editorAnimationMode = serializedAnimationMode.intValue;
+                editorAnimationMode = (SineAnimator.Mode)serializedAnimationMode.intValue;
                 SetAnimationFunction();
                 ((SineAnimator)target).SetAnimationFunction();
 
-                if (previousAnimationMode == 1)
+                if (previousAnimationMode == SineAnimator.Mode.ScaleBobber)
                     ApplyOriginalScales();
 
                 previousAnimationMode = editorAnimationMode;
@@ -229,7 +229,7 @@ namespace SpheroidGames.SineAnimator
             EditorGUILayout.PropertyField(serializedValueMode);
             if (EditorGUI.EndChangeCheck())
             {
-                editorValueMode = (int)serializedValueMode.intValue;
+                editorValueMode = (SineAnimator.ValueMode)serializedValueMode.intValue;
             }
 
             EditorGUILayout.EndVertical();
@@ -242,12 +242,12 @@ namespace SpheroidGames.SineAnimator
 
             if (EditorGUI.EndChangeCheck())
             {
-                if (editorAnimationMode == 0) //Position Lerp
+                if (editorAnimationMode == SineAnimator.Mode.PositionBobber)
                 {
                     CollectOriginalPositions();
                 }
 
-                if (editorAnimationMode == 2 || editorAnimationMode == 3) //Rings
+                if (editorAnimationMode == SineAnimator.Mode.RingPlane || editorAnimationMode == SineAnimator.Mode.RingCarousel)
                 {
                     CalculateDegreesDelta();
                 }
@@ -257,7 +257,7 @@ namespace SpheroidGames.SineAnimator
 
             GUILayout.Space(20);
 
-            if (editorAnimationMode == 2 || editorAnimationMode == 3)
+            if (editorAnimationMode == SineAnimator.Mode.RingPlane || editorAnimationMode == SineAnimator.Mode.RingCarousel)
                 editorRadius = serializedRadius.floatValue = EditorGUILayout.Slider("Radius", serializedRadius.floatValue, 0.01f, 400);
 
             GUILayout.Space(20);
@@ -265,11 +265,11 @@ namespace SpheroidGames.SineAnimator
             editorFrequency = serializedFrequency.floatValue = EditorGUILayout.Slider("Frequency", serializedFrequency.floatValue, 0.01f, 30);
             GUILayout.Space(20);
 
-            if (editorAnimationMode == 1)
+            if (editorAnimationMode == SineAnimator.Mode.ScaleBobber)
                 editorAmplitude = serializedAmplitude.floatValue = EditorGUILayout.Slider("Amplitude", serializedAmplitude.floatValue, 0, 1);
 
 
-            else if (editorAnimationMode == 2 || editorAnimationMode == 3)
+            else if (editorAnimationMode == SineAnimator.Mode.RingPlane || editorAnimationMode == SineAnimator.Mode.RingCarousel)
                 editorAmplitude = serializedAmplitude.floatValue = EditorGUILayout.Slider("Amplitude", serializedAmplitude.floatValue, 0.01f, 2000);
 
             else
@@ -278,10 +278,10 @@ namespace SpheroidGames.SineAnimator
 
             GUILayout.Space(20);
 
-            if (editorAnimationMode == 2 || editorAnimationMode == 3) 
-                editorRingSpin = serializedRingSpin.floatValue = EditorGUILayout.Slider("Ring spin", serializedRingSpin.floatValue, -10, 10);
+            if (editorAnimationMode == SineAnimator.Mode.RingPlane || editorAnimationMode == SineAnimator.Mode.RingCarousel) 
+                editorRingSpin = serializedRingSpin.floatValue = EditorGUILayout.Slider("Ring spin", serializedRingSpin.floatValue, -500, 500);
 
-            else if (editorAnimationMode == 4) //Wall
+            else if (editorAnimationMode == SineAnimator.Mode.Wall)
             {
                 EditorGUI.BeginChangeCheck();
                 serializedWallWidth.floatValue = EditorGUILayout.Slider("Wall width", serializedWallWidth.floatValue, 0.1f, 100);
@@ -479,14 +479,10 @@ namespace SpheroidGames.SineAnimator
                 if (editorTransforms[i] == null)
                     continue;
 
-                
-                if (editorValueMode == 0) //Value
-                    editorTransforms[i].position = originalPositions[i] -
-                        editorTransforms[i].forward * Mathf.Sin((float)EditorApplication.timeSinceStartup * editorFrequency) * editorAmplitude;
-                else //Absolute value
-                    editorTransforms[i].position = originalPositions[i] -
-                        editorTransforms[i].forward * Mathf.Abs(Mathf.Sin((float)EditorApplication.timeSinceStartup * editorFrequency)) * editorAmplitude;
-
+                    editorTransforms[i].position = 
+                    editorValueMode == SineAnimator.ValueMode.Value ?
+                    originalPositions[i] - editorTransforms[i].forward * Mathf.Sin((float)EditorApplication.timeSinceStartup * editorFrequency) * editorAmplitude :
+                    originalPositions[i] - editorTransforms[i].forward * Mathf.Abs(Mathf.Sin((float)EditorApplication.timeSinceStartup * editorFrequency)) * editorAmplitude;
             }
         }
 
@@ -507,12 +503,10 @@ namespace SpheroidGames.SineAnimator
                 if (editorTransforms[i] == null)
                     continue;
 
-                if (editorValueMode == 0)
-                    editorTransforms[i].localScale = Vector3.LerpUnclamped(originalScales[i], doubleScales[i], Mathf.Sin((float)EditorApplication.timeSinceStartup * editorFrequency) * editorAmplitude);
-
-                else
-                    editorTransforms[i].localScale = Vector3.LerpUnclamped(originalScales[i], doubleScales[i], Mathf.Abs(Mathf.Sin((float)EditorApplication.timeSinceStartup * editorFrequency)) * editorAmplitude);
-
+                    editorTransforms[i].localScale = 
+                    editorValueMode == SineAnimator.ValueMode.Value ? 
+                    Vector3.LerpUnclamped(originalScales[i], doubleScales[i], Mathf.Sin((float)EditorApplication.timeSinceStartup * editorFrequency) * editorAmplitude) :
+                    Vector3.LerpUnclamped(originalScales[i], doubleScales[i], Mathf.Abs(Mathf.Sin((float)EditorApplication.timeSinceStartup * editorFrequency)) * editorAmplitude);
             }
         }
 
@@ -558,6 +552,8 @@ namespace SpheroidGames.SineAnimator
 
         private Vector3 direction;
 
+        float previousTime;
+
         private void RingPlane()
         {
             for (int i = 0; i < editorTransforms.Count; i++)
@@ -568,17 +564,12 @@ namespace SpheroidGames.SineAnimator
                 //Find the new rotation
                 CalculateRingDistribution(i);
 
-
-                if (editorValueMode == 0) //Actual value
-                    editorTransforms[i].position = 
-                        basePoint + 
-                        (direction * editorRadius) + 
-                        (direction * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude )));
-
-                else //Absolute value
-                    editorTransforms[i].position = basePoint + 
-                        (direction * editorRadius) + 
-                        (direction * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency)   * editorAmplitude))));
+                editorTransforms[i].position = 
+                    basePoint + 
+                    (direction * editorRadius) + 
+                    ((editorValueMode == SineAnimator.ValueMode.Value) ?
+                    (direction * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude ))) :
+                    (direction * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude))))); 
 
                 if (serializedRingObjectsFaceOutward.boolValue == true)
                     editorTransforms[i].rotation = Quaternion.LookRotation(direction, targetTransform.forward);
@@ -586,7 +577,9 @@ namespace SpheroidGames.SineAnimator
 
             if (editorRingSpin != 0)
             {
-                targetTransform.Rotate(targetTransform.forward, editorRingSpin, Space.World);
+                targetTransform.Rotate(targetTransform.forward, editorRingSpin * ((float)EditorApplication.timeSinceStartup - previousTime), Space.World);
+
+                previousTime = (float)EditorApplication.timeSinceStartup;
             }
         }
 
@@ -599,26 +592,22 @@ namespace SpheroidGames.SineAnimator
 
                 CalculateRingDistribution(i);
 
-                if (editorValueMode == 0) //Actual value
                     editorTransforms[i].position = 
                         basePoint + 
                         (direction * editorRadius) + 
-                        (targetTransform.forward * 0.01f * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude))) ;
-
-                else
-                    editorTransforms[i].position = 
-                        basePoint + 
-                        (direction * editorRadius) + 
-                        (targetTransform.forward * 0.01f * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude)))) ;
+                        ((editorValueMode == SineAnimator.ValueMode.Value) ?
+                        (targetTransform.forward * 0.01f * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude))) :
+                        (targetTransform.forward * 0.01f * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude)))));
 
                 if (serializedRingObjectsFaceOutward.boolValue == true)
                     editorTransforms[i].rotation = Quaternion.LookRotation(direction, targetTransform.forward);
-
             }
 
             if (editorRingSpin != 0)
             {
-                targetTransform.Rotate(targetTransform.forward, editorRingSpin, Space.World);
+                targetTransform.Rotate(targetTransform.forward, editorRingSpin * ((float)EditorApplication.timeSinceStartup - previousTime), Space.World);
+
+                previousTime = (float)EditorApplication.timeSinceStartup;
             }
         }
 
@@ -650,10 +639,12 @@ namespace SpheroidGames.SineAnimator
                 if (editorTransforms[i] == null)
                     continue;
 
-                editorTransforms[i].position = targetTransform.position - 
-                    (targetTransform.right * halfDistance) + 
-                    targetTransform.right * wallDistanceDelta * i + 
-                    targetTransform.up * (Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude );
+                editorTransforms[i].position = targetTransform.position -
+                (targetTransform.right * halfDistance) +
+                (targetTransform.right * wallDistanceDelta * i) +
+                ((editorValueMode == SineAnimator.ValueMode.Value) ?
+                (targetTransform.up * (Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude)) :
+                (targetTransform.up * (Mathf.Abs(Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency)) * editorAmplitude)));
             }
         }
 
@@ -693,7 +684,7 @@ namespace SpheroidGames.SineAnimator
         {
             editorPlaybackRunning = false;
 
-            if (editorAnimationMode == 1) //ScaleLerp
+            if (editorAnimationMode == SineAnimator.Mode.ScaleBobber)
                 ApplyOriginalScales();
         }
 

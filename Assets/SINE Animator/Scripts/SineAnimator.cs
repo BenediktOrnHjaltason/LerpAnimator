@@ -138,14 +138,10 @@ namespace SpheroidGames.SineAnimator
                 if (TransformsToActOn[i] == null)
                     continue;
 
-
-                if (valueMode == ValueMode.Value)
-                    TransformsToActOn[i].position = originalPositions[i] -
-                        TransformsToActOn[i].forward * Mathf.Sin(Time.time * frequency) * amplitude;
-                else //Absolute value
-                    TransformsToActOn[i].position = originalPositions[i] -
-                        TransformsToActOn[i].forward * Mathf.Abs(Mathf.Sin(Time.time * frequency)) * amplitude;
-
+                TransformsToActOn[i].position =
+                (valueMode == ValueMode.Value) ?
+                originalPositions[i] - TransformsToActOn[i].forward * Mathf.Sin(Time.time * frequency) * amplitude :
+                originalPositions[i] - TransformsToActOn[i].forward * Mathf.Abs(Mathf.Sin(Time.time * frequency)) * amplitude;
             }
         }
 
@@ -170,12 +166,10 @@ namespace SpheroidGames.SineAnimator
                 if (TransformsToActOn[i] == null)
                     continue;
 
-                if (valueMode == ValueMode.Value)
-                    TransformsToActOn[i].localScale = Vector3.LerpUnclamped(originalScales[i], doubleScales[i], Mathf.Sin(Time.time * frequency) * amplitude);
-
-                else
-                    TransformsToActOn[i].localScale = Vector3.LerpUnclamped(originalScales[i], doubleScales[i], Mathf.Abs(Mathf.Sin(Time.time * frequency)) * amplitude);
-
+                TransformsToActOn[i].localScale =
+                (valueMode == ValueMode.Value) ?
+                Vector3.LerpUnclamped(originalScales[i], doubleScales[i], Mathf.Sin(Time.time * frequency) * amplitude) :
+                Vector3.LerpUnclamped(originalScales[i], doubleScales[i], Mathf.Abs(Mathf.Sin(Time.time * frequency)) * amplitude);
             }
         }
 
@@ -238,16 +232,12 @@ namespace SpheroidGames.SineAnimator
 
                 CalculateRingDistribution(i);
 
-                if (valueMode == ValueMode.Value) //Actual value
-                    TransformsToActOn[i].position =
-                        basePoint +
-                        (direction * radius) +
-                        (direction * ((((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) + 1) / 2) * amplitude)));
-
-                else //Absolute value
-                    TransformsToActOn[i].position = basePoint +
-                        (direction * radius) +
-                        (direction * (Mathf.Abs((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) * amplitude))));
+                TransformsToActOn[i].position =
+                basePoint +
+                (direction * radius) +
+                ((valueMode == ValueMode.Value) ?
+                (direction * ((((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) + 1) / 2) * amplitude))) :
+                (direction * (Mathf.Abs((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) * amplitude)))));
 
                 if (ringObjectsFaceOutward)
                     TransformsToActOn[i].rotation = Quaternion.LookRotation(direction, transform.forward);
@@ -255,7 +245,7 @@ namespace SpheroidGames.SineAnimator
 
             if (ringSpin != 0)
             {
-                transform.Rotate(transform.forward, ringSpin, Space.World);
+                transform.Rotate(transform.forward, ringSpin * Time.deltaTime, Space.World);
             }
         }
 
@@ -268,26 +258,20 @@ namespace SpheroidGames.SineAnimator
 
                 CalculateRingDistribution(i);
 
-                if (valueMode == ValueMode.Value) //Actual value
-                    TransformsToActOn[i].position =
-                        basePoint +
-                        (direction * radius) +
-                        (transform.forward * 0.01f * ((((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) + 1) / 2) * amplitude)));
-
-                else
-                    TransformsToActOn[i].position =
-                        basePoint +
-                        (direction * radius) +
-                        (transform.forward * 0.01f * (Mathf.Abs((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) * amplitude))));
+                TransformsToActOn[i].position =
+                basePoint +
+                (direction * radius) +
+                ((valueMode == ValueMode.Value) ?
+                (transform.forward * 0.01f * ((((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) + 1) / 2) * amplitude))) :
+                (transform.forward * 0.01f * (Mathf.Abs((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) * amplitude)))));
 
                 if (ringObjectsFaceOutward)
                     TransformsToActOn[i].rotation = Quaternion.LookRotation(direction, transform.forward);
-
             }
 
             if (ringSpin != 0)
             {
-                transform.Rotate(transform.forward, ringSpin, Space.World);
+                transform.Rotate(transform.forward, ringSpin * Time.deltaTime, Space.World);
             }
         }
         #endregion
@@ -305,7 +289,9 @@ namespace SpheroidGames.SineAnimator
                 TransformsToActOn[i].position = transform.position -
                     (transform.right * halfDistance) +
                     transform.right * wallDistanceDelta * i +
-                    transform.up * (Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) * amplitude);
+                    ((valueMode == ValueMode.Value) ?
+                    (transform.up * (Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) * amplitude)) :
+                    (transform.up * (Mathf.Abs(Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) * amplitude))));
             }
         }
 
