@@ -97,6 +97,32 @@ namespace SpheroidGames.LerpAnimator
 
         private List<Quaternion> interSegmentRotations = new List<Quaternion>();
 
+        private bool playingSingleSegment = false;
+        /// <summary>
+        /// Plays a single segment number (as displayed in inspector (#:Play))
+        /// </summary>
+        /// <param name="segmentNumber"></param>
+        public void PlaySingleSegment(int segmentNumber)
+        { 
+            if (segmentNumber > Segments.Count || segmentNumber < 1)
+            {
+                Debug.LogWarning($"LERP Animator: PlaySingleSegment() called with segment number out of bounds. There is no segment number {segmentNumber} on LERP Animator instance attached to {name}");
+                return;
+            }
+
+            fromIndex = segmentNumber == 1 ? -1 : segmentNumber - 2;
+            toIndex = fromIndex == -1 ? 0 : fromIndex + 1;
+
+            reciprocal = 1 / Segments[toIndex].duration;
+
+            ApplyFromDatastore(fromIndex);
+            SampleInterSegmentRotations();
+
+            playingSingleSegment = true;
+
+            StartCoroutine(RunSegment());
+        }
+
         private IEnumerator RunSegment()
         {
             Segments[toIndex].OnLerpStart?.Invoke();
@@ -183,6 +209,12 @@ namespace SpheroidGames.LerpAnimator
 
             Segments[toIndex].OnLerpEnd?.Invoke();
 
+            if (playingSingleSegment)
+            {
+                playingSingleSegment = false;
+                yield break;
+            }
+
             //Start next segment
             if (toIndex < Segments.Count - 1)
             {
@@ -257,6 +289,47 @@ namespace SpheroidGames.LerpAnimator
                     TransformsToActOn[i].localPosition = StartStates[i].position;
                     TransformsToActOn[i].localRotation = Quaternion.Euler(StartStates[i].offset);
                     TransformsToActOn[i].localScale = StartStates[i].scale;
+                }
+            }
+        }
+
+        public void ApplyFromDatastore(int segmentIndex)
+        {
+            if (segmentIndex == -1)
+            {
+                for (int i = 0; i < TransformsToActOn.Count; i++)
+                {
+                    if (TransformsToActOn[i] != null)
+                    {
+                        TransformsToActOn[i].localPosition = StartStates[i].position;
+
+                        TransformsToActOn[i].localRotation = Quaternion.Euler(StartStates[i].offset);
+
+
+                        TransformsToActOn[i].localScale =  StartStates[i].scale;
+                    }
+                }
+            }
+
+            else
+            {
+                for (int i = 0; i < TransformsToActOn.Count; i++)
+                {
+                    if (TransformsToActOn[i] != null)
+                    {
+                        TransformsToActOn[i].localPosition =
+                        Segments[segmentIndex].toTransformData[i].position;
+
+                        Quaternion acculumatedRotationOffsett = Quaternion.Euler(StartStates[i].offset);
+
+                        for (int j = 0; j <= segmentIndex; j++)
+                            acculumatedRotationOffsett *= Quaternion.Euler(Segments[j].toTransformData[i].offset);
+
+                        TransformsToActOn[i].localRotation = acculumatedRotationOffsett;
+
+                        TransformsToActOn[i].localScale =
+                        Segments[segmentIndex].toTransformData[i].scale;
+                    }
                 }
             }
         }

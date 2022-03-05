@@ -548,7 +548,7 @@ namespace SpheroidGames.LerpAnimator
         /// <param name="transformIndex"></param>
         private void SampleSingleFromSceneToStartStatesAndSegments(int transformIndex)
         {
-            //Depends on editorTransform being updated before calling this function
+            //Depends on editorTransforms being updated before calling this function
             serializedStartStates.GetArrayElementAtIndex(transformIndex).FindPropertyRelative("position").vector3Value =
                 editorStartStates[transformIndex].position = editorTransforms[transformIndex].localPosition;
 
