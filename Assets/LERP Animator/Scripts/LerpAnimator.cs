@@ -83,6 +83,7 @@ namespace SpheroidGames.LerpAnimator
                 return;
 
             StopAllCoroutines();
+            playingSingleSegment = false;
 
             fromIndex = -1;
             toIndex = 0;
