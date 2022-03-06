@@ -82,6 +82,8 @@ namespace SpheroidGames.LerpAnimator
             if (Segments.Count < 1 || TransformsToActOn.Count < 1)
                 return;
 
+            StopAllCoroutines();
+
             fromIndex = -1;
             toIndex = 0;
             timeOnStart = Time.time;
@@ -109,6 +111,8 @@ namespace SpheroidGames.LerpAnimator
                 Debug.LogWarning($"LERP Animator: PlaySingleSegment() called with segment number out of bounds. There is no segment number {segmentNumber} on LERP Animator instance attached to {name}");
                 return;
             }
+
+            StopAllCoroutines();
 
             fromIndex = segmentNumber == 1 ? -1 : segmentNumber - 2;
             toIndex = fromIndex == -1 ? 0 : fromIndex + 1;
