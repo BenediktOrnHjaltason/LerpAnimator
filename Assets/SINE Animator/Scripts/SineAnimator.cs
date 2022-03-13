@@ -44,9 +44,7 @@ namespace SpheroidGames.SineAnimator
         [SerializeField] public float frequency;
 
         [SerializeField] public float amplitude;
-        
 
-        //Ring of movement specific
         [SerializeField] public float radius;
 
         [SerializeField] public float ringSpin;
@@ -61,29 +59,10 @@ namespace SpheroidGames.SineAnimator
 
         private UnityEvent currentMode = new UnityEvent();
 
-
-
-
         private void Start()
         {
             if (StartOnPlay)
                 StartAnimation();
-
-            StartCoroutine(ChangeSettingsAfterSeconds(5));
-        }
-
-        private IEnumerator ChangeSettingsAfterSeconds(float delay)
-        {
-            yield return new WaitForSeconds(delay);
-
-            animationMode = Mode.RingCarousel;
-            valueMode = ValueMode.AbsoluteValue;
-
-            radius *= 10;
-            frequency *= 1.5f;
-            amplitude *= 1.5f;
-
-            SetAnimationFunction();
         }
 
         public void SetAnimationFunction()
@@ -137,7 +116,6 @@ namespace SpheroidGames.SineAnimator
         {
             animationRunning = false;
         }
-
         
         private IEnumerator RunAnimation()
         {
@@ -149,7 +127,6 @@ namespace SpheroidGames.SineAnimator
                 yield return null;
             }
         }
-
 
         #region Animation Functions
 
