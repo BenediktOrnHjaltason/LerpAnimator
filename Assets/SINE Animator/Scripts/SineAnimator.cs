@@ -37,23 +37,26 @@ namespace SpheroidGames.SineAnimator
 
         [SerializeField] List<Transform> TransformsToActOn;
 
-        [SerializeField] Mode animationMode;
+        [SerializeField] public Mode animationMode;
 
-        [SerializeField] ValueMode valueMode;
+        [SerializeField] public ValueMode valueMode;
 
-        [SerializeField] float frequency;
+        [SerializeField] public float frequency;
 
-        [SerializeField] float amplitude;
+        [SerializeField] public float amplitude;
         
 
         //Ring of movement specific
-        [SerializeField] float radius;
+        [SerializeField] public float radius;
 
-        [SerializeField] float ringSpin;
+        [SerializeField] public float ringSpin;
 
-        [SerializeField] float wallWidth;
+        [SerializeField] public float wallWidth;
 
         [SerializeField] RingObjectsFace ringObjectsFace;
+
+        [SerializeField] GameObject objectToSpawn;
+        [SerializeField] int numberOfObjectsToSpawn;
 
 
         private UnityEvent currentMode = new UnityEvent();
@@ -65,6 +68,22 @@ namespace SpheroidGames.SineAnimator
         {
             if (StartOnPlay)
                 StartAnimation();
+
+            StartCoroutine(ChangeSettingsAfterSeconds(5));
+        }
+
+        private IEnumerator ChangeSettingsAfterSeconds(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+
+            animationMode = Mode.RingCarousel;
+            valueMode = ValueMode.AbsoluteValue;
+
+            radius *= 10;
+            frequency *= 1.5f;
+            amplitude *= 1.5f;
+
+            SetAnimationFunction();
         }
 
         public void SetAnimationFunction()

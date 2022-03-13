@@ -49,14 +49,16 @@ namespace SpheroidGames.SineAnimator
         private SerializedProperty serializedRingSpin;
         private float editorRingSpin;
 
-        private SerializedProperty serializedRingObjectsFace;
-
         private SerializedProperty serializedWallWidth;
 
+        private SerializedProperty serializedObjectToSpawn;
+        private SerializedProperty serializedNumberOfObjectsToSpawn;
 
         private Transform targetTransform;
 
         private UnityEvent currentAnimationFunction = new UnityEvent();
+
+
 
 
         /// <summary>
@@ -92,11 +94,11 @@ namespace SpheroidGames.SineAnimator
             serializedRingSpin = serializedObject.FindProperty("ringSpin");
             editorRingSpin = serializedRingSpin.floatValue;
 
-            serializedRingObjectsFace = serializedObject.FindProperty("ringObjectsFace");
-
             serializedWallWidth = serializedObject.FindProperty("wallWidth");
 
 
+            serializedObjectToSpawn = serializedObject.FindProperty("objectToSpawn");
+            serializedNumberOfObjectsToSpawn = serializedObject.FindProperty("numberOfObjectsToSpawn");
 
 
 
@@ -231,6 +233,18 @@ namespace SpheroidGames.SineAnimator
 
             GUILayout.Space(20);
 
+            EditorGUILayout.PropertyField(serializedObjectToSpawn);
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.PropertyField(serializedNumberOfObjectsToSpawn);
+            if (GUILayout.Button("Generate"))
+                GenerateAndAddTransforms();
+
+            EditorGUILayout.EndHorizontal();
+
+
+            GUILayout.Space(20);
+
              EditorGUI.BeginChangeCheck();
                 EditorGUILayout.PropertyField(serializedTransforms, true);
 
@@ -319,6 +333,24 @@ namespace SpheroidGames.SineAnimator
         }
 
         #endregion
+
+        private void GenerateAndAddTransforms()
+        {
+            for (int i = 0; i < serializedNumberOfObjectsToSpawn.intValue; i++)
+            {
+                GameObject temp = (GameObject)Instantiate(serializedObjectToSpawn.objectReferenceValue, targetTransform.position, targetTransform.rotation);
+
+                serializedTransforms.arraySize++;
+                serializedTransforms.GetArrayElementAtIndex(serializedTransforms.arraySize - 1).objectReferenceValue = temp;
+
+                temp.transform.parent = targetTransform;
+                
+            }
+
+            serializedObject.ApplyModifiedProperties();
+
+            SetAnimationFunction();
+        }
 
         #region Data consistency
 
@@ -648,6 +680,9 @@ namespace SpheroidGames.SineAnimator
         /// </summary>
         private void CalculateDegreesDelta()
         {
+            if (editorTransforms.Count < 1) 
+                return;
+
             degreesDelta = 360 / editorTransforms.Count;
             radiansDelta = (Mathf.PI * 2) / editorTransforms.Count; 
         }
