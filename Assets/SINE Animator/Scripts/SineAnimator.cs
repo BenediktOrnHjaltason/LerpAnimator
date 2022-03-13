@@ -8,7 +8,7 @@ namespace SpheroidGames.SineAnimator
     [System.Serializable]
     public class SineAnimator : MonoBehaviour
     {
-        public enum Mode
+        public enum AnimationMode
         {
             PositionBobber,
             ScaleBobber,
@@ -37,7 +37,7 @@ namespace SpheroidGames.SineAnimator
 
         [SerializeField] List<Transform> TransformsToActOn;
 
-        [SerializeField] public Mode animationMode;
+        [SerializeField] public AnimationMode animationMode;
 
         [SerializeField] public ValueMode valueMode;
 
@@ -71,27 +71,27 @@ namespace SpheroidGames.SineAnimator
 
             switch (animationMode)
             {
-                case Mode.PositionBobber:
+                case AnimationMode.PositionBobber:
                     CollectOriginalPositions();
                     currentMode.AddListener(PositionBobber);
                     break;
 
-                case Mode.ScaleBobber:
+                case AnimationMode.ScaleBobber:
                     CollectScales();
                     currentMode.AddListener(ScaleBobber);
                     break;
 
-                case Mode.RingPlane:
+                case AnimationMode.RingPlane:
                     CalculateDegreesDelta();
                     currentMode.AddListener(RingPlane);
                     break;
 
-                case Mode.RingCarousel:
+                case AnimationMode.RingCarousel:
                     CalculateDegreesDelta();
                     currentMode.AddListener(RingCarousel);
                     break;
 
-                case Mode.Wall:
+                case AnimationMode.Wall:
                     CalculateWallDistanceDelta();
                     currentMode.AddListener(Wall);
                     break;
