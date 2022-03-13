@@ -377,6 +377,8 @@ namespace SpheroidGames.SineAnimator
 
                     Undo.CollapseUndoOperations(undoGroupOnChangeChecked - 1);
                 }
+
+                SetAnimationFunction();
             }
 
             //Else if user changed existing transform element
