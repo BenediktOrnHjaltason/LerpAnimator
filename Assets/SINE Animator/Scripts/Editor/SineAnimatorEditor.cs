@@ -281,7 +281,7 @@ namespace SpheroidGames.SineAnimator
             GUILayout.Space(20);
 
             if (editorAnimationMode == SineAnimator.Mode.RingPlane || editorAnimationMode == SineAnimator.Mode.RingCarousel)
-                editorRadius = serializedRadius.floatValue = EditorGUILayout.Slider("Radius", serializedRadius.floatValue, 0.01f, 400);
+                editorRadius = serializedRadius.floatValue = EditorGUILayout.Slider("Radius", serializedRadius.floatValue, 0.01f, 600);
 
             GUILayout.Space(20);
 
