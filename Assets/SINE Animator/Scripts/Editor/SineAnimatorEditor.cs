@@ -54,7 +54,7 @@ namespace SpheroidGames.SineAnimator
         private SerializedProperty serializedObjectToSpawn;
         private SerializedProperty serializedNumberOfObjectsToSpawn;
 
-        private Transform targetTransform;
+        private Transform parentTransform;
 
         private UnityEvent currentAnimationFunction = new UnityEvent();
 
@@ -107,7 +107,7 @@ namespace SpheroidGames.SineAnimator
 
             editorTransforms = new List<Transform>();
 
-            targetTransform = ((SineAnimator)target).gameObject.transform;
+            parentTransform = ((SineAnimator)target).gameObject.transform;
 
             CollectEditorTransforms();
 
@@ -281,11 +281,11 @@ namespace SpheroidGames.SineAnimator
             GUILayout.Space(20);
 
             if (editorAnimationMode == SineAnimator.AnimationMode.RingPlane || editorAnimationMode == SineAnimator.AnimationMode.RingCarousel)
-                editorRadius = serializedRadius.floatValue = EditorGUILayout.Slider("Radius", serializedRadius.floatValue, 0.01f, 600);
+                editorRadius = serializedRadius.floatValue = EditorGUILayout.Slider("Radius", serializedRadius.floatValue, 0, 600);
 
             GUILayout.Space(20);
 
-            editorFrequency = serializedFrequency.floatValue = EditorGUILayout.Slider("Frequency", serializedFrequency.floatValue, 0.01f, 30);
+            editorFrequency = serializedFrequency.floatValue = EditorGUILayout.Slider("Frequency", serializedFrequency.floatValue, 0, 30);
             GUILayout.Space(20);
 
             if (editorAnimationMode == SineAnimator.AnimationMode.ScaleBobber)
@@ -338,12 +338,12 @@ namespace SpheroidGames.SineAnimator
         {
             for (int i = 0; i < serializedNumberOfObjectsToSpawn.intValue; i++)
             {
-                GameObject temp = (GameObject)Instantiate(serializedObjectToSpawn.objectReferenceValue, targetTransform.position, targetTransform.rotation);
+                GameObject temp = (GameObject)Instantiate(serializedObjectToSpawn.objectReferenceValue, parentTransform.position, parentTransform.rotation);
 
                 serializedTransforms.arraySize++;
                 serializedTransforms.GetArrayElementAtIndex(serializedTransforms.arraySize - 1).objectReferenceValue = temp;
 
-                temp.transform.parent = targetTransform;
+                temp.transform.parent = parentTransform;
                 
             }
 
@@ -620,7 +620,7 @@ namespace SpheroidGames.SineAnimator
 
             if (editorRingSpin != 0)
             {
-                targetTransform.Rotate(targetTransform.forward, editorRingSpin * ((float)EditorApplication.timeSinceStartup - previousTime), Space.World);
+                parentTransform.Rotate(parentTransform.forward, editorRingSpin * ((float)EditorApplication.timeSinceStartup - previousTime), Space.World);
 
                 previousTime = (float)EditorApplication.timeSinceStartup;
             }
@@ -639,13 +639,13 @@ namespace SpheroidGames.SineAnimator
                 basePoint + 
                 (direction * editorRadius) + 
                 ((editorValueMode == SineAnimator.ValueMode.Value) ?
-                (targetTransform.forward * 0.01f * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude))) :
-                (targetTransform.forward * 0.01f * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude)))));
+                (parentTransform.forward * 0.01f * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude))) :
+                (parentTransform.forward * 0.01f * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude)))));
             }
 
             if (editorRingSpin != 0)
             {
-                targetTransform.Rotate(targetTransform.forward, editorRingSpin * ((float)EditorApplication.timeSinceStartup - previousTime), Space.World);
+                parentTransform.Rotate(parentTransform.forward, editorRingSpin * ((float)EditorApplication.timeSinceStartup - previousTime), Space.World);
 
                 previousTime = (float)EditorApplication.timeSinceStartup;
             }
@@ -658,10 +658,10 @@ namespace SpheroidGames.SineAnimator
                 CalculateRingDistribution(i);
 
                 if (lookDirection == SineAnimator.RingObjectsFace.Outward)
-                    editorTransforms[i].rotation = Quaternion.LookRotation(direction, targetTransform.forward);
+                    editorTransforms[i].rotation = Quaternion.LookRotation(direction, parentTransform.forward);
 
                 else if (lookDirection == SineAnimator.RingObjectsFace.Inward)
-                    editorTransforms[i].rotation = Quaternion.LookRotation(-direction, targetTransform.forward);
+                    editorTransforms[i].rotation = Quaternion.LookRotation(-direction, parentTransform.forward);
             }
         }
 
@@ -672,9 +672,9 @@ namespace SpheroidGames.SineAnimator
         /// </summary>
         private void CalculateRingDistribution(int i)
         {
-            rot = targetTransform.rotation * Quaternion.Euler(0, 0, degreesDelta * (i + 1));
-            basePoint = (targetTransform.position + (rot * (Vector3.right) * 0.01f));
-            direction = (basePoint - targetTransform.position);
+            rot = parentTransform.rotation * Quaternion.Euler(0, 0, degreesDelta * (i + 1));
+            basePoint = (parentTransform.position + (rot * (Vector3.right) * 0.01f));
+            direction = (basePoint - parentTransform.position);
         }
 
         /// <summary>
@@ -685,7 +685,7 @@ namespace SpheroidGames.SineAnimator
             if (editorTransforms.Count < 1) 
                 return;
 
-            degreesDelta = 360 / editorTransforms.Count;
+            degreesDelta = 360.0f / editorTransforms.Count;
             radiansDelta = (Mathf.PI * 2) / editorTransforms.Count; 
         }
 
@@ -698,12 +698,12 @@ namespace SpheroidGames.SineAnimator
                 if (editorTransforms[i] == null)
                     continue;
 
-                editorTransforms[i].position = targetTransform.position -
-                (targetTransform.right * halfDistance) +
-                (targetTransform.right * wallDistanceDelta * i) +
+                editorTransforms[i].position = parentTransform.position -
+                (parentTransform.right * halfDistance) +
+                (parentTransform.right * wallDistanceDelta * i) +
                 ((editorValueMode == SineAnimator.ValueMode.Value) ?
-                (targetTransform.up * (Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude)) :
-                (targetTransform.up * (Mathf.Abs(Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency)) * editorAmplitude)));
+                (parentTransform.up * (Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude)) :
+                (parentTransform.up * (Mathf.Abs(Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency)) * editorAmplitude)));
             }
         }
 
