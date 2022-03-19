@@ -719,10 +719,10 @@ namespace SpheroidGames.SineAnimator
             for (int i = 0; i < editorTransforms.Count; i++)
             {
                 if (lookDirection == SineAnimator.RingObjectsFace.Outward)
-                    editorTransforms[i].rotation = Quaternion.LookRotation(editorTransforms[i].transform.position - parentTransform.position, parentTransform.forward);
+                    editorTransforms[i].rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(editorTransforms[i].transform.position - parentTransform.position, parentTransform.forward), parentTransform.forward);
 
                 else if (lookDirection == SineAnimator.RingObjectsFace.Inward)
-                    editorTransforms[i].rotation = Quaternion.LookRotation(parentTransform.position - editorTransforms[i].transform.position, parentTransform.forward);
+                    editorTransforms[i].rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(parentTransform.position - editorTransforms[i].transform.position, parentTransform.forward), parentTransform.forward);
             }
         }
 
