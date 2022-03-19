@@ -263,28 +263,6 @@ namespace SpheroidGames.SineAnimator
 
             GUILayout.Space(20);
 
-            if (editorAnimationMode == SineAnimator.AnimationMode.RingPlane || editorAnimationMode == SineAnimator.AnimationMode.RingCarousel)
-            {
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("Objects face");
-
-                
-                if (GUILayout.Button("Outward"))
-                    RingObjectsFaceDirection(SineAnimator.RingObjectsFace.Outward);
-
-                if (GUILayout.Button("Inward"))
-                    RingObjectsFaceDirection(SineAnimator.RingObjectsFace.Inward);
-
-                EditorGUILayout.EndHorizontal();
-            }
-                
-            GUILayout.Space(20);
-
-            if (editorAnimationMode == SineAnimator.AnimationMode.RingPlane || editorAnimationMode == SineAnimator.AnimationMode.RingCarousel)
-                editorRadius = serializedRadius.floatValue = EditorGUILayout.Slider("Radius", serializedRadius.floatValue, 0, 600);
-
-            GUILayout.Space(20);
-
             editorFrequency = serializedFrequency.floatValue = EditorGUILayout.Slider("Frequency", serializedFrequency.floatValue, 0, 30);
             GUILayout.Space(20);
 
@@ -301,6 +279,11 @@ namespace SpheroidGames.SineAnimator
 
             GUILayout.Space(20);
 
+            if (editorAnimationMode == SineAnimator.AnimationMode.RingPlane || editorAnimationMode == SineAnimator.AnimationMode.RingCarousel)
+                editorRadius = serializedRadius.floatValue = EditorGUILayout.Slider("Radius", serializedRadius.floatValue, 0, 600);
+
+            GUILayout.Space(20);
+
             if (editorAnimationMode == SineAnimator.AnimationMode.RingPlane || editorAnimationMode == SineAnimator.AnimationMode.RingCarousel) 
                 editorRingSpin = serializedRingSpin.floatValue = EditorGUILayout.Slider("Ring spin", serializedRingSpin.floatValue, -500, 500);
 
@@ -312,6 +295,25 @@ namespace SpheroidGames.SineAnimator
                 if (EditorGUI.EndChangeCheck())
                     CalculateWallDistanceDelta();
             }
+
+            if (editorAnimationMode == SineAnimator.AnimationMode.RingPlane || editorAnimationMode == SineAnimator.AnimationMode.RingCarousel)
+            {
+                GUILayout.Space(20);
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("Objects face");
+
+
+                if (GUILayout.Button("Outward"))
+                    RingObjectsFaceDirection(SineAnimator.RingObjectsFace.Outward);
+
+                if (GUILayout.Button("Inward"))
+                    RingObjectsFaceDirection(SineAnimator.RingObjectsFace.Inward);
+
+                EditorGUILayout.EndHorizontal();
+            }
+
+            
 
             GUILayout.Space(20);
 
