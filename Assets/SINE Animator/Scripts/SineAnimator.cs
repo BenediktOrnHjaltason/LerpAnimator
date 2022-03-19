@@ -56,6 +56,9 @@ namespace SpheroidGames.SineAnimator
         [SerializeField] GameObject objectToSpawn;
         [SerializeField] int numberOfObjectsToSpawn;
 
+        [SerializeField] private bool showGenerateObjects;
+
+
 
         private UnityEvent currentMode = new UnityEvent();
 

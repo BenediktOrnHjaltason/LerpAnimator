@@ -58,6 +58,9 @@ namespace SpheroidGames.SineAnimator
 
         private UnityEvent currentAnimationFunction = new UnityEvent();
 
+        private SerializedProperty serializedShowGenerateObjects;
+        private bool editorShowGenerateObjects;
+
 
 
 
@@ -99,6 +102,8 @@ namespace SpheroidGames.SineAnimator
 
             serializedObjectToSpawn = serializedObject.FindProperty("objectToSpawn");
             serializedNumberOfObjectsToSpawn = serializedObject.FindProperty("numberOfObjectsToSpawn");
+
+            serializedShowGenerateObjects = serializedObject.FindProperty("showGenerateObjects");
 
 
 
@@ -194,6 +199,8 @@ namespace SpheroidGames.SineAnimator
 
         #region GUI
 
+        private bool showGenerateObjects = false;
+
         public override void OnInspectorGUI()
         {
             GUILayout.Box(logo);
@@ -233,15 +240,27 @@ namespace SpheroidGames.SineAnimator
 
             GUILayout.Space(20);
 
-            EditorGUILayout.PropertyField(serializedObjectToSpawn);
+            showGenerateObjects = EditorGUILayout.Foldout(serializedShowGenerateObjects.boolValue, "Generate objects", true);
 
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PropertyField(serializedNumberOfObjectsToSpawn);
-            if (GUILayout.Button("Generate"))
-                GenerateAndAddTransforms();
+            if (showGenerateObjects != editorShowGenerateObjects)
+            {
+                serializedShowGenerateObjects.boolValue = showGenerateObjects;
+                serializedObject.ApplyModifiedPropertiesWithoutUndo();
+            }
 
-            EditorGUILayout.EndHorizontal();
+            editorShowGenerateObjects = showGenerateObjects;
 
+            if (showGenerateObjects)
+            {
+                EditorGUILayout.PropertyField(serializedObjectToSpawn);
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.PropertyField(serializedNumberOfObjectsToSpawn);
+                if (GUILayout.Button("Generate"))
+                    GenerateAndAddTransforms();
+
+                EditorGUILayout.EndHorizontal();
+            }
 
             GUILayout.Space(20);
 
