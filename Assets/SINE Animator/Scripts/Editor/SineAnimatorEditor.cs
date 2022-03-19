@@ -307,6 +307,8 @@ namespace SpheroidGames.SineAnimator
 
                 EditorGUILayout.EndHorizontal();
 
+                GUILayout.Space(20);
+
                 EditorGUI.BeginChangeCheck();
                 EditorGUILayout.PropertyField(serializedRingUniformMovemement);
 
