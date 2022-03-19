@@ -49,6 +49,9 @@ namespace SpheroidGames.SineAnimator
         private SerializedProperty serializedRingSpin;
         private float editorRingSpin;
 
+        private SerializedProperty serializedRingUniformMovemement;
+        private bool editorRingUniformMovement;
+
         private SerializedProperty serializedWallWidth;
 
         private SerializedProperty serializedObjectToSpawn;
@@ -96,6 +99,9 @@ namespace SpheroidGames.SineAnimator
 
             serializedRingSpin = serializedObject.FindProperty("ringSpin");
             editorRingSpin = serializedRingSpin.floatValue;
+
+            serializedRingUniformMovemement = serializedObject.FindProperty("ringUniformMovement");
+            editorRingUniformMovement = serializedRingUniformMovemement.boolValue;
 
             serializedWallWidth = serializedObject.FindProperty("wallWidth");
 
@@ -332,6 +338,15 @@ namespace SpheroidGames.SineAnimator
                     RingObjectsFaceDirection(SineAnimator.RingObjectsFace.Inward);
 
                 EditorGUILayout.EndHorizontal();
+
+                EditorGUI.BeginChangeCheck();
+                EditorGUILayout.PropertyField(serializedRingUniformMovemement);
+
+                if (EditorGUI.EndChangeCheck())
+                {
+                    editorRingUniformMovement = serializedRingUniformMovemement.boolValue;
+                    CalculateDegreesDelta();
+                }
             }
 
             
@@ -709,7 +724,7 @@ namespace SpheroidGames.SineAnimator
                 return;
 
             degreesDelta = 360.0f / editorTransforms.Count;
-            radiansDelta = (Mathf.PI * 2) / editorTransforms.Count; 
+            radiansDelta = editorRingUniformMovement ? 0 : (Mathf.PI * 2) / editorTransforms.Count; 
         }
 
         private float wallDistanceDelta;
