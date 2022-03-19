@@ -213,28 +213,6 @@ namespace SpheroidGames.SineAnimator
 
             EditorGUILayout.PropertyField(serializedStartOnPlay);
 
-            EditorGUI.BeginChangeCheck();
-            EditorGUILayout.PropertyField(serializedAnimationMode);
-            if (EditorGUI.EndChangeCheck())
-            {
-                editorAnimationMode = (SineAnimator.AnimationMode)serializedAnimationMode.intValue;
-                SetAnimationFunction();
-                ((SineAnimator)target).SetAnimationFunction();
-
-                if (previousAnimationMode == SineAnimator.AnimationMode.ScaleBobber)
-                    ApplyOriginalScales();
-
-                previousAnimationMode = editorAnimationMode;
-            }
-
-
-            EditorGUI.BeginChangeCheck();
-            EditorGUILayout.PropertyField(serializedValueMode);
-            if (EditorGUI.EndChangeCheck())
-            {
-                editorValueMode = (SineAnimator.ValueMode)serializedValueMode.intValue;
-            }
-
             EditorGUILayout.EndVertical();
 
 
@@ -278,6 +256,30 @@ namespace SpheroidGames.SineAnimator
                 {
                     CalculateDegreesDelta();
                 }
+            }
+
+            GUILayout.Space(20);
+
+            EditorGUI.BeginChangeCheck();
+            EditorGUILayout.PropertyField(serializedAnimationMode);
+            if (EditorGUI.EndChangeCheck())
+            {
+                editorAnimationMode = (SineAnimator.AnimationMode)serializedAnimationMode.intValue;
+                SetAnimationFunction();
+                ((SineAnimator)target).SetAnimationFunction();
+
+                if (previousAnimationMode == SineAnimator.AnimationMode.ScaleBobber)
+                    ApplyOriginalScales();
+
+                previousAnimationMode = editorAnimationMode;
+            }
+
+
+            EditorGUI.BeginChangeCheck();
+            EditorGUILayout.PropertyField(serializedValueMode);
+            if (EditorGUI.EndChangeCheck())
+            {
+                editorValueMode = (SineAnimator.ValueMode)serializedValueMode.intValue;
             }
 
             GUILayout.Space(20);
