@@ -153,38 +153,6 @@ namespace SpheroidGames.SineAnimator
             delayedCollectTimerStart = (float)EditorApplication.timeSinceStartup;
         }
 
-        private void SetAnimationFunction()
-        {
-            currentAnimationFunction.RemoveAllListeners();
-
-            switch(serializedAnimationMode.enumValueIndex)
-            {
-                case 0:     //PositionLerp
-                    CollectOriginalPositions();
-                    currentAnimationFunction.AddListener(PositionBobber);
-                    break;
-
-                case 1:     //ScaleLerp
-                    CollectScales();
-                    currentAnimationFunction.AddListener(ScaleBobber);
-                    break;
-
-                case 2:     //RingPlane
-                    CalculateDegreesDelta();
-                    currentAnimationFunction.AddListener(RingPlane);
-                    break;
-                case 3: //RingCarousel
-                    CalculateDegreesDelta();
-                    currentAnimationFunction.AddListener(RingCarousel);
-                    break;
-
-                case 4:     //WallOfMotion
-                    CalculateWallDistanceDelta();
-                    currentAnimationFunction.AddListener(Wall);
-                    break;
-            }
-        }
-
         #endregion
 
         #region Editor data copies
@@ -553,6 +521,38 @@ namespace SpheroidGames.SineAnimator
 
         #region Animation Functions
 
+        private void SetAnimationFunction()
+        {
+            currentAnimationFunction.RemoveAllListeners();
+
+            switch (serializedAnimationMode.enumValueIndex)
+            {
+                case 0:     //PositionLerp
+                    CollectOriginalPositions();
+                    currentAnimationFunction.AddListener(PositionBobber);
+                    break;
+
+                case 1:     //ScaleLerp
+                    CollectScales();
+                    currentAnimationFunction.AddListener(ScaleBobber);
+                    break;
+
+                case 2:     //RingPlane
+                    CalculateDegreesDelta();
+                    currentAnimationFunction.AddListener(RingPlane);
+                    break;
+                case 3: //RingCarousel
+                    CalculateDegreesDelta();
+                    currentAnimationFunction.AddListener(RingCarousel);
+                    break;
+
+                case 4:     //WallOfMotion
+                    CalculateWallDistanceDelta();
+                    currentAnimationFunction.AddListener(Wall);
+                    break;
+            }
+        }
+
         private List<Vector3> originalPositions = new List<Vector3>();
 
 
@@ -622,7 +622,7 @@ namespace SpheroidGames.SineAnimator
 
 
         private Quaternion rot;
-        private Vector3 basePoint;
+        private Vector3 directionBasePoint;
 
         /// <summary>
         /// Used to place the objects around the center
@@ -634,9 +634,41 @@ namespace SpheroidGames.SineAnimator
         /// </summary>
         private float radiansDelta;
 
-        private Vector3 direction;
+        //private Vector3 direction;
 
         float previousTime;
+
+        /// <summary>
+        /// Calculates the data neccessary to place objects on sine wave
+        /// </summary>
+        private void CalculateDegreesDelta()
+        {
+            if (editorTransforms.Count < 1)
+                return;
+
+            degreesDelta = 360.0f / editorTransforms.Count;
+            radiansDelta = editorRingUniformMovement ? 0 : (Mathf.PI * 2) / editorTransforms.Count;
+
+            CalculateRingDistribution();
+        }
+
+        List<Vector3> directions = new List<Vector3>();
+
+        /// <summary>
+        /// Calculates the data neccessary to place objects around the ring
+        /// </summary>
+        private void CalculateRingDistribution()
+        {
+            directions.Clear();
+            
+            for (int i = 0; i < editorTransforms.Count; i++)
+            {
+                rot = parentTransform.localRotation * Quaternion.Euler(0, 0, degreesDelta * (i + 1));
+                directionBasePoint = (parentTransform.position + (rot * (Vector3.right) * 0.01f));
+
+                directions.Add(parentTransform.InverseTransformDirection(directionBasePoint - parentTransform.position));
+            }
+        }
 
         private void RingPlane()
         {
@@ -645,15 +677,11 @@ namespace SpheroidGames.SineAnimator
                 if (editorTransforms[i] == null)
                     continue;
 
-                //Find the new rotation
-                CalculateRingDistribution(i);
-
-                editorTransforms[i].position = 
-                    basePoint + 
-                    (direction * editorRadius) + 
+                editorTransforms[i].localPosition =
+                    (directions[i] * editorRadius) + 
                     ((editorValueMode == SineAnimator.ValueMode.Value) ?
-                    (direction * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude ))) :
-                    (direction * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude))))); 
+                    (directions[i] * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude ))) :
+                    (directions[i] * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude))))); 
             }        
 
             if (editorRingSpin != 0)
@@ -671,14 +699,11 @@ namespace SpheroidGames.SineAnimator
                 if (editorTransforms[i] == null)
                     continue;
 
-                CalculateRingDistribution(i);
-
-                editorTransforms[i].position = 
-                basePoint + 
-                (direction * editorRadius) + 
+                editorTransforms[i].localPosition =
+                (directions[i] * editorRadius) + 
                 ((editorValueMode == SineAnimator.ValueMode.Value) ?
-                (parentTransform.forward * 0.01f * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude))) :
-                (parentTransform.forward * 0.01f * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude)))));
+                (parentTransform.InverseTransformDirection(parentTransform.forward) * 0.01f * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude))) :
+                (parentTransform.InverseTransformDirection(parentTransform.forward) * 0.01f * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude)))));
             }
 
             if (editorRingSpin != 0)
@@ -693,38 +718,12 @@ namespace SpheroidGames.SineAnimator
         {
             for (int i = 0; i < editorTransforms.Count; i++)
             {
-                CalculateRingDistribution(i);
-
                 if (lookDirection == SineAnimator.RingObjectsFace.Outward)
-                    editorTransforms[i].rotation = Quaternion.LookRotation(direction, parentTransform.forward);
+                    editorTransforms[i].rotation = Quaternion.LookRotation(editorTransforms[i].transform.position - parentTransform.position, parentTransform.forward);
 
                 else if (lookDirection == SineAnimator.RingObjectsFace.Inward)
-                    editorTransforms[i].rotation = Quaternion.LookRotation(-direction, parentTransform.forward);
+                    editorTransforms[i].rotation = Quaternion.LookRotation(parentTransform.position - editorTransforms[i].transform.position, parentTransform.forward);
             }
-        }
-
-
-
-        /// <summary>
-        /// Calculates the data neccessary to place objects around the ring
-        /// </summary>
-        private void CalculateRingDistribution(int i)
-        {
-            rot = parentTransform.rotation * Quaternion.Euler(0, 0, degreesDelta * (i + 1));
-            basePoint = (parentTransform.position + (rot * (Vector3.right) * 0.01f));
-            direction = (basePoint - parentTransform.position);
-        }
-
-        /// <summary>
-        /// Calculates the data neccessary to place objects on sine wave
-        /// </summary>
-        private void CalculateDegreesDelta()
-        {
-            if (editorTransforms.Count < 1) 
-                return;
-
-            degreesDelta = 360.0f / editorTransforms.Count;
-            radiansDelta = editorRingUniformMovement ? 0 : (Mathf.PI * 2) / editorTransforms.Count; 
         }
 
         private float wallDistanceDelta;

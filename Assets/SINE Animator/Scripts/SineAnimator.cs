@@ -60,8 +60,6 @@ namespace SpheroidGames.SineAnimator
 
         [SerializeField] private bool showGenerateObjects;
 
-
-
         private UnityEvent currentMode = new UnityEvent();
 
         private void Start()
@@ -207,25 +205,33 @@ namespace SpheroidGames.SineAnimator
         /// </summary>
         private float radiansDelta;
 
-        private Vector3 direction;
-
-        /// <summary>
-        /// Calculates the data neccessary to place objects around the ring
-        /// </summary>
-        private void CalculateRingDistribution(int i)
-        {
-            rot = transform.rotation * Quaternion.Euler(0, 0, degreesDelta * (i + 1));
-            basePoint = (transform.position + (rot * (Vector3.right) * 0.01f));
-            direction = (basePoint - transform.position);
-        }
-
         /// <summary>
         /// Calculates the data neccessary to place objects on sine wave
         /// </summary>
         private void CalculateDegreesDelta()
         {
-            degreesDelta = 360 / TransformsToActOn.Count;
+            degreesDelta = 360.0f / TransformsToActOn.Count;
             radiansDelta = (Mathf.PI * 2) / TransformsToActOn.Count;
+
+            CalculateRingDistribution();
+        }
+
+        List<Vector3> directions = new List<Vector3>();
+
+        /// <summary>
+        /// Calculates the data neccessary to place objects around the ring
+        /// </summary>
+        private void CalculateRingDistribution()
+        {
+            directions.Clear();
+
+            for(int i = 0; i < TransformsToActOn.Count; i++)
+            {
+                rot = transform.localRotation * Quaternion.Euler(0, 0, degreesDelta * (i + 1));
+                basePoint = (transform.position + (rot * (Vector3.right) * 0.01f));
+
+                directions.Add(transform.InverseTransformDirection(basePoint - transform.position));
+            }
         }
 
         private void RingPlane()
@@ -235,14 +241,11 @@ namespace SpheroidGames.SineAnimator
                 if (TransformsToActOn[i] == null)
                     continue;
 
-                CalculateRingDistribution(i);
-
-                TransformsToActOn[i].position =
-                basePoint +
-                (direction * radius) +
-                ((valueMode == ValueMode.Value) ?
-                (direction * ((((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) + 1) / 2) * amplitude))) :
-                (direction * (Mathf.Abs((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) * amplitude)))));
+                TransformsToActOn[i].localPosition =
+                    (directions[i] * radius) +
+                    ((valueMode == ValueMode.Value) ?
+                    (directions[i] * ((((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) + 1) / 2) * amplitude))) :
+                    (directions[i] * (Mathf.Abs((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) * amplitude)))));
             }
 
             if (ringSpin != 0)
@@ -258,14 +261,11 @@ namespace SpheroidGames.SineAnimator
                 if (TransformsToActOn[i] == null)
                     continue;
 
-                CalculateRingDistribution(i);
-
-                TransformsToActOn[i].position =
-                basePoint +
-                (direction * radius) +
+                TransformsToActOn[i].localPosition =
+                (directions[i] * radius) +
                 ((valueMode == ValueMode.Value) ?
-                (transform.forward * 0.01f * ((((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) + 1) / 2) * amplitude))) :
-                (transform.forward * 0.01f * (Mathf.Abs((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) * amplitude)))));
+                (transform.InverseTransformDirection(transform.forward) * 0.01f * ((((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) + 1) / 2) * amplitude))) :
+                (transform.InverseTransformDirection(transform.forward) * 0.01f * (Mathf.Abs((Mathf.Sin((Time.time + (radiansDelta * i)) * frequency) * amplitude)))));
             }
 
             if (ringSpin != 0)
