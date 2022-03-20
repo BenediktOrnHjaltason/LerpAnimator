@@ -132,6 +132,8 @@ namespace SpheroidGames.SineAnimator
         {
             EditorApplication.update -= OnEditorUpdate;
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
+
+            ApplyOriginalTransformsData(editorAnimationMode);
         }
 
         /// <summary>
@@ -242,8 +244,7 @@ namespace SpheroidGames.SineAnimator
                 SetAnimationFunction();
                 ((SineAnimator)target).SetAnimationFunction();
 
-                if (previousAnimationMode == SineAnimator.AnimationMode.ScaleBobber)
-                    ApplyOriginalScales();
+                ApplyOriginalTransformsData(previousAnimationMode);
 
                 previousAnimationMode = editorAnimationMode;
             }
@@ -535,7 +536,7 @@ namespace SpheroidGames.SineAnimator
                     break;
 
                 case 1:     //ScaleLerp
-                    CollectScales();
+                    CollectOriginalScales();
                     currentAnimationFunction.AddListener(ScaleBobber);
                     break;
 
@@ -553,10 +554,40 @@ namespace SpheroidGames.SineAnimator
                     currentAnimationFunction.AddListener(Wall);
                     break;
             }
+
+            HandleTransformsListContainsTargetTransform(serializedAnimationMode.enumValueIndex);
+        }
+
+        private void HandleTransformsListContainsTargetTransform(int modeEnumValue)
+        {
+            if (modeEnumValue > 1 && editorTransforms.Contains(parentTransform))
+            {
+                Debug.LogWarning($"SINE Animator: GameObject this SineAnimator is attached to ({parentTransform.name}) has been added to it's own TransformsToActOn list, which is not supported in this mode");
+
+                if (editorPlaybackRunning)
+                    StopEditorPlayback();
+            }
+        }
+
+        private void CollectOriginalTransformsData(SineAnimator.AnimationMode animationMode)
+        {
+            if (animationMode == SineAnimator.AnimationMode.PositionBobber)
+                CollectOriginalPositions();
+
+            else if (animationMode == SineAnimator.AnimationMode.ScaleBobber)
+                CollectOriginalScales();
+        }
+
+        private void ApplyOriginalTransformsData(SineAnimator.AnimationMode animationMode)
+        {
+            if (animationMode == SineAnimator.AnimationMode.PositionBobber)
+                ApplyOriginalPositions();
+
+            else if (animationMode == SineAnimator.AnimationMode.ScaleBobber)
+                ApplyOriginalScales();
         }
 
         private List<Vector3> originalPositions = new List<Vector3>();
-
 
         private void PositionBobber()
         {
@@ -565,10 +596,10 @@ namespace SpheroidGames.SineAnimator
                 if (editorTransforms[i] == null)
                     continue;
 
-                    editorTransforms[i].position = 
-                    editorValueMode == SineAnimator.ValueMode.Value ?
-                    originalPositions[i] - editorTransforms[i].forward * Mathf.Sin((float)EditorApplication.timeSinceStartup * editorFrequency) * editorAmplitude :
-                    originalPositions[i] - editorTransforms[i].forward * Mathf.Abs(Mathf.Sin((float)EditorApplication.timeSinceStartup * editorFrequency)) * editorAmplitude;
+                editorTransforms[i].position =
+                editorValueMode == SineAnimator.ValueMode.Value ?
+                originalPositions[i] - editorTransforms[i].forward * Mathf.Sin((float)EditorApplication.timeSinceStartup * editorFrequency) * editorAmplitude   :
+                originalPositions[i] - editorTransforms[i].forward * Mathf.Abs(Mathf.Sin((float)EditorApplication.timeSinceStartup * editorFrequency)) * editorAmplitude;
             }
         }
 
@@ -578,6 +609,20 @@ namespace SpheroidGames.SineAnimator
 
             foreach (Transform tr in editorTransforms)
                 originalPositions.Add(tr.position);
+        }
+
+        private void ApplyOriginalPositions()
+        {
+            if (originalPositions.Count != editorTransforms.Count)
+                return;
+
+            for (int i = 0; i < editorTransforms.Count; i++)
+            {
+                if (editorTransforms[i] == null)
+                    continue;
+
+                editorTransforms[i].position = originalPositions[i];
+            }
         }
 
         private readonly List<Vector3> doubleScales = new List<Vector3>();
@@ -596,7 +641,7 @@ namespace SpheroidGames.SineAnimator
             }
         }
 
-        private void CollectScales()
+        private void CollectOriginalScales()
         {
             originalScales.Clear();
             doubleScales.Clear();
@@ -621,6 +666,8 @@ namespace SpheroidGames.SineAnimator
                 editorTransforms[i].localScale = originalScales[i];
             }
         }
+
+        
 
 
         private Quaternion rot;
@@ -769,13 +816,15 @@ namespace SpheroidGames.SineAnimator
             if (editorTransforms.Count == 0)
                 return;
 
+            CollectOriginalTransformsData(editorAnimationMode);
+
             startTime = (float)EditorApplication.timeSinceStartup;
 
             nextAnimationUpdate = startTime + animationFrequency;
 
-            SetAnimationFunction();
-
             editorPlaybackRunning = true;
+
+            SetAnimationFunction();
         }
 
         private void StopEditorPlayback()
@@ -784,6 +833,9 @@ namespace SpheroidGames.SineAnimator
 
             if (editorAnimationMode == SineAnimator.AnimationMode.ScaleBobber)
                 ApplyOriginalScales();
+
+            else if (editorAnimationMode == SineAnimator.AnimationMode.PositionBobber)
+                ApplyOriginalPositions();
         }
 
         private readonly double animationFrequency = 0.0166; //60 times per second
