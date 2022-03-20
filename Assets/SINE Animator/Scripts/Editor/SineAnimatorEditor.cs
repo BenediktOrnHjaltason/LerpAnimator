@@ -23,10 +23,6 @@ namespace SpheroidGames.SineAnimator
         /// </summary>
         private SerializedProperty serializedStartOnPlay;
 
-        /// <summary>
-        /// whether sequence will loop in game play mode
-        /// </summary>
-
         private SerializedProperty serializedTransforms;
 
         private SerializedProperty serializedAnimationMode;
@@ -64,14 +60,12 @@ namespace SpheroidGames.SineAnimator
         private SerializedProperty serializedShowGenerateObjects;
         private bool editorShowGenerateObjects;
 
-        private SerializedProperty serializedDestroyObjectsIfDeletedFromList;
-
-
-
 
         /// <summary>
-        /// Used for managing periodic checks for changes in serializedTransforms array
+        /// If true, and setting size of "Transforms To Act On" list to smaller number (not if right clicking element and "Delete array element", GameObjects will be deleted
         /// </summary>
+        private SerializedProperty serializedDestroyObjectsIfDeletedFromList;
+
         private double nextChangeCheck;
 
         #region Events
@@ -366,6 +360,11 @@ namespace SpheroidGames.SineAnimator
             }
 
             serializedObject.ApplyModifiedProperties();
+
+            //To prevent resampling scales of scale bobbing objects
+            if (editorAnimationMode == SineAnimator.AnimationMode.ScaleBobber && editorPlaybackRunning)
+                ApplyOriginalScales();
+
             CollectEditorTransforms();
 
             SetAnimationFunction();
@@ -409,8 +408,6 @@ namespace SpheroidGames.SineAnimator
 
                     if (editorTransforms[i] != serializedTransform)
                     {
-                        Debug.LogWarning("USER INSERTED OBJECT ON ELEMENT");
-
                         if (serializedTransform == null)
                         {
                             //User nulled reference on list element
@@ -454,9 +451,9 @@ namespace SpheroidGames.SineAnimator
         private void MakeChildIfRequired(Transform transform)
         {
             //Set object as child if current animation mode requires objects to be children
-            if (transform != parentTransform && (int)editorAnimationMode > 1 && transform.parent != parentTransform)
+            if (transform != null && transform != parentTransform && (int)editorAnimationMode > 1 && transform.parent != parentTransform)
             {
-                Debug.LogWarning($"SINE Animator ({parentTransform.name}): non-child was found in Transforms To Act On list. AnimationMode {editorAnimationMode} requires objects to be children. Object was autoparented.");
+                Debug.LogWarning($"SINE Animator ({parentTransform.name}): non-child was found in Transforms To Act On list. AnimationMode {editorAnimationMode} requires objects to be children. Object was auto-parented.");
                 transform.parent = parentTransform;
             }
         }
@@ -540,7 +537,7 @@ namespace SpheroidGames.SineAnimator
                 {
                     if ((Transform)serializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue != editorTransforms[i])
                     {
-                        if (serializedDestroyObjectsIfDeletedFromList.boolValue == true && editorTransforms[editorTransforms.Count - 1] != null)
+                        if (serializedDestroyObjectsIfDeletedFromList.boolValue == true && editorTransforms[i] != null)
                             DestroyImmediate(editorTransforms[i].gameObject);
 
                         editorTransforms.RemoveAt(i);

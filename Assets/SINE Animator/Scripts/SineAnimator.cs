@@ -60,6 +60,7 @@ namespace SpheroidGames.SineAnimator
 
         [SerializeField] private bool showGenerateObjects;
 
+        [Tooltip("If true, and setting size of \"Transforms To Act On\" list to smaller number (not if right clicking element and \"Delete array element\"), GameObjects will be deleted")]
         [SerializeField] private bool destroyObjectsIfRemovedFromList;
 
         private UnityEvent currentMode = new UnityEvent();
