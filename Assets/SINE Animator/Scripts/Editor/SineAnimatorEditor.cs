@@ -64,6 +64,8 @@ namespace SpheroidGames.SineAnimator
         private SerializedProperty serializedShowGenerateObjects;
         private bool editorShowGenerateObjects;
 
+        private SerializedProperty serializedDestroyObjectsIfDeletedFromList;
+
 
 
 
@@ -110,6 +112,8 @@ namespace SpheroidGames.SineAnimator
             serializedNumberOfObjectsToSpawn = serializedObject.FindProperty("numberOfObjectsToSpawn");
 
             serializedShowGenerateObjects = serializedObject.FindProperty("showGenerateObjects");
+
+            serializedDestroyObjectsIfDeletedFromList = serializedObject.FindProperty("destroyObjectsIfRemovedFromList");
 
 
 
@@ -194,7 +198,7 @@ namespace SpheroidGames.SineAnimator
 
             GUILayout.Space(20);
 
-            showGenerateObjects = EditorGUILayout.Foldout(serializedShowGenerateObjects.boolValue, "Generate objects", true);
+            showGenerateObjects = EditorGUILayout.Foldout(serializedShowGenerateObjects.boolValue, "Add to list", true);
 
             if (showGenerateObjects != editorShowGenerateObjects)
             {
@@ -210,7 +214,7 @@ namespace SpheroidGames.SineAnimator
 
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.PropertyField(serializedNumberOfObjectsToSpawn);
-                if (GUILayout.Button("Generate"))
+                if (GUILayout.Button("Add"))
                     GenerateAndAddTransforms();
 
                 EditorGUILayout.EndHorizontal();
@@ -233,6 +237,11 @@ namespace SpheroidGames.SineAnimator
                     CalculateDegreesDelta();
                 }
             }
+
+            GUILayout.Space(20);
+
+            EditorGUILayout.PropertyField(serializedDestroyObjectsIfDeletedFromList);
+
 
             GUILayout.Space(20);
 
@@ -357,6 +366,7 @@ namespace SpheroidGames.SineAnimator
             }
 
             serializedObject.ApplyModifiedProperties();
+            CollectEditorTransforms();
 
             SetAnimationFunction();
         }
@@ -399,6 +409,8 @@ namespace SpheroidGames.SineAnimator
 
                     if (editorTransforms[i] != serializedTransform)
                     {
+                        Debug.LogWarning("USER INSERTED OBJECT ON ELEMENT");
+
                         if (serializedTransform == null)
                         {
                             //User nulled reference on list element
@@ -410,7 +422,7 @@ namespace SpheroidGames.SineAnimator
 
                         else if (IsDuplicate(i, serializedTransform))
                         {
-                            Debug.LogWarning("LerpAnimator: Duplicate transform detected. There should only be one reference for each. Nulling element");
+                            Debug.LogWarning($"SineAnimator: Duplicate transform detected in list ({parentTransform.name}). There should only be one reference for each. Nulling element");
 
                             editorTransforms[i] = null;
                             serializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue = null;
@@ -427,10 +439,25 @@ namespace SpheroidGames.SineAnimator
 
                             editorTransforms[i] = serializedTransform;
 
+                            MakeChildIfRequired(editorTransforms[i]);
+
                             Undo.CollapseUndoOperations(undoGroupOnChangeChecked - 1);
                         }
+
+                        CollectEditorTransforms();
+                        SetAnimationFunction();
                     }
                 }
+            }
+        }
+
+        private void MakeChildIfRequired(Transform transform)
+        {
+            //Set object as child if current animation mode requires objects to be children
+            if (transform != parentTransform && (int)editorAnimationMode > 1 && transform.parent != parentTransform)
+            {
+                Debug.LogWarning($"SINE Animator ({parentTransform.name}): non-child was found in Transforms To Act On list. AnimationMode {editorAnimationMode} requires objects to be children. Object was autoparented.");
+                transform.parent = parentTransform;
             }
         }
 
@@ -494,6 +521,9 @@ namespace SpheroidGames.SineAnimator
                 {
                     if (editorTransforms.Count > 0)
                     {
+                        if (serializedDestroyObjectsIfDeletedFromList.boolValue == true && editorTransforms[editorTransforms.Count - 1] != null)
+                            DestroyImmediate(editorTransforms[editorTransforms.Count - 1].gameObject);
+
                         editorTransforms.RemoveAt(editorTransforms.Count - 1);
                     }
 
@@ -510,14 +540,21 @@ namespace SpheroidGames.SineAnimator
                 {
                     if ((Transform)serializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue != editorTransforms[i])
                     {
-                        editorTransforms.RemoveAt(i);
+                        if (serializedDestroyObjectsIfDeletedFromList.boolValue == true && editorTransforms[editorTransforms.Count - 1] != null)
+                            DestroyImmediate(editorTransforms[i].gameObject);
 
+                        editorTransforms.RemoveAt(i);
+                        
                         serializedObject.ApplyModifiedProperties();
 
                         break;
                     }
                 }
             }
+
+
+
+            CollectEditorTransforms();
         }
 
         #endregion
@@ -556,6 +593,9 @@ namespace SpheroidGames.SineAnimator
             }
 
             HandleTransformsListContainsTargetTransform(serializedAnimationMode.enumValueIndex);
+
+            foreach (Transform transform in editorTransforms)
+                MakeChildIfRequired(transform);
         }
 
         private void HandleTransformsListContainsTargetTransform(int modeEnumValue)
@@ -567,15 +607,6 @@ namespace SpheroidGames.SineAnimator
                 if (editorPlaybackRunning)
                     StopEditorPlayback();
             }
-        }
-
-        private void CollectOriginalTransformsData(SineAnimator.AnimationMode animationMode)
-        {
-            if (animationMode == SineAnimator.AnimationMode.PositionBobber)
-                CollectOriginalPositions();
-
-            else if (animationMode == SineAnimator.AnimationMode.ScaleBobber)
-                CollectOriginalScales();
         }
 
         private void ApplyOriginalTransformsData(SineAnimator.AnimationMode animationMode)
@@ -666,9 +697,6 @@ namespace SpheroidGames.SineAnimator
                 editorTransforms[i].localScale = originalScales[i];
             }
         }
-
-        
-
 
         private Quaternion rot;
         private Vector3 directionBasePoint;
@@ -812,11 +840,8 @@ namespace SpheroidGames.SineAnimator
 
         public void StartEditorPlayback()
         {
-
             if (editorTransforms.Count == 0)
                 return;
-
-            CollectOriginalTransformsData(editorAnimationMode);
 
             startTime = (float)EditorApplication.timeSinceStartup;
 
@@ -863,7 +888,6 @@ namespace SpheroidGames.SineAnimator
 
             //Handles periodic checks for when user makes changes in serializedTransforms array
             if (!handlingUndoRedo && 
-                !editorPlaybackRunning &&
                 !EditorApplication.isPlaying &&
                 EditorApplication.timeSinceStartup > nextChangeCheck)
             {

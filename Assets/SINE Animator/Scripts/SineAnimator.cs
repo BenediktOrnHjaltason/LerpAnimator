@@ -53,12 +53,14 @@ namespace SpheroidGames.SineAnimator
 
         [SerializeField] public float wallWidth;
 
-        [SerializeField] RingObjectsFace ringObjectsFace;
+        [SerializeField] private RingObjectsFace ringObjectsFace;
 
-        [SerializeField] GameObject objectToSpawn;
-        [SerializeField] int numberOfObjectsToSpawn;
+        [SerializeField] private GameObject objectToSpawn;
+        [SerializeField] private int numberOfObjectsToSpawn;
 
         [SerializeField] private bool showGenerateObjects;
+
+        [SerializeField] private bool destroyObjectsIfRemovedFromList;
 
         private UnityEvent currentMode = new UnityEvent();
 
