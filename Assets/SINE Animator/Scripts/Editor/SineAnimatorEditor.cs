@@ -45,8 +45,8 @@ namespace SpheroidGames.SineAnimator
         private SerializedProperty serializedRingSpin;
         private float editorRingSpin;
 
-        private SerializedProperty serializedRingUniformMovemement;
-        private bool editorRingUniformMovement;
+        private SerializedProperty serializedUniformMovemement;
+        private bool editorUniformMovement;
 
         private SerializedProperty serializedWallWidth;
 
@@ -96,8 +96,8 @@ namespace SpheroidGames.SineAnimator
             serializedRingSpin = serializedObject.FindProperty("ringSpin");
             editorRingSpin = serializedRingSpin.floatValue;
 
-            serializedRingUniformMovemement = serializedObject.FindProperty("ringUniformMovement");
-            editorRingUniformMovement = serializedRingUniformMovemement.boolValue;
+            serializedUniformMovemement = serializedObject.FindProperty("uniformMovement");
+            editorUniformMovement = serializedUniformMovemement.boolValue;
 
             serializedWallWidth = serializedObject.FindProperty("wallWidth");
 
@@ -310,20 +310,21 @@ namespace SpheroidGames.SineAnimator
                     RingObjectsFaceDirection(SineAnimator.RingObjectsFace.Inward);
 
                 EditorGUILayout.EndHorizontal();
+            }
 
+            if (editorAnimationMode == SineAnimator.AnimationMode.RingPlane || editorAnimationMode == SineAnimator.AnimationMode.RingCarousel || editorAnimationMode == SineAnimator.AnimationMode.Wall)
+            {
                 GUILayout.Space(20);
 
                 EditorGUI.BeginChangeCheck();
-                EditorGUILayout.PropertyField(serializedRingUniformMovemement);
+                EditorGUILayout.PropertyField(serializedUniformMovemement);
 
                 if (EditorGUI.EndChangeCheck())
                 {
-                    editorRingUniformMovement = serializedRingUniformMovemement.boolValue;
+                    editorUniformMovement = serializedUniformMovemement.boolValue;
                     CalculateDegreesDelta();
                 }
             }
-
-            
 
             GUILayout.Space(20);
 
@@ -721,7 +722,7 @@ namespace SpheroidGames.SineAnimator
                 return;
 
             degreesDelta = 360.0f / editorTransforms.Count;
-            radiansDelta = editorRingUniformMovement ? 0 : (Mathf.PI * 2) / editorTransforms.Count;
+            radiansDelta = editorUniformMovement ? 0 : (Mathf.PI * 2) / editorTransforms.Count;
 
             CalculateRingDistribution();
         }

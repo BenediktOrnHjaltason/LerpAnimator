@@ -49,7 +49,7 @@ namespace SpheroidGames.SineAnimator
 
         [SerializeField] public float ringSpin;
 
-        [SerializeField] public bool ringUniformMovement;
+        [SerializeField] public bool uniformMovement;
 
         [SerializeField] public float wallWidth;
 
