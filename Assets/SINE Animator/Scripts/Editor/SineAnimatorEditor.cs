@@ -16,8 +16,6 @@ namespace SpheroidGames.SineAnimator
         /// </summary>
         private List<Transform> editorTransforms;
 
-        //Properties for accessing parts of serializedObject
-
         /// <summary>
         /// whether animation should start when play in scene starts
         /// </summary>
@@ -48,10 +46,18 @@ namespace SpheroidGames.SineAnimator
         private SerializedProperty serializedUniformMovemement;
         private bool editorUniformMovement;
 
-        private SerializedProperty serializedWallWidth;
+        private SerializedProperty serializedShowGenerateObjects;
+        private bool editorShowGenerateObjects;
 
+        private SerializedProperty serializedWallWidth;
         private SerializedProperty serializedObjectToSpawn;
         private SerializedProperty serializedNumberOfObjectsToSpawn;
+        private SerializedProperty serializedAutoAllignFaceDirections;
+
+        /// <summary>
+        /// If true, gameobjects will be destroyed if removed from \"Transforms To Act On\" list
+        /// </summary>
+        private SerializedProperty serializedDestroyIfRemoved;
 
         /// <summary>
         /// The transform of the object this SINE Animator is attached to
@@ -59,17 +65,6 @@ namespace SpheroidGames.SineAnimator
         private Transform ownerTransform;
 
         private UnityEvent currentAnimationFunction = new UnityEvent();
-
-        private SerializedProperty serializedShowGenerateObjects;
-        private bool editorShowGenerateObjects;
-
-        private SerializedProperty serializedAutoAllignFaceDirections;
-
-
-        /// <summary>
-        /// If true, gameobjects will be destroyed if removed from \"Transforms To Act On\" list
-        /// </summary>
-        private SerializedProperty serializedDestroyIfRemoved;
 
         private double nextChangeCheck;
 
@@ -117,7 +112,6 @@ namespace SpheroidGames.SineAnimator
             serializedAutoAllignFaceDirections = serializedObject.FindProperty("autoAllign");
 
 
-
             EditorApplication.update += OnEditorUpdate;
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
 
@@ -131,7 +125,6 @@ namespace SpheroidGames.SineAnimator
 
             SetAnimationFunction();
         }
-
 
         private void OnDisable()
         {
@@ -148,7 +141,6 @@ namespace SpheroidGames.SineAnimator
         private bool handlingUndoRedo = false;
         private float delayedCollectTimerStart;
         private const float delayAmount = 0.05f;
-
 
         private void OnUndoRedoPerformed()
         {
@@ -196,7 +188,6 @@ namespace SpheroidGames.SineAnimator
 
             EditorGUILayout.EndVertical();
 
-
             GUILayout.Space(20);
 
             showGenerateObjects = EditorGUILayout.Foldout(serializedShowGenerateObjects.boolValue, "Add to list", true);
@@ -228,6 +219,8 @@ namespace SpheroidGames.SineAnimator
 
             if (EditorGUI.EndChangeCheck())
             {
+                Debug.Log("END CHANGE CHECK FOR SERIALIZEDTRANSFORMS");
+
                 if (editorAnimationMode == SineAnimator.AnimationMode.PositionBobber)
                 {
                     CollectOriginalPositions();
@@ -242,7 +235,6 @@ namespace SpheroidGames.SineAnimator
             GUILayout.Space(3);
 
             EditorGUILayout.PropertyField(serializedDestroyIfRemoved);
-
 
             GUILayout.Space(20);
 
@@ -346,7 +338,6 @@ namespace SpheroidGames.SineAnimator
             {
                 StopEditorPlayback();
             }
-
 
             GUILayout.Space(20);
 
@@ -495,7 +486,6 @@ namespace SpheroidGames.SineAnimator
             return false;
         }
 
-
         private void OnUserIncreasedTransformsArraySize()
         {
             int difference = serializedTransforms.arraySize - editorTransforms.Count;
@@ -583,8 +573,6 @@ namespace SpheroidGames.SineAnimator
                 SetRingObjectsFaceDirection((SineAnimator.RingObjectsFace)serializedObject.FindProperty("lastRingObjectsFaceDirection").enumValueIndex);
             }
         }
-
-        //private void Refresh
 
         #endregion
 
@@ -930,9 +918,8 @@ namespace SpheroidGames.SineAnimator
 
                 CheckForTransformsArrayChanged();
             }
-
         }
 
         #endregion
     }
-} 
+}
