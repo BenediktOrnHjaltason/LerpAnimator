@@ -185,8 +185,31 @@ namespace SpheroidGames.SineAnimator
             GUI.enabled = !EditorApplication.isPlaying && !handlingUndoRedo;
 
             EditorGUILayout.PropertyField(serializedStartOnPlay);
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
             EditorGUILayout.EndVertical();
+
+            GUILayout.Space(20);
+
+            EditorGUI.BeginChangeCheck();
+            EditorGUILayout.PropertyField(serializedTransforms, true);
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                if (editorAnimationMode == SineAnimator.AnimationMode.PositionBobber)
+                {
+                    CollectOriginalPositions();
+                }
+
+                if (editorAnimationMode == SineAnimator.AnimationMode.RingPlane || editorAnimationMode == SineAnimator.AnimationMode.RingCarousel)
+                {
+                    CalculateDegreesDelta();
+                }
+            }
+
+            GUILayout.Space(3);
+
+            EditorGUILayout.PropertyField(serializedDestroyIfRemoved);
 
             GUILayout.Space(20);
 
@@ -212,29 +235,7 @@ namespace SpheroidGames.SineAnimator
                 EditorGUILayout.EndHorizontal();
             }
 
-            GUILayout.Space(20);
-
-             EditorGUI.BeginChangeCheck();
-             EditorGUILayout.PropertyField(serializedTransforms, true);
-
-            if (EditorGUI.EndChangeCheck())
-            {
-                Debug.Log("END CHANGE CHECK FOR SERIALIZEDTRANSFORMS");
-
-                if (editorAnimationMode == SineAnimator.AnimationMode.PositionBobber)
-                {
-                    CollectOriginalPositions();
-                }
-
-                if (editorAnimationMode == SineAnimator.AnimationMode.RingPlane || editorAnimationMode == SineAnimator.AnimationMode.RingCarousel)
-                {
-                    CalculateDegreesDelta();
-                }
-            }
-
-            GUILayout.Space(3);
-
-            EditorGUILayout.PropertyField(serializedDestroyIfRemoved);
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
             GUILayout.Space(20);
 
@@ -281,10 +282,11 @@ namespace SpheroidGames.SineAnimator
             if (editorAnimationMode == SineAnimator.AnimationMode.RingPlane || editorAnimationMode == SineAnimator.AnimationMode.RingCarousel)
                 editorRadius = serializedRadius.floatValue = EditorGUILayout.Slider("Radius", serializedRadius.floatValue, 0, 1500);
 
-            GUILayout.Space(20);
-
-            if (editorAnimationMode == SineAnimator.AnimationMode.RingPlane || editorAnimationMode == SineAnimator.AnimationMode.RingCarousel) 
+            if (editorAnimationMode == SineAnimator.AnimationMode.RingPlane || editorAnimationMode == SineAnimator.AnimationMode.RingCarousel)
+            {
+                GUILayout.Space(20);
                 editorRingSpin = serializedRingSpin.floatValue = EditorGUILayout.Slider("Ring spin", serializedRingSpin.floatValue, -500, 500);
+            }
 
             else if (editorAnimationMode == SineAnimator.AnimationMode.Wall)
             {
@@ -293,6 +295,20 @@ namespace SpheroidGames.SineAnimator
 
                 if (EditorGUI.EndChangeCheck())
                     CalculateWallDistanceDelta();
+            }
+
+            if (editorAnimationMode == SineAnimator.AnimationMode.RingPlane || editorAnimationMode == SineAnimator.AnimationMode.RingCarousel || editorAnimationMode == SineAnimator.AnimationMode.Wall)
+            {
+                GUILayout.Space(20);
+
+                EditorGUI.BeginChangeCheck();
+                EditorGUILayout.PropertyField(serializedUniformMovemement);
+
+                if (EditorGUI.EndChangeCheck())
+                {
+                    editorUniformMovement = serializedUniformMovemement.boolValue;
+                    CalculateDegreesDelta();
+                }
             }
 
             if (editorAnimationMode == SineAnimator.AnimationMode.RingPlane || editorAnimationMode == SineAnimator.AnimationMode.RingCarousel)
@@ -314,19 +330,7 @@ namespace SpheroidGames.SineAnimator
                 EditorGUILayout.PropertyField(serializedAutoAllignFaceDirections);
             }
 
-            if (editorAnimationMode == SineAnimator.AnimationMode.RingPlane || editorAnimationMode == SineAnimator.AnimationMode.RingCarousel || editorAnimationMode == SineAnimator.AnimationMode.Wall)
-            {
-                GUILayout.Space(20);
-
-                EditorGUI.BeginChangeCheck();
-                EditorGUILayout.PropertyField(serializedUniformMovemement);
-
-                if (EditorGUI.EndChangeCheck())
-                {
-                    editorUniformMovement = serializedUniformMovemement.boolValue;
-                    CalculateDegreesDelta();
-                }
-            }
+            
 
             GUILayout.Space(20);
 
@@ -455,6 +459,11 @@ namespace SpheroidGames.SineAnimator
 
                         CollectEditorTransforms();
                         SetAnimationFunction();
+                    }
+
+                    else if (serializedTransform == ownerTransform && (int)editorAnimationMode > 1)
+                    {
+
                     }
                 }
             }
@@ -609,17 +618,24 @@ namespace SpheroidGames.SineAnimator
                     break;
             }
 
-            HandleTransformsListContainsTargetTransform(serializedAnimationMode.enumValueIndex);
+            HandleTransformsListContainsOwnerTransform(serializedAnimationMode.enumValueIndex);
 
             foreach (Transform transform in editorTransforms)
                 MakeChildIfRequired(transform);
         }
 
-        private void HandleTransformsListContainsTargetTransform(int modeEnumValue)
+        private void HandleTransformsListContainsOwnerTransform(int modeEnumValue)
         {
             if (modeEnumValue > 1 && editorTransforms.Contains(ownerTransform))
             {
-                Debug.LogWarning($"SINE Animator({ownerTransform}): GameObject this SineAnimator is attached to has been added to it's own TransformsToActOn list, which is not supported in this mode");
+                Debug.LogWarning($"SINE Animator({ownerTransform.name}): The GameObject this SineAnimator is attached to has been added to it's own TransformsToActOn list, which is not supported in this mode.\n Owner was removed. Modes that do support this is Position bobber and Scale bobber");
+
+                serializedTransforms.DeleteArrayElementAtIndex(editorTransforms.IndexOf(ownerTransform));
+                serializedTransforms.DeleteArrayElementAtIndex(editorTransforms.IndexOf(ownerTransform));
+
+                serializedObject.ApplyModifiedPropertiesWithoutUndo();
+
+                editorTransforms.RemoveAt(editorTransforms.IndexOf(ownerTransform));
 
                 if (editorPlaybackRunning)
                     StopEditorPlayback();
@@ -917,6 +933,8 @@ namespace SpheroidGames.SineAnimator
                 nextChangeCheck = EditorApplication.timeSinceStartup + 0.3f;
 
                 CheckForTransformsArrayChanged();
+
+                HandleTransformsListContainsOwnerTransform((int)editorAnimationMode);
             }
         }
 
