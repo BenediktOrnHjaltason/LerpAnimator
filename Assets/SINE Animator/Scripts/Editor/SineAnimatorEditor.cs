@@ -53,7 +53,10 @@ namespace SpheroidGames.SineAnimator
         private SerializedProperty serializedObjectToSpawn;
         private SerializedProperty serializedNumberOfObjectsToSpawn;
 
-        private Transform parentTransform;
+        /// <summary>
+        /// The transform of the object this SINE Animator is attached to
+        /// </summary>
+        private Transform ownerTransform;
 
         private UnityEvent currentAnimationFunction = new UnityEvent();
 
@@ -120,7 +123,7 @@ namespace SpheroidGames.SineAnimator
 
             editorTransforms = new List<Transform>();
 
-            parentTransform = ((SineAnimator)target).gameObject.transform;
+            ownerTransform = ((SineAnimator)target).gameObject.transform;
 
             CollectEditorTransforms();
 
@@ -359,14 +362,14 @@ namespace SpheroidGames.SineAnimator
 
             for (int i = 0; i < serializedNumberOfObjectsToSpawn.intValue; i++)
             {
-                GameObject temp = (GameObject)Instantiate(serializedObjectToSpawn.objectReferenceValue, parentTransform.position, parentTransform.rotation);
+                GameObject temp = (GameObject)Instantiate(serializedObjectToSpawn.objectReferenceValue, ownerTransform.position, ownerTransform.rotation);
 
                 Undo.RegisterCreatedObjectUndo(temp, temp.name);
 
                 serializedTransforms.arraySize++;
                 serializedTransforms.GetArrayElementAtIndex(serializedTransforms.arraySize - 1).objectReferenceValue = temp;
 
-                temp.transform.parent = parentTransform;
+                temp.transform.parent = ownerTransform;
             }
 
             serializedObject.ApplyModifiedProperties();
@@ -436,7 +439,7 @@ namespace SpheroidGames.SineAnimator
 
                         else if (IsDuplicate(i, serializedTransform))
                         {
-                            Debug.LogWarning($"SINE Animator: Duplicate transform detected in list ({parentTransform.name}). There should only be one reference for each. Nulling element");
+                            Debug.LogWarning($"SINE Animator: Duplicate transform detected in list ({ownerTransform.name}). There should only be one reference for each. Nulling element");
 
                             editorTransforms[i] = null;
                             serializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue = null;
@@ -467,10 +470,10 @@ namespace SpheroidGames.SineAnimator
 
         private void MakeChildIfRequired(Transform transform)
         {
-            if (transform != null && transform != parentTransform && (int)editorAnimationMode > 1 && transform.parent != parentTransform)
+            if (transform != null && transform != ownerTransform && (int)editorAnimationMode > 1 && transform.parent != ownerTransform)
             {
-                Debug.LogWarning($"SINE Animator ({parentTransform.name}): non-child was found in Transforms To Act On list. AnimationMode {editorAnimationMode} requires objects to be children. Object was auto-parented.");
-                transform.parent = parentTransform;
+                Debug.LogWarning($"SINE Animator ({ownerTransform.name}): non-child was found in Transforms To Act On list. AnimationMode {editorAnimationMode} requires objects to be children. Object was auto-parented.");
+                transform.parent = ownerTransform;
             }
         }
 
@@ -625,9 +628,9 @@ namespace SpheroidGames.SineAnimator
 
         private void HandleTransformsListContainsTargetTransform(int modeEnumValue)
         {
-            if (modeEnumValue > 1 && editorTransforms.Contains(parentTransform))
+            if (modeEnumValue > 1 && editorTransforms.Contains(ownerTransform))
             {
-                Debug.LogWarning($"SINE Animator({parentTransform}): GameObject this SineAnimator is attached to has been added to it's own TransformsToActOn list, which is not supported in this mode");
+                Debug.LogWarning($"SINE Animator({ownerTransform}): GameObject this SineAnimator is attached to has been added to it's own TransformsToActOn list, which is not supported in this mode");
 
                 if (editorPlaybackRunning)
                     StopEditorPlayback();
@@ -765,10 +768,10 @@ namespace SpheroidGames.SineAnimator
             
             for (int i = 0; i < editorTransforms.Count; i++)
             {
-                rot = parentTransform.localRotation * Quaternion.Euler(0, 0, degreesDelta * (i + 1));
-                directionBasePoint = (parentTransform.position + (rot * (Vector3.right) * 0.01f));
+                rot = ownerTransform.localRotation * Quaternion.Euler(0, 0, degreesDelta * (i + 1));
+                directionBasePoint = (ownerTransform.position + (rot * (Vector3.right) * 0.01f));
 
-                directions.Add(parentTransform.InverseTransformDirection(directionBasePoint - parentTransform.position));
+                directions.Add(ownerTransform.InverseTransformDirection(directionBasePoint - ownerTransform.position));
             }
         }
 
@@ -788,7 +791,7 @@ namespace SpheroidGames.SineAnimator
 
             if (editorRingSpin != 0)
             {
-                parentTransform.Rotate(parentTransform.forward, editorRingSpin * ((float)EditorApplication.timeSinceStartup - previousTime), Space.World);
+                ownerTransform.Rotate(ownerTransform.forward, editorRingSpin * ((float)EditorApplication.timeSinceStartup - previousTime), Space.World);
 
                 previousTime = (float)EditorApplication.timeSinceStartup;
             }
@@ -804,13 +807,13 @@ namespace SpheroidGames.SineAnimator
                 editorTransforms[i].localPosition =
                 (directions[i] * editorRadius) + 
                 ((editorValueMode == SineAnimator.ValueMode.Value) ?
-                (parentTransform.InverseTransformDirection(parentTransform.forward) * 0.01f * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude))) :
-                (parentTransform.InverseTransformDirection(parentTransform.forward) * 0.01f * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude)))));
+                (ownerTransform.InverseTransformDirection(ownerTransform.forward) * 0.01f * ((((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) + 1) / 2) * editorAmplitude))) :
+                (ownerTransform.InverseTransformDirection(ownerTransform.forward) * 0.01f * (Mathf.Abs((Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude)))));
             }
 
             if (editorRingSpin != 0)
             {
-                parentTransform.Rotate(parentTransform.forward, editorRingSpin * ((float)EditorApplication.timeSinceStartup - previousTime), Space.World);
+                ownerTransform.Rotate(ownerTransform.forward, editorRingSpin * ((float)EditorApplication.timeSinceStartup - previousTime), Space.World);
 
                 previousTime = (float)EditorApplication.timeSinceStartup;
             }
@@ -824,10 +827,10 @@ namespace SpheroidGames.SineAnimator
             for (int i = 0; i < editorTransforms.Count; i++)
             {
                 if (lookDirection == SineAnimator.RingObjectsFace.Outward)
-                    editorTransforms[i].rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(editorTransforms[i].transform.position - parentTransform.position, parentTransform.forward), parentTransform.forward);
+                    editorTransforms[i].rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(editorTransforms[i].transform.position - ownerTransform.position, ownerTransform.forward), ownerTransform.forward);
 
                 else if (lookDirection == SineAnimator.RingObjectsFace.Inward)
-                    editorTransforms[i].rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(parentTransform.position - editorTransforms[i].transform.position, parentTransform.forward), parentTransform.forward);
+                    editorTransforms[i].rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(ownerTransform.position - editorTransforms[i].transform.position, ownerTransform.forward), ownerTransform.forward);
             }
         }
 
@@ -840,12 +843,12 @@ namespace SpheroidGames.SineAnimator
                 if (editorTransforms[i] == null)
                     continue;
 
-                editorTransforms[i].position = parentTransform.position -
-                (parentTransform.right * halfDistance) +
-                (parentTransform.right * wallDistanceDelta * i) +
+                editorTransforms[i].position = ownerTransform.position -
+                (ownerTransform.right * halfDistance) +
+                (ownerTransform.right * wallDistanceDelta * i) +
                 ((editorValueMode == SineAnimator.ValueMode.Value) ?
-                (parentTransform.up * (Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude)) :
-                (parentTransform.up * (Mathf.Abs(Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency)) * editorAmplitude)));
+                (ownerTransform.up * (Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency) * editorAmplitude)) :
+                (ownerTransform.up * (Mathf.Abs(Mathf.Sin(((float)EditorApplication.timeSinceStartup + (radiansDelta * i)) * editorFrequency)) * editorAmplitude)));
             }
         }
 
@@ -870,7 +873,7 @@ namespace SpheroidGames.SineAnimator
         {
             if (editorTransforms.Count == 0)
             {
-                Debug.LogWarning($"SINE Animator ({parentTransform.name}): Transforms To Act On list is empty!");
+                Debug.LogWarning($"SINE Animator ({ownerTransform.name}): Transforms To Act On list is empty!");
                 return;
             }
 

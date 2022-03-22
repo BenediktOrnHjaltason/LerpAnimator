@@ -68,7 +68,7 @@ namespace SpheroidGames.SineAnimator
         [SerializeField] private RingObjectsFace lastRingObjectsFaceDirection;
 
 
-        [Tooltip("Makes sure object directions are auto alligned when removing or adding transforms to list while in Ring modes, if any direction previously chosen (Inward or outward).")]
+        [Tooltip("If true, objects are auto alligned when removing or adding transforms to list, if any direction previously chosen (Inward or outward).")]
         [SerializeField] private bool autoAllignFaceDirections;
 
         private UnityEvent currentMode = new UnityEvent();
