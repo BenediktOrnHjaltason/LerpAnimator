@@ -504,6 +504,8 @@ namespace SpheroidGames.SineAnimator
 
         private void OnUserDecreasedTransformsArraySize()
         {
+            int undoGroupIndexBeforeDecreasedTransformsArray = Undo.GetCurrentGroup();
+
             //First find out if editor transforms are equal up to new size of serialized transforms (User deleted last element or down adjusted array size of transforms)
             bool editorSegmentsContainsSameTransforms = true;
 
@@ -525,7 +527,7 @@ namespace SpheroidGames.SineAnimator
                     if (editorTransforms.Count > 0)
                     {
                         if (serializedDestroyObjectsIfDeletedFromList.boolValue == true && editorTransforms[editorTransforms.Count - 1] != null)
-                            DestroyImmediate(editorTransforms[editorTransforms.Count - 1].gameObject);
+                            Undo.DestroyObjectImmediate(editorTransforms[editorTransforms.Count - 1].gameObject);
 
                         editorTransforms.RemoveAt(editorTransforms.Count - 1);
                     }
@@ -544,7 +546,7 @@ namespace SpheroidGames.SineAnimator
                     if ((Transform)serializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue != editorTransforms[i])
                     {
                         if (serializedDestroyObjectsIfDeletedFromList.boolValue == true && editorTransforms[i] != null)
-                            DestroyImmediate(editorTransforms[i].gameObject);
+                            Undo.DestroyObjectImmediate(editorTransforms[i].gameObject);
 
                         editorTransforms.RemoveAt(i);
                         
@@ -556,6 +558,8 @@ namespace SpheroidGames.SineAnimator
             }
 
             CollectEditorTransforms();
+
+            Undo.CollapseUndoOperations(undoGroupIndexBeforeDecreasedTransformsArray);
         }
 
         #endregion
