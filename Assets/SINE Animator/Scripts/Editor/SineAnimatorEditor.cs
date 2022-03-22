@@ -114,7 +114,7 @@ namespace SpheroidGames.SineAnimator
 
             serializedDestroyIfRemoved = serializedObject.FindProperty("destroyIfRemoved");
 
-            serializedAutoAllignFaceDirections = serializedObject.FindProperty("autoAllignFaceDirections");
+            serializedAutoAllignFaceDirections = serializedObject.FindProperty("autoAllign");
 
 
 

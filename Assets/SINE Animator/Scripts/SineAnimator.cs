@@ -69,7 +69,7 @@ namespace SpheroidGames.SineAnimator
 
 
         [Tooltip("If true, objects are auto alligned when removing or adding transforms to list, if any direction previously chosen (Inward or outward).")]
-        [SerializeField] private bool autoAllignFaceDirections;
+        [SerializeField] private bool autoAllign;
 
         private UnityEvent currentMode = new UnityEvent();
 
