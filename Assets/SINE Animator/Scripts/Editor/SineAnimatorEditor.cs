@@ -349,9 +349,13 @@ namespace SpheroidGames.SineAnimator
 
         private void GenerateAndAddTransforms()
         {
+            int undoGroupIndexBeforeGeneratingObjects = Undo.GetCurrentGroup();
+
             for (int i = 0; i < serializedNumberOfObjectsToSpawn.intValue; i++)
             {
                 GameObject temp = (GameObject)Instantiate(serializedObjectToSpawn.objectReferenceValue, parentTransform.position, parentTransform.rotation);
+
+                Undo.RegisterCreatedObjectUndo(temp, temp.name);
 
                 serializedTransforms.arraySize++;
                 serializedTransforms.GetArrayElementAtIndex(serializedTransforms.arraySize - 1).objectReferenceValue = temp;
@@ -369,14 +373,16 @@ namespace SpheroidGames.SineAnimator
             CollectEditorTransforms();
 
             SetAnimationFunction();
+
+            Undo.CollapseUndoOperations(undoGroupIndexBeforeGeneratingObjects);
         }
 
         #region Data consistency
 
+        private int undoGroupOnChangeChecked;
         /// <summary>
         /// Checks if user increased or decreased array size by adjusting number, or replaced or nulled element
         /// </summary>
-        private int undoGroupOnChangeChecked;
         private void CheckForTransformsArrayChanged()
         {
             undoGroupOnChangeChecked = Undo.GetCurrentGroup();
@@ -451,7 +457,6 @@ namespace SpheroidGames.SineAnimator
 
         private void MakeChildIfRequired(Transform transform)
         {
-            //Set object as child if current animation mode requires objects to be children
             if (transform != null && transform != parentTransform && (int)editorAnimationMode > 1 && transform.parent != parentTransform)
             {
                 Debug.LogWarning($"SINE Animator ({parentTransform.name}): non-child was found in Transforms To Act On list. AnimationMode {editorAnimationMode} requires objects to be children. Object was auto-parented.");
@@ -549,8 +554,6 @@ namespace SpheroidGames.SineAnimator
                     }
                 }
             }
-
-
 
             CollectEditorTransforms();
         }
