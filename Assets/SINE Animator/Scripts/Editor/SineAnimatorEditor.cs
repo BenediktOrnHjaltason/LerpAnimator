@@ -224,7 +224,7 @@ namespace SpheroidGames.SineAnimator
             GUILayout.Space(20);
 
              EditorGUI.BeginChangeCheck();
-                EditorGUILayout.PropertyField(serializedTransforms, true);
+             EditorGUILayout.PropertyField(serializedTransforms, true);
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -239,7 +239,7 @@ namespace SpheroidGames.SineAnimator
                 }
             }
 
-            GUILayout.Space(20);
+            GUILayout.Space(3);
 
             EditorGUILayout.PropertyField(serializedDestroyIfRemoved);
 
@@ -259,6 +259,7 @@ namespace SpheroidGames.SineAnimator
                 previousAnimationMode = editorAnimationMode;
             }
 
+            EditorGUILayout.Space(5);
 
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(serializedValueMode);
