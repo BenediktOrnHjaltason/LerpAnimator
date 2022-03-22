@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.Events;
@@ -60,6 +61,8 @@ namespace SpheroidGames.SineAnimator
         private SerializedProperty serializedShowGenerateObjects;
         private bool editorShowGenerateObjects;
 
+        private SerializedProperty serializedAutoAllignFaceDirections;
+
 
         /// <summary>
         /// If true, and setting size of "Transforms To Act On" list to smaller number (not if right clicking element and "Delete array element", GameObjects will be deleted
@@ -108,6 +111,8 @@ namespace SpheroidGames.SineAnimator
             serializedShowGenerateObjects = serializedObject.FindProperty("showGenerateObjects");
 
             serializedDestroyObjectsIfDeletedFromList = serializedObject.FindProperty("destroyObjectsIfRemovedFromList");
+
+            serializedAutoAllignFaceDirections = serializedObject.FindProperty("autoAllignFaceDirections");
 
 
 
@@ -304,12 +309,14 @@ namespace SpheroidGames.SineAnimator
 
 
                 if (GUILayout.Button("Outward"))
-                    RingObjectsFaceDirection(SineAnimator.RingObjectsFace.Outward);
+                    SetRingObjectsFaceDirection(SineAnimator.RingObjectsFace.Outward);
 
                 if (GUILayout.Button("Inward"))
-                    RingObjectsFaceDirection(SineAnimator.RingObjectsFace.Inward);
+                    SetRingObjectsFaceDirection(SineAnimator.RingObjectsFace.Inward);
 
                 EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.PropertyField(serializedAutoAllignFaceDirections);
             }
 
             if (editorAnimationMode == SineAnimator.AnimationMode.RingPlane || editorAnimationMode == SineAnimator.AnimationMode.RingCarousel || editorAnimationMode == SineAnimator.AnimationMode.Wall)
@@ -361,16 +368,17 @@ namespace SpheroidGames.SineAnimator
                 serializedTransforms.GetArrayElementAtIndex(serializedTransforms.arraySize - 1).objectReferenceValue = temp;
 
                 temp.transform.parent = parentTransform;
-                
             }
 
             serializedObject.ApplyModifiedProperties();
+
+            CollectEditorTransforms();
 
             //To prevent resampling scales of scale bobbing objects
             if (editorAnimationMode == SineAnimator.AnimationMode.ScaleBobber && editorPlaybackRunning)
                 ApplyOriginalScales();
 
-            CollectEditorTransforms();
+            HandleAutoAllignFaces();
 
             SetAnimationFunction();
 
@@ -559,8 +567,23 @@ namespace SpheroidGames.SineAnimator
 
             CollectEditorTransforms();
 
+            HandleAutoAllignFaces();
+                
+
             Undo.CollapseUndoOperations(undoGroupIndexBeforeDecreasedTransformsArray);
         }
+
+        private void HandleAutoAllignFaces()
+        {
+            if ((editorAnimationMode == SineAnimator.AnimationMode.RingPlane || editorAnimationMode == SineAnimator.AnimationMode.RingCarousel) && serializedAutoAllignFaceDirections.boolValue)
+            {
+                CalculateDegreesDelta();
+                currentAnimationFunction.Invoke();
+                SetRingObjectsFaceDirection((SineAnimator.RingObjectsFace)serializedObject.FindProperty("lastRingObjectsFaceDirection").enumValueIndex);
+            }
+        }
+
+        //private void Refresh
 
         #endregion
 
@@ -607,7 +630,7 @@ namespace SpheroidGames.SineAnimator
         {
             if (modeEnumValue > 1 && editorTransforms.Contains(parentTransform))
             {
-                Debug.LogWarning($"SINE Animator: GameObject this SineAnimator is attached to ({parentTransform.name}) has been added to it's own TransformsToActOn list, which is not supported in this mode");
+                Debug.LogWarning($"SINE Animator({parentTransform}): GameObject this SineAnimator is attached to has been added to it's own TransformsToActOn list, which is not supported in this mode");
 
                 if (editorPlaybackRunning)
                     StopEditorPlayback();
@@ -796,8 +819,11 @@ namespace SpheroidGames.SineAnimator
             }
         }
 
-        private void RingObjectsFaceDirection(SineAnimator.RingObjectsFace lookDirection)
+        private void SetRingObjectsFaceDirection(SineAnimator.RingObjectsFace lookDirection)
         {
+            serializedObject.FindProperty("lastRingObjectsFaceDirection").enumValueIndex = (int)lookDirection;
+            serializedObject.ApplyModifiedPropertiesWithoutUndo();
+
             for (int i = 0; i < editorTransforms.Count; i++)
             {
                 if (lookDirection == SineAnimator.RingObjectsFace.Outward)
@@ -846,7 +872,10 @@ namespace SpheroidGames.SineAnimator
         public void StartEditorPlayback()
         {
             if (editorTransforms.Count == 0)
+            {
+                Debug.LogWarning($"SINE Animator ({parentTransform.name}): Transforms To Act On list is empty!");
                 return;
+            }
 
             startTime = (float)EditorApplication.timeSinceStartup;
 

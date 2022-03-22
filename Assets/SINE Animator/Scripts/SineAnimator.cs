@@ -37,7 +37,7 @@ namespace SpheroidGames.SineAnimator
 
         [SerializeField] List<Transform> TransformsToActOn;
 
-        [SerializeField] public AnimationMode animationMode;
+        [SerializeField] private AnimationMode animationMode;
 
         [SerializeField] public ValueMode valueMode;
 
@@ -49,6 +49,8 @@ namespace SpheroidGames.SineAnimator
 
         [SerializeField] public float ringSpin;
 
+
+        [Tooltip("Places all objects on the same spot on the sine wave, producing uniform movement")]
         [SerializeField] public bool uniformMovement;
 
         [SerializeField] public float wallWidth;
@@ -60,8 +62,14 @@ namespace SpheroidGames.SineAnimator
 
         [SerializeField] private bool showGenerateObjects;
 
-        [Tooltip("If true, and setting size of \"Transforms To Act On\" list to smaller number (not if right clicking element and \"Delete array element\"), GameObjects will be deleted")]
+        [Tooltip("If true, and setting size of \"Transforms To Act On\" list to smaller number (not if right clicking element and \"Delete array element\"), removed GameObjects will be destroyed")]
         [SerializeField] private bool destroyObjectsIfRemovedFromList;
+
+        [SerializeField] private RingObjectsFace lastRingObjectsFaceDirection;
+
+
+        [Tooltip("Makes sure object directions are auto alligned when removing or adding transforms to list while in Ring modes, if any direction previously chosen (Inward or outward).")]
+        [SerializeField] private bool autoAllignFaceDirections;
 
         private UnityEvent currentMode = new UnityEvent();
 
