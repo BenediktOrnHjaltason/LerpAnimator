@@ -16,7 +16,6 @@ namespace SpheroidGames.SineAnimator
         /// </summary>
         private List<Transform> editorTransforms;
 
-
         //Properties for accessing parts of serializedObject
 
         /// <summary>
@@ -65,9 +64,9 @@ namespace SpheroidGames.SineAnimator
 
 
         /// <summary>
-        /// If true, and setting size of "Transforms To Act On" list to smaller number (not if right clicking element and "Delete array element", GameObjects will be deleted
+        /// If true, gameobjects will be destroyed if removed from \"Transforms To Act On\" list
         /// </summary>
-        private SerializedProperty serializedDestroyObjectsIfDeletedFromList;
+        private SerializedProperty serializedDestroyIfRemoved;
 
         private double nextChangeCheck;
 
@@ -110,7 +109,7 @@ namespace SpheroidGames.SineAnimator
 
             serializedShowGenerateObjects = serializedObject.FindProperty("showGenerateObjects");
 
-            serializedDestroyObjectsIfDeletedFromList = serializedObject.FindProperty("destroyObjectsIfRemovedFromList");
+            serializedDestroyIfRemoved = serializedObject.FindProperty("destroyIfRemoved");
 
             serializedAutoAllignFaceDirections = serializedObject.FindProperty("autoAllignFaceDirections");
 
@@ -239,7 +238,7 @@ namespace SpheroidGames.SineAnimator
 
             GUILayout.Space(20);
 
-            EditorGUILayout.PropertyField(serializedDestroyObjectsIfDeletedFromList);
+            EditorGUILayout.PropertyField(serializedDestroyIfRemoved);
 
 
             GUILayout.Space(20);
@@ -402,13 +401,13 @@ namespace SpheroidGames.SineAnimator
                 {
                     OnUserIncreasedTransformsArraySize();
 
-                    Undo.CollapseUndoOperations(undoGroupOnChangeChecked - 1);
+                    Undo.CollapseUndoOperations(undoGroupOnChangeChecked);
                 }
                 else
                 {
                     OnUserDecreasedTransformsArraySize();
 
-                    Undo.CollapseUndoOperations(undoGroupOnChangeChecked - 1);
+                    Undo.CollapseUndoOperations(undoGroupOnChangeChecked);
                 }
 
                 SetAnimationFunction();
@@ -427,14 +426,17 @@ namespace SpheroidGames.SineAnimator
                         {
                             //User nulled reference on list element
 
+                            if (serializedDestroyIfRemoved.boolValue == true)
+                                Undo.DestroyObjectImmediate(editorTransforms[i].gameObject);
+
                             editorTransforms[i] = null;
 
-                            Undo.CollapseUndoOperations(undoGroupOnChangeChecked - 1);
+                            Undo.CollapseUndoOperations(undoGroupOnChangeChecked);
                         }
 
                         else if (IsDuplicate(i, serializedTransform))
                         {
-                            Debug.LogWarning($"SineAnimator: Duplicate transform detected in list ({parentTransform.name}). There should only be one reference for each. Nulling element");
+                            Debug.LogWarning($"SINE Animator: Duplicate transform detected in list ({parentTransform.name}). There should only be one reference for each. Nulling element");
 
                             editorTransforms[i] = null;
                             serializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue = null;
@@ -442,7 +444,7 @@ namespace SpheroidGames.SineAnimator
                             serializedObject.ApplyModifiedProperties();
 
 
-                            Undo.CollapseUndoOperations(undoGroupOnChangeChecked - 1);
+                            Undo.CollapseUndoOperations(undoGroupOnChangeChecked);
                         }
 
                         else
@@ -453,7 +455,7 @@ namespace SpheroidGames.SineAnimator
 
                             MakeChildIfRequired(editorTransforms[i]);
 
-                            Undo.CollapseUndoOperations(undoGroupOnChangeChecked - 1);
+                            Undo.CollapseUndoOperations(undoGroupOnChangeChecked);
                         }
 
                         CollectEditorTransforms();
@@ -534,7 +536,7 @@ namespace SpheroidGames.SineAnimator
                 {
                     if (editorTransforms.Count > 0)
                     {
-                        if (serializedDestroyObjectsIfDeletedFromList.boolValue == true && editorTransforms[editorTransforms.Count - 1] != null)
+                        if (serializedDestroyIfRemoved.boolValue == true && editorTransforms[editorTransforms.Count - 1] != null)
                             Undo.DestroyObjectImmediate(editorTransforms[editorTransforms.Count - 1].gameObject);
 
                         editorTransforms.RemoveAt(editorTransforms.Count - 1);
@@ -548,14 +550,10 @@ namespace SpheroidGames.SineAnimator
             else
             {
                 //User deleted element in middle of list
-
                 for (int i = 0; i < serializedTransforms.arraySize; i++)
                 {
                     if ((Transform)serializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue != editorTransforms[i])
                     {
-                        if (serializedDestroyObjectsIfDeletedFromList.boolValue == true && editorTransforms[i] != null)
-                            Undo.DestroyObjectImmediate(editorTransforms[i].gameObject);
-
                         editorTransforms.RemoveAt(i);
                         
                         serializedObject.ApplyModifiedProperties();
@@ -568,7 +566,6 @@ namespace SpheroidGames.SineAnimator
             CollectEditorTransforms();
 
             HandleAutoAllignFaces();
-                
 
             Undo.CollapseUndoOperations(undoGroupIndexBeforeDecreasedTransformsArray);
         }

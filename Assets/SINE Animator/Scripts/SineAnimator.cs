@@ -62,8 +62,8 @@ namespace SpheroidGames.SineAnimator
 
         [SerializeField] private bool showGenerateObjects;
 
-        [Tooltip("If true, and setting size of \"Transforms To Act On\" list to smaller number (not if right clicking element and \"Delete array element\"), removed GameObjects will be destroyed")]
-        [SerializeField] private bool destroyObjectsIfRemovedFromList;
+        [Tooltip("If true, gameobjects will be destroyed if removed from \"Transforms To Act On\" list")]
+        [SerializeField] private bool destroyIfRemoved;
 
         [SerializeField] private RingObjectsFace lastRingObjectsFaceDirection;
 
