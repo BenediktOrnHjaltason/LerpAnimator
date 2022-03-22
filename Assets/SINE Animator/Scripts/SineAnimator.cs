@@ -222,7 +222,7 @@ namespace SpheroidGames.SineAnimator
         private void CalculateDegreesDelta()
         {
             degreesDelta = 360.0f / TransformsToActOn.Count;
-            radiansDelta = (Mathf.PI * 2) / TransformsToActOn.Count;
+            radiansDelta = uniformMovement ? 0 : (Mathf.PI * 2) / TransformsToActOn.Count;
 
             CalculateRingDistribution();
         }
