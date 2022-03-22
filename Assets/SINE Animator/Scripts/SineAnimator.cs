@@ -49,7 +49,6 @@ namespace SpheroidGames.SineAnimator
 
         [SerializeField] public float ringSpin;
 
-
         [Tooltip("Places all objects on the same spot on the sine wave, producing uniform movement")]
         [SerializeField] public bool uniformMovement;
 
@@ -66,7 +65,6 @@ namespace SpheroidGames.SineAnimator
         [SerializeField] private bool destroyIfRemoved;
 
         [SerializeField] private RingObjectsFace lastRingObjectsFaceDirection;
-
 
         [Tooltip("If true, objects are auto alligned when removing or adding transforms to list, if any direction previously chosen (Inward or outward).")]
         [SerializeField] private bool autoAllign;

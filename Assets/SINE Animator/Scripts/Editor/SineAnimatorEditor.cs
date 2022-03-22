@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.Events;
@@ -269,6 +268,9 @@ namespace SpheroidGames.SineAnimator
             if (editorAnimationMode == SineAnimator.AnimationMode.ScaleBobber)
                 editorAmplitude = serializedAmplitude.floatValue = EditorGUILayout.Slider("Amplitude", serializedAmplitude.floatValue, 0, 1);
 
+            else if (editorAnimationMode == SineAnimator.AnimationMode.PositionBobber)
+                editorAmplitude = serializedAmplitude.floatValue = EditorGUILayout.Slider("Amplitude", serializedAmplitude.floatValue, 0, 50);
+
 
             else if (editorAnimationMode == SineAnimator.AnimationMode.RingPlane || editorAnimationMode == SineAnimator.AnimationMode.RingCarousel)
                 editorAmplitude = serializedAmplitude.floatValue = EditorGUILayout.Slider("Amplitude", serializedAmplitude.floatValue, 0.01f, 2000);
@@ -329,8 +331,6 @@ namespace SpheroidGames.SineAnimator
 
                 EditorGUILayout.PropertyField(serializedAutoAllignFaceDirections);
             }
-
-            
 
             GUILayout.Space(20);
 
