@@ -41,6 +41,8 @@ namespace SpheroidGames.LerpAnimator
     [System.Serializable]
     public class LerpAnimator : MonoBehaviour
     {
+        [SerializeField] string SequenceName;
+
         [Tooltip("Wether sequence should start when game starts")]
         [SerializeField] bool StartOnPlay;
 

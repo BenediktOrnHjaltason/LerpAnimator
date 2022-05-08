@@ -8,6 +8,7 @@ namespace SpheroidGames.LerpAnimator
     public class LerpAnimatorEditor : Editor
     {
         Texture logo;
+
         Texture toolHandleReminder;
 
         /// <summary>
@@ -28,6 +29,8 @@ namespace SpheroidGames.LerpAnimator
         private List<bool> editorShowSegmentEvents;
 
         //Properties for accessing parts of serializedObject
+
+        private SerializedProperty serializedSequenceName;
 
         /// <summary>
         /// whether sequence should start when play in scene starts
@@ -57,12 +60,19 @@ namespace SpheroidGames.LerpAnimator
         /// </summary>
         private double nextChangeCheck;
 
+        private GUIStyle labelStyle;
+
+        private GUILayoutOption inputFieldLayoutOption;
+
+
         #region Events
 
         private void OnEnable()
         {
             logo = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Textures/T_LerpAnimatorLogo.png", typeof(Texture));
             toolHandleReminder = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Textures/T_ToolHandleReminder.png", typeof(Texture));
+
+            serializedSequenceName = serializedObject.FindProperty("SequenceName");
 
             serializedStartOnPlay = serializedObject.FindProperty("StartOnPlay");
             serializedLoop = serializedObject.FindProperty("Loop");
@@ -82,6 +92,12 @@ namespace SpheroidGames.LerpAnimator
             editorSegments = new List<Segment>();
             editorShowRotationOffsets = new List<bool>();
             editorShowSegmentEvents = new List<bool>();
+
+            labelStyle = new GUIStyle();
+            labelStyle.alignment = TextAnchor.UpperCenter;
+            labelStyle.normal.textColor = Color.white;
+
+            //inputFieldLayoutOption = GUILayout.
 
             CollectEditorTransforms();
             CollectEditorStartStates();
@@ -217,31 +233,38 @@ namespace SpheroidGames.LerpAnimator
         public override void OnInspectorGUI()
         {
             GUILayout.Box(logo);
+            GUILayout.Space(-20);
+            GUILayout.Box(toolHandleReminder);
 
             GUI.enabled = !editorPlaybackRunning && !playingPauseAfterSegment && !EditorApplication.isPlaying;
 
             GUILayout.BeginVertical();
 
             GUILayout.Space(10);
+            
             EditorGUILayout.PropertyField(serializedStartOnPlay);
             EditorGUILayout.PropertyField(serializedLoop);
             EditorGUILayout.EndVertical();
 
-            GUILayout.Space(20);
+            
 
 
             EditorGUILayout.PropertyField(serializedTransforms, true);
             GUI.enabled = true;
 
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+            EditorGUILayout.PropertyField(serializedSequenceName);
+
             GUILayout.Space(20);
 
-            GUILayout.Label("START STATES - Samples location, rotation and scale");
+            GUILayout.Label("START STATES", labelStyle);
 
             GUILayout.BeginHorizontal("Box");
             EditorGUILayout.LabelField(lastSelectedState == -1 ? "|>" : "", GUILayout.Width(20));
 
             GUI.enabled = !EditorApplication.isPlaying;
-            if (GUILayout.Button("Preview"))
+            if (GUILayout.Button(new GUIContent("Preview", "Previews start states")))
             {
                 lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = -1;
                 serializedObject.ApplyModifiedProperties();
@@ -253,7 +276,7 @@ namespace SpheroidGames.LerpAnimator
             GUI.enabled = true;
 
             GUI.enabled = !editorPlaybackRunning && !EditorApplication.isPlaying && !playingPauseAfterSegment;
-            if (GUILayout.Button("Sample scene"))
+            if (GUILayout.Button(new GUIContent("Sample scene", "Samples positions, rotations and scales")))
             {
                 lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = -1;
                 SampleAllFromScene(-1);
@@ -263,19 +286,21 @@ namespace SpheroidGames.LerpAnimator
             GUILayout.EndHorizontal();
 
             GUILayout.Space(20);
-            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-            GUILayout.Box(toolHandleReminder);
-            GUILayout.Label("SEGMENTS - Samples location and scale");
-            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+            GUILayout.Label("SEGMENTS", labelStyle);
+            //EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            GUILayout.Space(5);
 
             if (!handlingUndoRedo)
             {
                 for (int i = 0; i < serializedSegments.arraySize; i++)
                 {
                     GUILayout.BeginHorizontal();
-                    GUI.enabled = !EditorApplication.isPlaying;
-                    if (GUILayout.Button((i + 1).ToString() + " : Play", GUILayout.Width(90)))
+                    GUI.enabled = !EditorApplication.isPlaying; 
+                    if (GUILayout.Button(new GUIContent((i + 1).ToString() + " : Play", "Play from segment to end of sequence"), GUILayout.Width(90)))
                     {
+                        
+
                         CollectEditorSegments();
 
                         lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
@@ -371,7 +396,7 @@ namespace SpheroidGames.LerpAnimator
                         EditorGUILayout.LabelField(lastSelectedState == i ? "|>" : "", GUILayout.Width(20));
 
                     GUI.enabled = !EditorApplication.isPlaying;
-                    if (GUILayout.Button("Preview"))
+                    if (GUILayout.Button(new GUIContent("Preview", "Previews destination states for this segment")))
                     {
                         lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
                         editorPlaybackRunning = false;
@@ -381,7 +406,7 @@ namespace SpheroidGames.LerpAnimator
                     GUI.enabled = true;
 
                     GUI.enabled = !editorPlaybackRunning && !EditorApplication.isPlaying && !playingPauseAfterSegment;
-                    if (GUILayout.Button("Sample scene"))
+                    if (GUILayout.Button(new GUIContent("Sample scene", "Samples positions and scales (NOT rotations) from scene into segment")))
                     {
                         lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = i;
                         SampleAllFromScene(i);
@@ -391,7 +416,7 @@ namespace SpheroidGames.LerpAnimator
                     GUILayout.EndHorizontal();
                     EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-                    GUILayout.Space(15);
+                    GUILayout.Space(10);
                 }
             }
 
