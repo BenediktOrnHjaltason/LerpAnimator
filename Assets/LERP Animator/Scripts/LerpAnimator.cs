@@ -27,8 +27,6 @@ namespace SpheroidGames.LerpAnimator
 
         public List<TransformData> toTransformData;
 
-        public string name;
-
         public float duration;
 
         public float pauseAfter;
@@ -36,6 +34,29 @@ namespace SpheroidGames.LerpAnimator
         public AnimationCurve curve;
 
         public UnityEvent OnLerpEnd;
+
+        public bool showEvents;
+
+        public bool showRotationOffsets;
+    }
+
+    [System.Serializable]
+    public class Sequence
+    {
+        public string Name;
+
+        [Tooltip("Wether sequence should start when game starts")]
+        public bool StartOnPlay;
+
+        [Tooltip("Wether sequence should loop")]
+        public bool Loop;
+
+        [Tooltip("The start states for this sequence")]
+        public List<TransformData> StartStates;
+
+        public List<Segment> Segments;
+
+        public bool ShowSegments;
     }
 
     [System.Serializable]
@@ -55,7 +76,9 @@ namespace SpheroidGames.LerpAnimator
 #endif
         [SerializeField] List<Transform> TransformsToActOn;
 
-        [Tooltip("The start states for this animatic")]
+        [SerializeField] List<Sequence> Sequences;
+
+        [Tooltip("The start states for this sequence")]
         [SerializeField] List<TransformData> StartStates;
 
         [SerializeField] List<Segment> Segments;
