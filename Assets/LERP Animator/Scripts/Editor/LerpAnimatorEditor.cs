@@ -32,21 +32,21 @@ namespace SpheroidGames.LerpAnimator
 
         //Properties for accessing parts of serializedObject
 
-        private SerializedProperty serializedSequenceName;
+        //private SerializedProperty serializedSequenceName;
 
         /// <summary>
         /// whether sequence should start when play in scene starts
         /// </summary>
-        private SerializedProperty serializedStartOnPlay;
+        //private SerializedProperty serializedStartOnPlay;
 
         /// <summary>
         /// whether sequence will loop in game play mode
         /// </summary>
-        private SerializedProperty serializedLoop;
+        //private SerializedProperty serializedLoop;
 
         private SerializedProperty serializedTransforms;
-        private SerializedProperty serializedStartStates;
-        private SerializedProperty serializedSegments;
+        //private SerializedProperty serializedStartStates;
+        //private SerializedProperty serializedSegments;
 
         //To remember inspector fold out states for segment rotation offsets and events between LerpAnimator object selected/unselected
         private SerializedProperty serializedShowRotations;
@@ -541,7 +541,7 @@ namespace SpheroidGames.LerpAnimator
                                 if (EditorGUI.EndChangeCheck())
                                 {
                                     CollectEditorSegments();
-                                    ApplyFromDatastore(j);
+                                    ApplyFromDatastore(i,j);
 
                                     lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = j;
                                     serializedObject.ApplyModifiedProperties();
@@ -565,7 +565,7 @@ namespace SpheroidGames.LerpAnimator
                             lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = j;
                             editorPlaybackRunning = false;
                             playingPauseAfterSegment = false;
-                            ApplyFromDatastore(j);
+                            ApplyFromDatastore(i,j);
                         }
                         GUI.enabled = true;
 
@@ -965,10 +965,12 @@ namespace SpheroidGames.LerpAnimator
             Undo.CollapseUndoOperations(undoGroupOnSegmentAdjusted);
         }
 
-        public void ApplyFromDatastore(int segmentIndex)
+        public void ApplyFromDatastore(int sequenceIndex, int segmentIndex)
         {
             if (segmentIndex == -1)
             {
+                SerializedProperty serializedStartStates = serializedSequences.GetArrayElementAtIndex(sequenceIndex).FindPropertyRelative("StartStates");
+
                 for (int i = 0; i < editorTransforms.Count; i++)
                 {
                     if (editorTransforms[i] != null)
@@ -988,22 +990,25 @@ namespace SpheroidGames.LerpAnimator
 
             else
             {
+                SerializedProperty serializedSegment = serializedSequences.GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("Segments").GetArrayElementAtIndex(segmentIndex);
+                SerializedProperty serializedStartStates = serializedSequences.GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("StartStates");
+
                 for (int i = 0; i < editorTransforms.Count; i++)
                 {
                     if (editorTransforms[i] != null)
                     {
                         editorTransforms[i].localPosition =
-                        serializedSegments.GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value;
+                        serializedSegment.FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value;
 
                         Quaternion acculumatedRotationOffsett = Quaternion.Euler(serializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value);
 
                         for (int j = 0; j <= segmentIndex; j++)
-                            acculumatedRotationOffsett *= Quaternion.Euler(serializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value);
+                            acculumatedRotationOffsett *= Quaternion.Euler(serializedSegment.FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value);
 
                         editorTransforms[i].localRotation = acculumatedRotationOffsett;
 
                         editorTransforms[i].localScale =
-                        serializedSegments.GetArrayElementAtIndex(segmentIndex).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value;
+                        serializedSegment.FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value;
                     }
                 }
             }
