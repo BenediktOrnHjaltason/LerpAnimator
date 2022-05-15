@@ -45,8 +45,8 @@ namespace SpheroidGames.LerpAnimator
         //private SerializedProperty serializedLoop;
 
         private SerializedProperty serializedTransforms;
-        private SerializedProperty serializedStartStates;
-        private SerializedProperty serializedSegments;
+        //private SerializedProperty serializedStartStates;
+        //private SerializedProperty serializedSegments;
 
         //To remember inspector fold out states for segment rotation offsets and events between LerpAnimator object selected/unselected
         //private SerializedProperty serializedShowRotations;
@@ -804,7 +804,7 @@ namespace SpheroidGames.LerpAnimator
 
             CollectEditorTransforms();
 
-            AddDataElementsForNewlyAddedTransformsElements(difference);
+            AddDataForNewlyAddedTransforms(difference);
         }
 
         private void OnUserDecreasedTransformsArraySize()
@@ -877,40 +877,51 @@ namespace SpheroidGames.LerpAnimator
         }
 
         /// <summary>
-        /// Adds Start State data and Segments data when user increased transforms count, either by dropping one transform onto array or by manually increasing array size by any amount.
+        /// Adds Start State data and Segments data when user increased transforms count, either by dropping one transform onto array header or by manually increasing array size by any amount.
         /// NOTE! Necessary even if null elements added
         /// </summary>
         /// <param name="difference"></param>
-        private void AddDataElementsForNewlyAddedTransformsElements(int difference)
+        private void AddDataForNewlyAddedTransforms(int difference)
         {
             for (int i = 0; i < difference; i++)
             {
-                serializedStartStates.arraySize++;
 
-                int newStartStatesCount = serializedStartStates.arraySize;
-
-                //StartStates
-                serializedStartStates.GetArrayElementAtIndex(newStartStatesCount - 1).FindPropertyRelative("position").vector3Value = editorTransforms[newStartStatesCount - 1] == null ? Vector3.zero : editorTransforms[newStartStatesCount - 1].localPosition;
-                serializedStartStates.GetArrayElementAtIndex(newStartStatesCount - 1).FindPropertyRelative("offset").vector3Value = editorTransforms[newStartStatesCount - 1] == null ? Vector3.zero : editorTransforms[newStartStatesCount - 1].localRotation.eulerAngles;
-                serializedStartStates.GetArrayElementAtIndex(newStartStatesCount - 1).FindPropertyRelative("scale").vector3Value = editorTransforms[newStartStatesCount - 1] == null ? Vector3.zero : editorTransforms[newStartStatesCount - 1].localScale;
-
-                //Segments
-                for (int j = 0; j < serializedSegments.arraySize; j++)
+                for (int j = 0; j < serializedSequences.arraySize; j++)
                 {
-                    serializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").arraySize++;
+                    SerializedProperty startStates = serializedSequences.GetArrayElementAtIndex(j).FindPropertyRelative("StartStates");
 
-                    int newToTransformDataCount = serializedObject.FindProperty("Segments").GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").arraySize;
+                    startStates.arraySize++;
 
-                    serializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(newToTransformDataCount - 1).FindPropertyRelative("position").vector3Value = editorTransforms[newToTransformDataCount - 1] == null ? Vector3.zero : editorTransforms[newToTransformDataCount - 1].localPosition;
-                    serializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(newToTransformDataCount - 1).FindPropertyRelative("offset").vector3Value = Vector3.zero;
-                    serializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(newToTransformDataCount - 1).FindPropertyRelative("scale").vector3Value = editorTransforms[newToTransformDataCount - 1] == null ? Vector3.zero : editorTransforms[newToTransformDataCount - 1].localScale;
+                    int newStartStatesCount = startStates.arraySize;
+
+                    //StartStates
+                    startStates.GetEndProperty().FindPropertyRelative("position").vector3Value = editorTransforms[newStartStatesCount - 1] == null ? Vector3.zero : editorTransforms[newStartStatesCount - 1].localPosition;
+                    startStates.GetEndProperty().FindPropertyRelative("offset").vector3Value = editorTransforms[newStartStatesCount - 1] == null ? Vector3.zero : editorTransforms[newStartStatesCount - 1].localRotation.eulerAngles;
+                    startStates.GetEndProperty().FindPropertyRelative("scale").vector3Value = editorTransforms[newStartStatesCount - 1] == null ? Vector3.zero : editorTransforms[newStartStatesCount - 1].localScale;
+
+                    SerializedProperty segments = serializedSequences.GetArrayElementAtIndex(j).FindPropertyRelative("Segments");
+
+                    //Segments
+                    for (int k = 0; k < segments.arraySize; k++)
+                    {
+                        SerializedProperty segment = segments.GetArrayElementAtIndex(k);
+
+                        segment.FindPropertyRelative("toTransformData").arraySize++;
+
+                        int newToTransformDataCount = segment.FindPropertyRelative("toTransformData").arraySize;
+
+                        SerializedProperty toTransformData = segment.FindPropertyRelative("toTransformData");
+
+                        toTransformData.GetEndProperty().FindPropertyRelative("position").vector3Value = editorTransforms[newToTransformDataCount - 1] == null ? Vector3.zero : editorTransforms[newToTransformDataCount - 1].localPosition;
+                        toTransformData.GetEndProperty().FindPropertyRelative("offset").vector3Value = Vector3.zero;
+                        toTransformData.GetEndProperty().FindPropertyRelative("scale").vector3Value = editorTransforms[newToTransformDataCount - 1] == null ? Vector3.zero : editorTransforms[newToTransformDataCount - 1].localScale;
+                    }
                 }
             }
 
             serializedObject.ApplyModifiedProperties();
 
-            CollectEditorStartStates();
-            CollectEditorSegments();
+            CollectEditorSequences();
         }
 
         #endregion
