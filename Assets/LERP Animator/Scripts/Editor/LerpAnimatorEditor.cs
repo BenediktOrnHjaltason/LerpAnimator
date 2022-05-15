@@ -964,15 +964,13 @@ namespace SpheroidGames.LerpAnimator
             //Insert data for transforms allready in array
             int newSegmentIndex = serializedSequences.GetArrayElementAtIndex(sequenceIndex).FindPropertyRelative("Segments").arraySize - 1;
 
-            lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = newSegmentIndex;
+            lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = sequenceIndex;
+            lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = newSegmentIndex;
+
 
             newSegment.FindPropertyRelative("duration").floatValue = 1;
             newSegment.FindPropertyRelative("pauseAfter").floatValue = 0;
             newSegment.FindPropertyRelative("curve").animationCurveValue = AnimationCurve.Linear(0, 0, 1, 1);
-
-
-            //CollectEditorSegments();
-
 
             newSegment.FindPropertyRelative("showRotationOffsets").boolValue = false;
             newSegment.FindPropertyRelative("showEvents").boolValue = false;
@@ -998,10 +996,10 @@ namespace SpheroidGames.LerpAnimator
             serializedObject.ApplyModifiedProperties();
 
             //If last segment to select was the one we are about to delete, set to previous segment
-            if (lastSelectedState == (sequenceIndex, editorSequences[sequenceIndex].Segments.Count -1 ))
+            if (lastSelectedSequence == sequenceIndex && lastSelectedSegment == editorSequences[sequenceIndex].Segments.Count -1 )
             {
                 ApplyFromDatastore(sequenceIndex, editorSequences[sequenceIndex].Segments.Count - 2);
-                lastSelectedState  = (sequenceIndex, editorSequences[sequenceIndex].Segments.Count - 2);
+                lastSelectedSegment = editorSequences[sequenceIndex].Segments.Count - 2;
 
                 serializedSequences.FindPropertyRelative("lastSelectedSequence").intValue = sequenceIndex;
                 serializedSequences.FindPropertyRelative("lastSelectedSegment").intValue = editorSequences[sequenceIndex].Segments.Count - 2;
