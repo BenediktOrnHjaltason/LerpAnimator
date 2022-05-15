@@ -85,6 +85,10 @@ namespace SpheroidGames.LerpAnimator
 
         [SerializeField] int lastSelectedState;
 
+        [SerializeField] int lastSelectedSequence;
+        [SerializeField] int lastSelectedSegment;
+
+
         [SerializeField] List<bool> ShowRotations;
 
         [SerializeField] List<bool> ShowSegmentEvents;
