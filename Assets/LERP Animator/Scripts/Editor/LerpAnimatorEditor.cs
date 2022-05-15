@@ -825,23 +825,27 @@ namespace SpheroidGames.LerpAnimator
 
                 int difference = editorTransforms.Count - serializedTransforms.arraySize;
 
-                for (int j = 0; j < difference; j++)
+                for (int i = 0; i < difference; i++)
                 {
-                    if (editorStartStates.Count > 0)
+                    for (int j = 0; j < serializedSequences.arraySize; j++)
                     {
-                        editorTransforms.RemoveAt(editorTransforms.Count - 1);
+                        if (editorSequences[j].StartStates.Count > 0)
+                        {
+                            editorTransforms.RemoveAt(editorTransforms.Count - 1);
 
-                        //Delete from end of start states
-                        editorStartStates.RemoveAt(editorStartStates.Count - 1);
-                        serializedStartStates.arraySize--;
-                    }
+                            //Delete from end of start states
+                            editorSequences[j].StartStates.RemoveAt(editorSequences[j].StartStates.Count - 1);
 
-                    for (int k = 0; k < editorSegments.Count; k++)
-                    {
-                        //Delete from end of transforms data in segments
-                        editorSegments[k].toTransformData.RemoveAt(editorSegments[k].toTransformData.Count - 1);
+                            serializedSequences.GetArrayElementAtIndex(j).FindPropertyRelative("StartStates").arraySize--;
+                        }
 
-                        serializedSegments.GetArrayElementAtIndex(k).FindPropertyRelative("toTransformData").arraySize--;
+                        for (int k = 0; k < editorSequences[j].Segments.Count; k++)
+                        {
+                            //Delete from end of transforms data in segments
+                            editorSequences[j].Segments[k].toTransformData.RemoveAt(editorSequences[j].Segments[k].toTransformData.Count - 1);
+
+                            serializedSequences.GetArrayElementAtIndex(j).FindPropertyRelative("Segments").GetArrayElementAtIndex(k).FindPropertyRelative("toTransformData").arraySize--;
+                        }
                     }
 
                     serializedObject.ApplyModifiedProperties();
@@ -858,14 +862,20 @@ namespace SpheroidGames.LerpAnimator
                     if ((Transform)serializedTransforms.GetArrayElementAtIndex(i).objectReferenceValue != editorTransforms[i])
                     {
                         editorTransforms.RemoveAt(i);
-                        editorStartStates.RemoveAt(i);
 
-                        serializedStartStates.DeleteArrayElementAtIndex(i);
-
-                        for (int j = 0; j < serializedSegments.arraySize; j++)
+                        for (int j = 0; j < editorSequences.Count; j++)
                         {
-                            editorSegments[j].toTransformData.RemoveAt(i);
-                            serializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").DeleteArrayElementAtIndex(i);
+                            editorSequences[j].StartStates.RemoveAt(i);
+
+                            serializedSequences.GetArrayElementAtIndex(j).FindPropertyRelative("StartStates").DeleteArrayElementAtIndex(i);
+
+                            SerializedProperty serializedSegments = serializedSequences.GetArrayElementAtIndex(j).FindPropertyRelative("Segments");
+
+                            for (int k = 0; k < serializedSegments.arraySize; k++)
+                            {
+                                editorSequences[j].Segments[k].toTransformData.RemoveAt(i);
+                                serializedSegments.GetArrayElementAtIndex(k).FindPropertyRelative("toTransformData").DeleteArrayElementAtIndex(i);
+                            }
                         }
 
                         serializedObject.ApplyModifiedProperties();
