@@ -758,19 +758,28 @@ namespace SpheroidGames.LerpAnimator
         private void SampleSingleFromSceneToStartStatesAndSegments(int transformIndex)
         {
             //Depends on editorTransforms being updated before calling this function
-            serializedStartStates.GetArrayElementAtIndex(transformIndex).FindPropertyRelative("position").vector3Value =
-                editorStartStates[transformIndex].position = editorTransforms[transformIndex].localPosition;
-
-            serializedStartStates.GetArrayElementAtIndex(transformIndex).FindPropertyRelative("scale").vector3Value =
-                editorStartStates[transformIndex].scale = editorTransforms[transformIndex].localScale;
-
-            for (int i = 0; i < editorSegments.Count; i++)
+            
+            for (int i = 0; i > serializedSequences.arraySize; i++)
             {
-                serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(transformIndex).FindPropertyRelative("position").vector3Value =
-                    editorSegments[i].toTransformData[transformIndex].position = editorTransforms[transformIndex].localPosition;
+                SerializedProperty startStates = serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("StartStates");
 
-                serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(transformIndex).FindPropertyRelative("scale").vector3Value =
-                    editorSegments[i].toTransformData[transformIndex].scale = editorTransforms[transformIndex].localScale;
+                startStates.GetArrayElementAtIndex(transformIndex).FindPropertyRelative("position").vector3Value =
+                    editorSequences[i].StartStates[transformIndex].position = editorTransforms[transformIndex].localPosition;
+
+                startStates.GetArrayElementAtIndex(transformIndex).FindPropertyRelative("scale").vector3Value =
+                    editorSequences[i].StartStates[transformIndex].scale = editorTransforms[transformIndex].localScale;
+
+                for (int j = 0; j < editorSequences[i].Segments.Count; j++)
+                {
+                    SerializedProperty segment = serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Segments").GetArrayElementAtIndex(j);
+                    SerializedProperty toTransformData = segment.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData");
+
+                    toTransformData.GetArrayElementAtIndex(transformIndex).FindPropertyRelative("position").vector3Value =
+                        editorSequences[i].Segments[j].toTransformData[transformIndex].position = editorTransforms[transformIndex].localPosition;
+
+                    toTransformData.GetArrayElementAtIndex(transformIndex).FindPropertyRelative("scale").vector3Value =
+                        editorSequences[i].Segments[j].toTransformData[transformIndex].scale = editorTransforms[transformIndex].localScale;
+                }
             }
 
             serializedObject.ApplyModifiedProperties();
