@@ -27,8 +27,8 @@ namespace SpheroidGames.LerpAnimator
         private List<Sequence> editorSequences;
 
 
-        private List<bool> editorShowRotationOffsets;
-        private List<bool> editorShowSegmentEvents;
+        //private List<List<bool>> editorShowRotationOffsets;
+        //private List<List<bool>> editorShowSegmentEvents;
 
         //Properties for accessing parts of serializedObject
 
@@ -140,6 +140,8 @@ namespace SpheroidGames.LerpAnimator
 
         private void MigrateToMultiSequenceSystem()
         {
+            Debug.Log("MigrateToMultiSequenceSystem called");
+
             //Add new sequence
             serializedSequences.arraySize++;
 
@@ -321,7 +323,9 @@ namespace SpheroidGames.LerpAnimator
 
             for (int i = 0; i < serializedSequences.arraySize; i++)
             {
-                Sequence editorSequence = new Sequence();
+                var editorSequence = new Sequence();
+                editorSequence.StartStates = new List<TransformData>();
+                
 
                 //Top level variables
                 editorSequence.Name = serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Name").stringValue;
@@ -330,7 +334,7 @@ namespace SpheroidGames.LerpAnimator
                 editorSequence.ShowSegments = serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("ShowSegments").boolValue;
 
                 //Start States
-                SerializedProperty serializedStartStates = serializedSequences.FindPropertyRelative("StartStates");
+                SerializedProperty serializedStartStates = serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("StartStates");
 
                 for (int j = 0; j < serializedStartStates.arraySize; j++)
                 {
@@ -344,10 +348,12 @@ namespace SpheroidGames.LerpAnimator
 
                 }
 
+                editorSequence.Segments = new List<Segment>();
+
                 //Segments
-                for (int j = 0; j < serializedSequences.FindPropertyRelative("Segments").arraySize; j++)
+                for (int j = 0; j < serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Segments").arraySize; j++)
                 {
-                    SerializedProperty serializedSegment = serializedSequences.FindPropertyRelative("Segments").GetArrayElementAtIndex(j);
+                    SerializedProperty serializedSegment = serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Segments").GetArrayElementAtIndex(j);
 
                     Segment editorSegment = new Segment();
 
@@ -371,6 +377,7 @@ namespace SpheroidGames.LerpAnimator
 
                     editorSequence.Segments.Add(editorSegment);
                 }
+                editorSequences.Add(editorSequence);
             }
         }
 
@@ -526,15 +533,15 @@ namespace SpheroidGames.LerpAnimator
 
                         bool showEvents = EditorGUILayout.Foldout(serializedShowEvents.boolValue, "Events", true);
 
-                        if (showEvents != editorShowSegmentEvents[j])
+                        if (showEvents != editorSequences[i].Segments[j].showEvents)
                         {
                             serializedShowEvents.boolValue = showEvents;
                             serializedObject.ApplyModifiedPropertiesWithoutUndo();
                         }
 
-                        editorShowSegmentEvents[j] = showEvents;
+                        editorSequences[i].Segments[j].showEvents = showEvents;
 
-                        if (editorShowSegmentEvents[j])
+                        if (editorSequences[i].Segments[j].showEvents)
                         {
                             EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("OnLerpStart"));
                             EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("OnLerpEnd"));
@@ -551,15 +558,15 @@ namespace SpheroidGames.LerpAnimator
 
                         bool showRotation = EditorGUILayout.Foldout(serializedShowRotationOffsets.boolValue, "RotationOffsets", true);
 
-                        if (showRotation != editorShowRotationOffsets[j])
+                        if (showRotation != editorSequences[i].Segments[j].showRotationOffsets)
                         {
                             serializedShowRotationOffsets.boolValue = showRotation;
                             serializedObject.ApplyModifiedPropertiesWithoutUndo();
                         }
 
-                        editorShowRotationOffsets[j] = showRotation;
+                        editorSequences[i].Segments[j].showRotationOffsets = showRotation;
 
-                        if (editorShowRotationOffsets[j])
+                        if (editorSequences[i].Segments[j].showRotationOffsets)
                         {
                             for (int k = 0; k < editorTransforms.Count; k++)
                             {
