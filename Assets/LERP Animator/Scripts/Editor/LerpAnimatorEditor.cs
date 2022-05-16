@@ -27,30 +27,30 @@ namespace SpheroidGames.LerpAnimator
         private List<Sequence> editorSequences;
 
 
-        //private List<bool> editorShowRotationOffsets;
-        //private List<bool> editorShowSegmentEvents;
+        private List<bool> editorShowRotationOffsets;
+        private List<bool> editorShowSegmentEvents;
 
         //Properties for accessing parts of serializedObject
 
-        //private SerializedProperty serializedSequenceName;
+        private SerializedProperty serializedSequenceName;
 
         /// <summary>
         /// whether sequence should start when play in scene starts
         /// </summary>
-        //private SerializedProperty serializedStartOnPlay;
+        private SerializedProperty serializedStartOnPlay;
 
         /// <summary>
         /// whether sequence will loop in game play mode
         /// </summary>
-        //private SerializedProperty serializedLoop;
+        private SerializedProperty serializedLoop;
 
         private SerializedProperty serializedTransforms;
-        //private SerializedProperty serializedStartStates;
-        //private SerializedProperty serializedSegments;
+        private SerializedProperty serializedStartStates;
+        private SerializedProperty serializedSegments;
 
         //To remember inspector fold out states for segment rotation offsets and events between LerpAnimator object selected/unselected
-        //private SerializedProperty serializedShowRotations;
-        //private SerializedProperty serializedShowSegmentEvents;
+        private SerializedProperty serializedShowRotations;
+        private SerializedProperty serializedShowSegmentEvents;
 
         private SerializedProperty serializedSequences;
 
@@ -77,14 +77,14 @@ namespace SpheroidGames.LerpAnimator
             logo = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Textures/T_LerpAnimatorLogo.png", typeof(Texture));
             toolHandleReminder = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Textures/T_ToolHandleReminder.png", typeof(Texture));
 
-            //serializedSequenceName = serializedObject.FindProperty("SequenceName");
+            serializedSequenceName = serializedObject.FindProperty("SequenceName");
 
-            //serializedStartOnPlay = serializedObject.FindProperty("StartOnPlay");
-            //serializedLoop = serializedObject.FindProperty("Loop");
+            serializedStartOnPlay = serializedObject.FindProperty("StartOnPlay");
+            serializedLoop = serializedObject.FindProperty("Loop");
 
-            //serializedTransforms = serializedObject.FindProperty("TransformsToActOn");
-            //serializedStartStates = serializedObject.FindProperty("StartStates");
-            //serializedSegments = serializedObject.FindProperty("Segments");
+            serializedTransforms = serializedObject.FindProperty("TransformsToActOn");
+            serializedStartStates = serializedObject.FindProperty("StartStates");
+            serializedSegments = serializedObject.FindProperty("Segments");
 
             serializedSequences = serializedObject.FindProperty("Sequences");
 
@@ -94,7 +94,7 @@ namespace SpheroidGames.LerpAnimator
             if (serializedSequences.arraySize == 0 && serializedSegments.arraySize > 0)
                 MigrateToMultiSequenceSystem();
 
-            EditorApplication.update += OnEditorUpdate;
+            //EditorApplication.update += OnEditorUpdate;
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
 
             editorTransforms = new List<Transform>();
@@ -118,14 +118,22 @@ namespace SpheroidGames.LerpAnimator
             //CollectEditorShowRotations();
             //CollectEditorShowSegmentEvents();
 
+            CollectEditorSequences();
+
+
+            lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue;
+            lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue;
+
+            //TODO: What to do about this?
+            /*
             if (serializedSegments.arraySize < 1)
             {
                 serializedObject.FindProperty("lastSelectedState").intValue = -1;
                 serializedObject.ApplyModifiedProperties();
             }
+            */
 
-            lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue;
-            lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue;
+            
 
             nextChangeCheck = EditorApplication.timeSinceStartup + 0.5f;
         }
@@ -219,7 +227,7 @@ namespace SpheroidGames.LerpAnimator
 
         private void OnDisable()
         {
-            EditorApplication.update -= OnEditorUpdate;
+            //EditorApplication.update -= OnEditorUpdate;
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
         }
 
@@ -393,6 +401,8 @@ namespace SpheroidGames.LerpAnimator
 
         private string progressBarName;
 
+        private SerializedProperty serializedSegmentsGUI = null;
+
         public override void OnInspectorGUI()
         {
             GUILayout.Box(logo);
@@ -419,65 +429,72 @@ namespace SpheroidGames.LerpAnimator
 
             EditorGUILayout.PropertyField(serializedSequenceName);
 
-            GUILayout.Space(20);
+            
 
-            GUILayout.Label("START STATES", labelStyle);
-
-            GUILayout.BeginHorizontal("Box");
-            EditorGUILayout.LabelField(lastSelectedState == -1 ? "|>" : "", GUILayout.Width(20));
-
-            GUI.enabled = !EditorApplication.isPlaying;
-            if (GUILayout.Button(new GUIContent("Preview", "Previews start states")))
-            {
-                lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = -1;
-                serializedObject.ApplyModifiedProperties();
-
-                editorPlaybackRunning = false;
-                playingPauseAfterSegment = false;
-                ApplyFromDatastore(-1);
-            }
-            GUI.enabled = true;
-
-            GUI.enabled = !editorPlaybackRunning && !EditorApplication.isPlaying && !playingPauseAfterSegment;
-            if (GUILayout.Button(new GUIContent("Sample scene", "Samples positions, rotations and scales")))
-            {
-                lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = -1;
-                SampleAllFromScene(i,-1);
-            }
-            GUI.enabled = true;
-
-            GUILayout.EndHorizontal();
-
-            GUILayout.Space(20);
-
-            GUILayout.Label("SEGMENTS", labelStyle);
-            //EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-            GUILayout.Space(5);
+            
 
             if (!handlingUndoRedo)
             {
                 for (int i = 0; i < serializedSequences.arraySize; i++)
                 {
 
+                    //------START STATES FROM CURRENT SEQUENCE
+                    GUILayout.Space(20);
 
+                    GUILayout.Label("START STATES", labelStyle);
 
-                    for (int j = 0; j < serializedSegments.arraySize; j++)
+                    GUILayout.BeginHorizontal("Box");
+                    EditorGUILayout.LabelField(lastSelectedSequence == i && lastSelectedSegment == -1 ? "|>" : "", GUILayout.Width(20));
+
+                    GUI.enabled = !EditorApplication.isPlaying;
+                    if (GUILayout.Button(new GUIContent("Preview", "Preview LERP starting point for this sequence")))
+                    {
+                        lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = i;
+                        lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = -1;
+
+                        serializedObject.ApplyModifiedProperties();
+
+                        editorPlaybackRunning = false;
+                        playingPauseAfterSegment = false;
+                        ApplyFromDatastore(i, -1);
+                    }
+                    GUI.enabled = true;
+
+                    GUI.enabled = !editorPlaybackRunning && !EditorApplication.isPlaying && !playingPauseAfterSegment;
+                    if (GUILayout.Button(new GUIContent("Sample scene", "Sample positions, rotations and scales for LERP Starting point for this sequence")))
+                    {
+                        lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = i;
+                        lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = -1;
+                        SampleAllFromScene(i, -1);
+                    }
+                    GUI.enabled = true;
+
+                    GUILayout.EndHorizontal();
+
+                    //-----------------
+
+                    serializedSegmentsGUI = serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Segments");
+
+                    GUILayout.Space(20);
+
+                    GUILayout.Label("SEGMENTS", labelStyle);
+                    //EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+                    GUILayout.Space(5);
+
+                    for (int j = 0; j < serializedSegmentsGUI.arraySize; j++)
                     {
                         GUILayout.BeginHorizontal();
                         GUI.enabled = !EditorApplication.isPlaying;
                         if (GUILayout.Button(new GUIContent((j + 1).ToString() + " : Play", "Play from segment to end of sequence"), GUILayout.Width(90)))
                         {
-
-
                             CollectEditorSequences();
 
-                            lastSelectedSequence = serializedObject.FindProperty
+                            lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = i;
                             lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = j;
-
 
                             serializedObject.ApplyModifiedProperties();
 
-                            StartEditorPlayback(j - 1);
+                            //StartEditorPlayback(j - 1);
                         }
                         GUI.enabled = true;
 
@@ -495,18 +512,23 @@ namespace SpheroidGames.LerpAnimator
                         else
                         {
                             GUI.enabled = !EditorApplication.isPlaying && !editorPlaybackRunning && !playingPauseAfterSegment;
-                            EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("Name"));
+                            EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("Name"));
                             GUI.enabled = true;
                         }
+
+                       
 
                         GUILayout.EndHorizontal();
 
                         GUI.enabled = !editorPlaybackRunning && !playingPauseAfterSegment && !EditorApplication.isPlaying;
-                        bool showEvents = EditorGUILayout.Foldout(serializedShowSegmentEvents.GetArrayElementAtIndex(j).boolValue, "Events", true);
+
+                        SerializedProperty serializedShowEvents = serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("showEvents");
+
+                        bool showEvents = EditorGUILayout.Foldout(serializedShowEvents.boolValue, "Events", true);
 
                         if (showEvents != editorShowSegmentEvents[j])
                         {
-                            serializedShowSegmentEvents.GetArrayElementAtIndex(j).boolValue = showEvents;
+                            serializedShowEvents.boolValue = showEvents;
                             serializedObject.ApplyModifiedPropertiesWithoutUndo();
                         }
 
@@ -514,22 +536,24 @@ namespace SpheroidGames.LerpAnimator
 
                         if (editorShowSegmentEvents[j])
                         {
-                            EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("OnLerpStart"));
-                            EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("OnLerpEnd"));
+                            EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("OnLerpStart"));
+                            EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("OnLerpEnd"));
                         }
 
                         EditorGUILayout.BeginHorizontal();
-                        EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("duration"));
-                        EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("pauseAfter"));
+                        EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("duration"));
+                        EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("pauseAfter"));
                         EditorGUILayout.EndHorizontal();
 
-                        EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("curve"));
+                        EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("curve"));
 
-                        bool showRotation = EditorGUILayout.Foldout(serializedShowRotations.GetArrayElementAtIndex(j).boolValue, "RotationOffsets", true);
+                        SerializedProperty serializedShowRotationOffsets = serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("showRotationOffsets");
+
+                        bool showRotation = EditorGUILayout.Foldout(serializedShowRotationOffsets.boolValue, "RotationOffsets", true);
 
                         if (showRotation != editorShowRotationOffsets[j])
                         {
-                            serializedShowRotations.GetArrayElementAtIndex(j).boolValue = showRotation;
+                            serializedShowRotationOffsets.boolValue = showRotation;
                             serializedObject.ApplyModifiedPropertiesWithoutUndo();
                         }
 
@@ -544,13 +568,14 @@ namespace SpheroidGames.LerpAnimator
                                 EditorGUILayout.LabelField(editorTransforms[k] != null ? editorTransforms[k].name : "*NULL*", GUILayout.Width(100));
 
                                 EditorGUI.BeginChangeCheck();
-                                EditorGUILayout.PropertyField(serializedSegments.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(k).FindPropertyRelative("offset"));
+                                EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(k).FindPropertyRelative("offset"));
                                 if (EditorGUI.EndChangeCheck())
                                 {
-                                    CollectEditorSegments();
+                                    CollectEditorSequences();
                                     ApplyFromDatastore(i,j);
 
-                                    lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = j;
+                                    lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = i;
+                                    lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = j;
                                     serializedObject.ApplyModifiedProperties();
                                 }
 
@@ -564,12 +589,13 @@ namespace SpheroidGames.LerpAnimator
                         GUILayout.BeginHorizontal("Box");
 
                         if (!EditorApplication.isPlaying)
-                            EditorGUILayout.LabelField(lastSelectedState == j ? "|>" : "", GUILayout.Width(20));
+                            EditorGUILayout.LabelField(lastSelectedSequence == i && lastSelectedSegment == j ? "|>" : "", GUILayout.Width(20));
 
                         GUI.enabled = !EditorApplication.isPlaying;
                         if (GUILayout.Button(new GUIContent("Preview", "Previews destination states for this segment")))
                         {
-                            lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = j;
+                            lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = i;
+                            lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = j;
                             editorPlaybackRunning = false;
                             playingPauseAfterSegment = false;
                             ApplyFromDatastore(i,j);
@@ -579,7 +605,8 @@ namespace SpheroidGames.LerpAnimator
                         GUI.enabled = !editorPlaybackRunning && !EditorApplication.isPlaying && !playingPauseAfterSegment;
                         if (GUILayout.Button(new GUIContent("Sample scene", "Samples positions and scales (NOT rotations) from scene into segment")))
                         {
-                            lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = j;
+                            lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = i;
+                            lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = j;
                             SampleAllFromScene(i,j);
                         }
                         GUI.enabled = true;
@@ -612,7 +639,7 @@ namespace SpheroidGames.LerpAnimator
                     EditorGUILayout.Space(20);
                 }
 
-                EditorGUILayout.PropertyField(serializedSequences);
+                //EditorGUILayout.PropertyField(serializedSequences);
 
                 serializedObject.ApplyModifiedProperties();
             }
@@ -1121,11 +1148,12 @@ namespace SpheroidGames.LerpAnimator
         private bool editorPlaybackRunning;
         private float pauseAfterSegmentDuration;
 
-        public void StartEditorPlayback(int fromIndex)
+        
+        public void StartEditorPlayback(int sequenceIndex, int fromIndex)
         {
-            if (serializedSegments.arraySize == 0) return;
+            if (serializedSequences.GetArrayElementAtIndex(sequenceIndex).FindPropertyRelative("Segments").arraySize == 0) return;
 
-            ApplyFromDatastore(fromIndex);
+            ApplyFromDatastore(sequenceIndex, fromIndex);
 
             startTime = (float)EditorApplication.timeSinceStartup;
 
@@ -1137,13 +1165,14 @@ namespace SpheroidGames.LerpAnimator
 
             SampleInterSegmentRotations();
 
-            reciprocal = 1 / editorSegments[toIndex].duration;
+            reciprocal = 1 / editorSequences[sequenceIndex].Segments[toIndex].duration;
 
-            progressBarName = serializedSegments.GetArrayElementAtIndex(toIndex).FindPropertyRelative("Name").stringValue;
+            progressBarName = serializedSequences.GetArrayElementAtIndex(sequenceIndex).FindPropertyRelative("Segments").GetArrayElementAtIndex(toIndex).FindPropertyRelative("Name").stringValue;
 
             playingPauseAfterSegment = false;
             editorPlaybackRunning = true;
         }
+        
 
         private List<Quaternion> interSegmentRotations = new List<Quaternion>();
         private readonly double lerpFrequency = 0.0166; //60 times per second
@@ -1151,6 +1180,7 @@ namespace SpheroidGames.LerpAnimator
         private float reciprocal;
         private bool playingPauseAfterSegment;
 
+        
         private void OnEditorUpdate()
         {
             if (editorPlaybackRunning && EditorApplication.timeSinceStartup > nextLerpUpdate)
@@ -1166,26 +1196,26 @@ namespace SpheroidGames.LerpAnimator
                     {
                         if (editorTransforms[i] != null)
                         {
-                            if (editorStartStates[i].position != editorSegments[toIndex].toTransformData[i].position)
+                            if (editorSequences[lastSelectedSequence].StartStates[i].position != editorSequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].position)
                             {
                                 editorTransforms[i].localPosition =
-                                    Vector3.LerpUnclamped(editorStartStates[i].position,
-                                                 editorSegments[toIndex].toTransformData[i].position,
-                                                 editorSegments[toIndex].curve.Evaluate(lerpStep));
+                                    Vector3.LerpUnclamped(editorSequences[lastSelectedSequence].StartStates[i].position,
+                                                 editorSequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].position,
+                                                 editorSequences[lastSelectedSequence].Segments[toIndex].curve.Evaluate(lerpStep));
                             }
 
-                            if (editorSegments[toIndex].toTransformData[i].offset != Vector3.zero)
+                            if (editorSequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].offset != Vector3.zero)
                             {
-                                editorTransforms[i].localRotation = Quaternion.Euler(editorStartStates[i].offset) *
-                                    Quaternion.Euler(Vector3.LerpUnclamped(Vector3.zero, editorSegments[toIndex].toTransformData[i].offset, editorSegments[toIndex].curve.Evaluate(lerpStep)));
+                                editorTransforms[i].localRotation = Quaternion.Euler(editorSequences[lastSelectedSequence].StartStates[i].offset) *
+                                    Quaternion.Euler(Vector3.LerpUnclamped(Vector3.zero, editorSequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].offset, editorSequences[lastSelectedSequence].Segments[toIndex].curve.Evaluate(lerpStep)));
                             }
 
-                            if (editorStartStates[i].scale != editorSegments[toIndex].toTransformData[i].scale)
+                            if (editorSequences[lastSelectedSequence].StartStates[i].scale != editorSequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].scale)
                             {
                                 editorTransforms[i].localScale =
-                                    Vector3.LerpUnclamped(editorStartStates[i].scale,
-                                                 editorSegments[toIndex].toTransformData[i].scale,
-                                                 editorSegments[toIndex].curve.Evaluate(lerpStep));
+                                    Vector3.LerpUnclamped(editorSequences[lastSelectedSequence].StartStates[i].scale,
+                                                 editorSequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].scale,
+                                                 editorSequences[lastSelectedSequence].Segments[toIndex].curve.Evaluate(lerpStep));
                             }
                         }
                     }
@@ -1197,26 +1227,26 @@ namespace SpheroidGames.LerpAnimator
                     {
                         if (editorTransforms[i] != null)
                         {
-                            if (editorSegments[fromIndex].toTransformData[i].position != editorSegments[toIndex].toTransformData[i].position)
+                            if (editorSequences[lastSelectedSequence].Segments[fromIndex].toTransformData[i].position != editorSequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].position)
                             {
                                 editorTransforms[i].localPosition =
-                                    Vector3.LerpUnclamped(editorSegments[fromIndex].toTransformData[i].position,
-                                                 editorSegments[toIndex].toTransformData[i].position,
-                                                 editorSegments[toIndex].curve.Evaluate(lerpStep));
+                                    Vector3.LerpUnclamped(editorSequences[lastSelectedSequence].Segments[fromIndex].toTransformData[i].position,
+                                                 editorSequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].position,
+                                                 editorSequences[lastSelectedSequence].Segments[toIndex].curve.Evaluate(lerpStep));
                             }
 
-                            if (editorSegments[toIndex].toTransformData[i].offset != Vector3.zero)
+                            if (editorSequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].offset != Vector3.zero)
                             {
                                 editorTransforms[i].localRotation = interSegmentRotations[i] *
-                                    Quaternion.Euler(Vector3.LerpUnclamped(Vector3.zero, editorSegments[toIndex].toTransformData[i].offset, editorSegments[toIndex].curve.Evaluate(lerpStep)));
+                                    Quaternion.Euler(Vector3.LerpUnclamped(Vector3.zero, editorSequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].offset, editorSequences[lastSelectedSequence].Segments[toIndex].curve.Evaluate(lerpStep)));
                             }
 
-                            if (editorSegments[fromIndex].toTransformData[i].scale != editorSegments[toIndex].toTransformData[i].scale)
+                            if (editorSequences[lastSelectedSequence].Segments[fromIndex].toTransformData[i].scale != editorSequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].scale)
                             {
                                 editorTransforms[i].localScale =
-                                    Vector3.LerpUnclamped(editorSegments[fromIndex].toTransformData[i].scale,
-                                                 editorSegments[toIndex].toTransformData[i].scale,
-                                                 editorSegments[toIndex].curve.Evaluate(lerpStep));
+                                    Vector3.LerpUnclamped(editorSequences[lastSelectedSequence].Segments[fromIndex].toTransformData[i].scale,
+                                                 editorSequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].scale,
+                                                 editorSequences[lastSelectedSequence].Segments[toIndex].curve.Evaluate(lerpStep));
                             }
                         }
                     }
@@ -1225,7 +1255,7 @@ namespace SpheroidGames.LerpAnimator
                 if (lerpStep > 1)
                 {
                     //Pause after segment?
-                    pauseAfterSegmentDuration = serializedSegments.GetArrayElementAtIndex(toIndex).FindPropertyRelative("pauseAfter").floatValue;
+                    pauseAfterSegmentDuration = serializedSequences.GetArrayElementAtIndex(lastSelectedSequence).FindPropertyRelative("Segments").GetArrayElementAtIndex(toIndex).FindPropertyRelative("pauseAfter").floatValue;
 
                     if (pauseAfterSegmentDuration > 0)
                     {
@@ -1265,10 +1295,11 @@ namespace SpheroidGames.LerpAnimator
                 handlingUndoRedo = false;
                 Repaint();
 
-                lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue;
+                lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue;
+                lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue;
 
-                if (lastSelectedState == -1 || (lastSelectedState > -1 && lastSelectedState <= serializedStartStates.arraySize))
-                    ApplyFromDatastore(lastSelectedState);
+                if (lastSelectedSegment == -1 || (lastSelectedSegment > -1 && lastSelectedSegment <= serializedSequences.GetArrayElementAtIndex(lastSelectedSequence).FindPropertyRelative("StartStates").arraySize))
+                    ApplyFromDatastore(lastSelectedSequence, lastSelectedSegment);
             }
 
             //Handles periodic checks for when user makes changes in serializedTransforms array
@@ -1302,12 +1333,14 @@ namespace SpheroidGames.LerpAnimator
             SampleInterSegmentRotations();
 
             //Was it the last segment?
-            if (toIndex + 1 > editorSegments.Count - 1)
+            if (toIndex + 1 > editorSequences[lastSelectedSequence].Segments.Count - 1)
             {
-                if (serializedLoop.boolValue == true)
+                if (serializedSequences.GetArrayElementAtIndex(lastSelectedSequence).FindPropertyRelative("Loop").boolValue == true)
                 {
-                    lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = 0;
-                    StartEditorPlayback(-1);
+                    lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = 0;
+
+
+                    StartEditorPlayback(lastSelectedSequence, -1);
                 }
 
                 else editorPlaybackRunning = false;
@@ -1318,16 +1351,16 @@ namespace SpheroidGames.LerpAnimator
                 fromIndex = fromIndex == -1 ? 0 : ++fromIndex;
                 toIndex++;
 
-                reciprocal = 1 / editorSegments[toIndex].duration;
+                reciprocal = 1 / editorSequences[lastSelectedSequence].Segments[toIndex].duration;
 
                 startTime = (float)EditorApplication.timeSinceStartup;
 
-                lastSelectedState = serializedObject.FindProperty("lastSelectedState").intValue = toIndex;
+                lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = toIndex;
 
-                progressBarName = serializedSegments.GetArrayElementAtIndex(toIndex).FindPropertyRelative("Name").stringValue;
+                progressBarName = serializedSequences.GetArrayElementAtIndex(lastSelectedSequence).FindPropertyRelative("Segments").GetArrayElementAtIndex(toIndex).FindPropertyRelative("Name").stringValue;
             }
         }
-
+        
         #endregion
     }
 }
