@@ -158,6 +158,8 @@ namespace SpheroidGames.LerpAnimator
             //Add start states
             SerializedProperty newStartStates = serializedSequence.FindPropertyRelative("StartStates");
 
+            newStartStates.ClearArray();
+
             for(int i = 0; i < serializedStartStates.arraySize; i++)
             {
                 newStartStates.arraySize++;
@@ -231,6 +233,8 @@ namespace SpheroidGames.LerpAnimator
 
             serializedSegments.ClearArray();
             serializedStartStates.ClearArray();
+            serializedShowRotations.ClearArray();
+            serializedShowSegmentEvents.ClearArray();
 
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
@@ -1040,9 +1044,6 @@ namespace SpheroidGames.LerpAnimator
 
             serializedSegments.arraySize--;
 
-            //serializedSegments.arraySize--;
-            serializedObject.ApplyModifiedProperties();
-
             //If last segment to select was the one we are about to delete, set to previous segment
             if (lastSelectedSequence == sequenceIndex && lastSelectedSegment == editorSequences[sequenceIndex].Segments.Count -1 )
             {
@@ -1054,6 +1055,8 @@ namespace SpheroidGames.LerpAnimator
             }
 
             editorSequences[sequenceIndex].Segments.RemoveAt(editorSequences[sequenceIndex].Segments.Count - 1);
+
+            serializedObject.ApplyModifiedProperties();
 
             Undo.CollapseUndoOperations(undoGroupOnSegmentAdjusted);
         }
@@ -1096,7 +1099,11 @@ namespace SpheroidGames.LerpAnimator
                         Quaternion acculumatedRotationOffsett = Quaternion.Euler(serializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value);
 
                         for (int j = 0; j <= segmentIndex; j++)
-                            acculumatedRotationOffsett *= Quaternion.Euler(serializedSegment.FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value);
+                        {
+                            acculumatedRotationOffsett *= 
+                                Quaternion.Euler(serializedSequences.GetArrayElementAtIndex(sequenceIndex).FindPropertyRelative("Segments").GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value);
+                        }
+                            
 
                         editorTransforms[i].localRotation = acculumatedRotationOffsett;
 
