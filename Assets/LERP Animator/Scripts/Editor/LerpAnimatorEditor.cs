@@ -1050,8 +1050,8 @@ namespace SpheroidGames.LerpAnimator
                 ApplyFromDatastore(sequenceIndex, editorSequences[sequenceIndex].Segments.Count - 2);
                 lastSelectedSegment = editorSequences[sequenceIndex].Segments.Count - 2;
 
-                serializedSequences.FindPropertyRelative("lastSelectedSequence").intValue = sequenceIndex;
-                serializedSequences.FindPropertyRelative("lastSelectedSegment").intValue = editorSequences[sequenceIndex].Segments.Count - 2;
+                serializedObject.FindProperty("lastSelectedSequence").intValue = sequenceIndex;
+                serializedObject.FindProperty("lastSelectedSegment").intValue = editorSequences[sequenceIndex].Segments.Count - 2;
             }
 
             editorSequences[sequenceIndex].Segments.RemoveAt(editorSequences[sequenceIndex].Segments.Count - 1);
