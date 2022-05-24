@@ -465,6 +465,7 @@ namespace SpheroidGames.LerpAnimator
                     GUILayout.Label("START STATES", labelStyle);
 
                     GUILayout.BeginHorizontal("Box");
+
                     EditorGUILayout.LabelField(lastSelectedSequence == i && lastSelectedSegment == -1 ? "|>" : "", GUILayout.Width(20));
 
                     GUI.enabled = !EditorApplication.isPlaying;
@@ -492,177 +493,194 @@ namespace SpheroidGames.LerpAnimator
 
                     GUILayout.EndHorizontal();
 
-                    //-----------------
 
                     serializedSegmentsGUI = serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Segments");
 
                     GUILayout.Space(20);
 
-                    GUILayout.Label("SEGMENTS", labelStyle);
-                    //EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
                     GUILayout.Space(5);
 
-                    for (int j = 0; j < serializedSegmentsGUI.arraySize; j++)
+                    EditorGUI.indentLevel++;
+                    bool showSegments = EditorGUILayout.Foldout(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("ShowSegments").boolValue, "Segments", true);
+                    EditorGUI.indentLevel--;
+
+                    if (showSegments != editorSequences[i].ShowSegments)
                     {
-                        GUILayout.BeginHorizontal();
-                        GUI.enabled = !EditorApplication.isPlaying;
-                        if (GUILayout.Button(new GUIContent((j + 1).ToString() + " : Play", "Play from segment to end of sequence"), GUILayout.Width(90)))
+                        serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("ShowSegments").boolValue = showSegments;
+                        serializedObject.ApplyModifiedPropertiesWithoutUndo();
+                    }
+
+                    editorSequences[i].ShowSegments = showSegments;
+
+                    if (editorSequences[i].ShowSegments)
+                    {
+                        EditorGUI.indentLevel++;
+
+                        for (int j = 0; j < serializedSegmentsGUI.arraySize; j++)
                         {
-                            CollectEditorSequences();
-
-                            lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = i;
-                            lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = j;
-
-                            serializedObject.ApplyModifiedProperties();
-
-                            StartEditorPlayback(i, j - 1);
-                        }
-                        GUI.enabled = true;
-
-                        if (editorPlaybackRunning && j == toIndex)
-                        {
-                            var rect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight);
-                            EditorGUI.ProgressBar(rect, lerpStep, progressBarName);
-
-                        }
-                        else if (playingPauseAfterSegment && j == toIndex)
-                        {
-                            var rect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight);
-                            EditorGUI.ProgressBar(rect, 0, string.Format("Pause: {0:#0.0}", (((startTime + pauseAfterSegmentDuration - EditorApplication.timeSinceStartup)))));
-                        }
-                        else
-                        {
-                            GUI.enabled = !EditorApplication.isPlaying && !editorPlaybackRunning && !playingPauseAfterSegment;
-                            EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("Name"));
-                            GUI.enabled = true;
-                        }
-
-                       
-
-                        GUILayout.EndHorizontal();
-
-                        GUI.enabled = !editorPlaybackRunning && !playingPauseAfterSegment && !EditorApplication.isPlaying;
-
-                        SerializedProperty serializedShowEvents = serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("showEvents");
-
-                        bool showEvents = EditorGUILayout.Foldout(serializedShowEvents.boolValue, "Events", true);
-
-                        if (showEvents != editorSequences[i].Segments[j].showEvents)
-                        {
-                            serializedShowEvents.boolValue = showEvents;
-                            serializedObject.ApplyModifiedPropertiesWithoutUndo();
-                        }
-
-                        editorSequences[i].Segments[j].showEvents = showEvents;
-
-                        if (editorSequences[i].Segments[j].showEvents)
-                        {
-                            EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("OnLerpStart"));
-                            EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("OnLerpEnd"));
-                        }
-
-                        EditorGUILayout.BeginHorizontal();
-                        EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("duration"));
-                        EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("pauseAfter"));
-                        EditorGUILayout.EndHorizontal();
-
-                        EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("curve"));
-
-                        SerializedProperty serializedShowRotationOffsets = serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("showRotationOffsets");
-
-                        bool showRotation = EditorGUILayout.Foldout(serializedShowRotationOffsets.boolValue, "RotationOffsets", true);
-
-                        if (showRotation != editorSequences[i].Segments[j].showRotationOffsets)
-                        {
-                            serializedShowRotationOffsets.boolValue = showRotation;
-                            serializedObject.ApplyModifiedPropertiesWithoutUndo();
-                        }
-
-                        editorSequences[i].Segments[j].showRotationOffsets = showRotation;
-
-                        if (editorSequences[i].Segments[j].showRotationOffsets)
-                        {
-                            for (int k = 0; k < editorTransforms.Count; k++)
+                            GUILayout.BeginHorizontal();
+                            GUI.enabled = !EditorApplication.isPlaying;
+                            if (GUILayout.Button(new GUIContent((j + 1).ToString() + " : Play", "Play from segment to end of sequence"), GUILayout.Width(90)))
                             {
-                                GUILayout.BeginHorizontal("Box");
+                                CollectEditorSequences();
 
-                                EditorGUILayout.LabelField(editorTransforms[k] != null ? editorTransforms[k].name : "*NULL*", GUILayout.Width(100));
+                                lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = i;
+                                lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = j;
 
-                                EditorGUI.BeginChangeCheck();
-                                EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(k).FindPropertyRelative("offset"));
-                                if (EditorGUI.EndChangeCheck())
-                                {
-                                    CollectEditorSequences();
-                                    ApplyFromDatastore(i,j);
+                                serializedObject.ApplyModifiedProperties();
 
-                                    lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = i;
-                                    lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = j;
-                                    serializedObject.ApplyModifiedProperties();
-                                }
-
-                                GUILayout.EndHorizontal();
+                                StartEditorPlayback(i, j - 1);
                             }
+                            GUI.enabled = true;
+
+                            if (editorPlaybackRunning && j == toIndex)
+                            {
+                                var rect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight);
+                                EditorGUI.ProgressBar(rect, lerpStep, progressBarName);
+
+                            }
+                            else if (playingPauseAfterSegment && j == toIndex)
+                            {
+                                var rect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight);
+                                EditorGUI.ProgressBar(rect, 0, string.Format("Pause: {0:#0.0}", (((startTime + pauseAfterSegmentDuration - EditorApplication.timeSinceStartup)))));
+                            }
+                            else
+                            {
+                                GUI.enabled = !EditorApplication.isPlaying && !editorPlaybackRunning && !playingPauseAfterSegment;
+                                EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("Name"));
+                                GUI.enabled = true;
+                            }
+
+                           
+
+                            GUILayout.EndHorizontal();
+
+                            GUI.enabled = !editorPlaybackRunning && !playingPauseAfterSegment && !EditorApplication.isPlaying;
+
+                            SerializedProperty serializedShowEvents = serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("showEvents");
+
+                            bool showEvents = EditorGUILayout.Foldout(serializedShowEvents.boolValue, "Events", true);
+
+                            if (showEvents != editorSequences[i].Segments[j].showEvents)
+                            {
+                                serializedShowEvents.boolValue = showEvents;
+                                serializedObject.ApplyModifiedPropertiesWithoutUndo();
+                            }
+
+                            editorSequences[i].Segments[j].showEvents = showEvents;
+
+                            if (editorSequences[i].Segments[j].showEvents)
+                            {
+                                EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("OnLerpStart"));
+                                EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("OnLerpEnd"));
+                            }
+
+                            EditorGUILayout.BeginHorizontal();
+                            EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("duration"));
+                            EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("pauseAfter"));
+                            EditorGUILayout.EndHorizontal();
+
+                            EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("curve"));
+
+                            SerializedProperty serializedShowRotationOffsets = serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("showRotationOffsets");
+
+                            bool showRotation = EditorGUILayout.Foldout(serializedShowRotationOffsets.boolValue, "RotationOffsets", true);
+
+                            if (showRotation != editorSequences[i].Segments[j].showRotationOffsets)
+                            {
+                                serializedShowRotationOffsets.boolValue = showRotation;
+                                serializedObject.ApplyModifiedPropertiesWithoutUndo();
+                            }
+
+                            editorSequences[i].Segments[j].showRotationOffsets = showRotation;
+
+                            if (editorSequences[i].Segments[j].showRotationOffsets)
+                            {
+                                for (int k = 0; k < editorTransforms.Count; k++)
+                                {
+                                    GUILayout.BeginHorizontal("Box");
+
+                                    EditorGUILayout.LabelField(editorTransforms[k] != null ? editorTransforms[k].name : "*NULL*", GUILayout.Width(100));
+
+                                    EditorGUI.BeginChangeCheck();
+                                    EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(k).FindPropertyRelative("offset"));
+                                    if (EditorGUI.EndChangeCheck())
+                                    {
+                                        CollectEditorSequences();
+                                        ApplyFromDatastore(i,j);
+
+                                        lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = i;
+                                        lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = j;
+                                        serializedObject.ApplyModifiedProperties();
+                                    }
+
+                                    GUILayout.EndHorizontal();
+                                }
+                            }
+                            GUI.enabled = true;
+
+
+
+                            GUILayout.BeginHorizontal("Box");
+
+                            EditorGUI.indentLevel--;
+                            if (!EditorApplication.isPlaying)
+                                EditorGUILayout.LabelField(lastSelectedSequence == i && lastSelectedSegment == j ? "|>" : "", GUILayout.Width(20));
+                            EditorGUI.indentLevel++;
+
+                            GUI.enabled = !EditorApplication.isPlaying;
+                            if (GUILayout.Button(new GUIContent("Preview", "Previews destination states for this segment")))
+                            {
+                                lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = i;
+                                lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = j;
+                                editorPlaybackRunning = false;
+                                playingPauseAfterSegment = false;
+                                ApplyFromDatastore(i,j);
+                            }
+                            GUI.enabled = true;
+
+                            GUI.enabled = !editorPlaybackRunning && !EditorApplication.isPlaying && !playingPauseAfterSegment;
+                            if (GUILayout.Button(new GUIContent("Sample scene", "Samples positions and scales (NOT rotations) from scene into segment")))
+                            {
+                                lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = i;
+                                lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = j;
+                                SampleAllFromScene(i,j);
+                            }
+                            GUI.enabled = true;
+
+                            GUILayout.EndHorizontal();
+                            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+                            GUILayout.Space(10);
                         }
-                        GUI.enabled = true;
-
-
 
                         GUILayout.BeginHorizontal("Box");
 
-                        if (!EditorApplication.isPlaying)
-                            EditorGUILayout.LabelField(lastSelectedSequence == i && lastSelectedSegment == j ? "|>" : "", GUILayout.Width(20));
+                        GUI.enabled = !EditorApplication.isPlaying && !editorPlaybackRunning && !playingPauseAfterSegment;
+                        if (GUILayout.Button("Add segment"))
+                            AddSegment(i);
 
-                        GUI.enabled = !EditorApplication.isPlaying;
-                        if (GUILayout.Button(new GUIContent("Preview", "Previews destination states for this segment")))
+                        if (GUILayout.Button("Remove segment"))
                         {
-                            lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = i;
-                            lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = j;
-                            editorPlaybackRunning = false;
-                            playingPauseAfterSegment = false;
-                            ApplyFromDatastore(i,j);
-                        }
-                        GUI.enabled = true;
+                            if (serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Segments").arraySize < 1)
+                                return;
 
-                        GUI.enabled = !editorPlaybackRunning && !EditorApplication.isPlaying && !playingPauseAfterSegment;
-                        if (GUILayout.Button(new GUIContent("Sample scene", "Samples positions and scales (NOT rotations) from scene into segment")))
-                        {
-                            lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = i;
-                            lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = j;
-                            SampleAllFromScene(i,j);
+                            RemoveSegment(i);
                         }
                         GUI.enabled = true;
 
                         GUILayout.EndHorizontal();
-                        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+                        EditorGUILayout.HelpBox("Adding segment auto samples from scene", MessageType.Info);
 
-                        GUILayout.Space(10);
+                        EditorGUILayout.Space(20);
+
+                        EditorGUI.indentLevel--;
                     }
-
-
-                    GUILayout.BeginHorizontal("Box");
-
-                    GUI.enabled = !EditorApplication.isPlaying && !editorPlaybackRunning && !playingPauseAfterSegment;
-                    if (GUILayout.Button("Add segment"))
-                        AddSegment(i);
-
-                    if (GUILayout.Button("Remove segment"))
-                    {
-                        if (serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Segments").arraySize < 1)
-                            return;
-
-                        RemoveSegment(i);
-                    }
-                    GUI.enabled = true;
-
-                    GUILayout.EndHorizontal();
-                    EditorGUILayout.HelpBox("Adding segment auto samples from scene", MessageType.Info);
-
-                    EditorGUILayout.Space(20);
                 }
 
-            
+                EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-                EditorGUILayout.PropertyField(serializedSequences);
+                //EditorGUILayout.PropertyField(serializedSequences);
 
                 //EditorGUILayout.PropertyField(serializedSegments);
 
