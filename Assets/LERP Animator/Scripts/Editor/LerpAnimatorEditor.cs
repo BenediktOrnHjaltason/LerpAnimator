@@ -377,11 +377,11 @@ namespace SpheroidGames.LerpAnimator
                     editorSegment.showEvents = serializedSegment.FindPropertyRelative("showEvents").boolValue;
                     editorSegment.showRotationOffsets = serializedSegment.FindPropertyRelative("showRotationOffsets").boolValue;
 
+                    editorSegment.toTransformData = new List<TransformData>();
+
                     for (int k = 0; k < serializedSegment.FindPropertyRelative("toTransformData").arraySize; k++)
                     {
                         SerializedProperty serializedToTransformData = serializedSegment.FindPropertyRelative("toTransformData").GetArrayElementAtIndex(k);
-
-                        editorSegment.toTransformData = new List<TransformData>();
 
                         editorSegment.toTransformData.Add(new TransformData(serializedToTransformData.FindPropertyRelative("position").vector3Value,
                                                                             serializedToTransformData.FindPropertyRelative("offset").vector3Value,
@@ -515,7 +515,7 @@ namespace SpheroidGames.LerpAnimator
 
                             serializedObject.ApplyModifiedProperties();
 
-                            //StartEditorPlayback(j - 1);
+                            StartEditorPlayback(i, j - 1);
                         }
                         GUI.enabled = true;
 
@@ -1255,6 +1255,8 @@ namespace SpheroidGames.LerpAnimator
                     {
                         if (editorTransforms[i] != null)
                         {
+                            
+
                             if (editorSequences[lastSelectedSequence].Segments[fromIndex].toTransformData[i].position != editorSequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].position)
                             {
                                 editorTransforms[i].localPosition =
