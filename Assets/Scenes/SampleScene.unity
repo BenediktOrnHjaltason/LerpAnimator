@@ -1644,6 +1644,7 @@ MonoBehaviour:
   Loop: 0
   TransformsToActOn:
   - {fileID: 111789229}
+  Sequences: []
   StartStates:
   - position: {x: 128.36, y: 33.24, z: -25.95}
     offset: {x: 0.000002561321, y: 217.2376, z: 315.6965}
@@ -1657,7 +1658,6 @@ MonoBehaviour:
     - position: {x: 149.09, y: 58.65, z: -41.71}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 10
     pauseAfter: 0
     curve:
@@ -1687,7 +1687,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: 0
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 00
   ShowSegmentEvents: 00
 --- !u!1 &118926254
@@ -2720,6 +2724,7 @@ MonoBehaviour:
   TransformsToActOn:
   - {fileID: 151651264}
   - {fileID: 775490876}
+  Sequences: []
   StartStates:
   - position: {x: 40.055447, y: 31.24466, z: 2.3307078}
     offset: {x: 0, y: 0, z: 0}
@@ -2739,7 +2744,6 @@ MonoBehaviour:
     - position: {x: 40.055447, y: 31.24466, z: 2.3307078}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 1
     pauseAfter: 0
     curve:
@@ -2769,6 +2773,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -2780,7 +2786,6 @@ MonoBehaviour:
     - position: {x: 40.055447, y: 31.24466, z: 2.3307078}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 1
     pauseAfter: 0
     curve:
@@ -2810,7 +2815,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: -1
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 010100
   ShowSegmentEvents: 0100
 --- !u!4 &151651264
@@ -3145,6 +3154,7 @@ MonoBehaviour:
   Loop: 0
   TransformsToActOn:
   - {fileID: 185394979}
+  Sequences: []
   StartStates:
   - position: {x: -505.79932, y: 40.965, z: -12.633731}
     offset: {x: 0, y: 0, z: 0}
@@ -3158,7 +3168,6 @@ MonoBehaviour:
     - position: {x: -505.79932, y: 44.114, z: -12.633731}
       offset: {x: 0, y: 0, z: 1080}
       scale: {x: 3.0063, y: 3.0063, z: 3.0063}
-    name: 
     duration: 2
     pauseAfter: 0
     curve:
@@ -3188,6 +3197,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -3196,7 +3207,6 @@ MonoBehaviour:
     - position: {x: -505.79932, y: 40.965, z: -12.633731}
       offset: {x: 0, y: 1080, z: 0}
       scale: {x: 2.8291056, y: 0.16292, z: 0.16292}
-    name: 
     duration: 2
     pauseAfter: 0
     curve:
@@ -3226,6 +3236,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -3234,7 +3246,6 @@ MonoBehaviour:
     - position: {x: -501.224, y: 40.965, z: -12.633731}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 2
     pauseAfter: 0
     curve:
@@ -3264,7 +3275,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: 0
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 010100
   ShowSegmentEvents: 000000
 --- !u!23 &185394977
@@ -3369,6 +3384,7 @@ MonoBehaviour:
   - {fileID: 1519952981}
   - {fileID: 1213565975}
   - {fileID: 630491230}
+  Sequences: []
   StartStates:
   - position: {x: 0.05, y: 1.689, z: 0.2}
     offset: {x: -0.000003152144, y: 20.000011, z: -0.000016540096}
@@ -3418,7 +3434,6 @@ MonoBehaviour:
     - position: {x: 5.18, y: -1.53, z: -1.67}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    name: 
     duration: 1
     pauseAfter: 0
     curve:
@@ -3448,6 +3463,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -3474,7 +3491,6 @@ MonoBehaviour:
     - position: {x: 0.01, y: -1.53, z: 0.21}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.7, y: 0.31009, z: 0.41084}
-    name: 
     duration: 1
     pauseAfter: 0
     curve:
@@ -3504,7 +3520,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: 0
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 0000
   ShowSegmentEvents: 0000
 --- !u!4 &188428722
@@ -5597,6 +5617,7 @@ MonoBehaviour:
   - {fileID: 798791139}
   - {fileID: 290970789}
   - {fileID: 422874966}
+  Sequences: []
   StartStates:
   - position: {x: 0, y: 0, z: 0}
     offset: {x: 0, y: 0, z: 0}
@@ -5628,7 +5649,6 @@ MonoBehaviour:
     - position: {x: -45.458, y: 12.778503, z: 7.4588647}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 5
     pauseAfter: 0
     curve:
@@ -5658,7 +5678,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: -1
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 0100
   ShowSegmentEvents: 00
 --- !u!4 &422874966
@@ -7130,6 +7154,7 @@ MonoBehaviour:
   Loop: 0
   TransformsToActOn:
   - {fileID: 537031306}
+  Sequences: []
   StartStates:
   - position: {x: 211.90991, y: -0.68307495, z: -69.2515}
     offset: {x: 0, y: 0, z: 0}
@@ -7143,7 +7168,6 @@ MonoBehaviour:
     - position: {x: 211.90991, y: -0.68307495, z: -28.71}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 20
     pauseAfter: 0
     curve:
@@ -7173,7 +7197,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: -1
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 00
   ShowSegmentEvents: 00
 --- !u!1 &542172641
@@ -7401,6 +7429,7 @@ MonoBehaviour:
   TransformsToActOn:
   - {fileID: 554479891}
   - {fileID: 1268895068}
+  Sequences: []
   StartStates:
   - position: {x: -139.46, y: 21.3, z: 1.5}
     offset: {x: 0.57320416, y: 296.20105, z: 51.208622}
@@ -7420,7 +7449,6 @@ MonoBehaviour:
     - position: {x: -138.9, y: 19.85, z: -6.51}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.1397004, y: 1, z: 6.579402}
-    name: 
     duration: 1
     pauseAfter: 0
     curve:
@@ -7450,6 +7478,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -7461,7 +7491,6 @@ MonoBehaviour:
     - position: {x: -138.9, y: 19.85, z: -6.51}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.1397004, y: 1, z: 6.579402}
-    name: 
     duration: 1
     pauseAfter: 0
     curve:
@@ -7491,6 +7520,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -7502,7 +7533,6 @@ MonoBehaviour:
     - position: {x: -138.9, y: 19.85, z: -6.51}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.1397004, y: 1, z: 6.579402}
-    name: 
     duration: 1
     pauseAfter: 0
     curve:
@@ -7532,7 +7562,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: 0
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 000101
   ShowSegmentEvents: 000000
 --- !u!65 &554479888
@@ -8942,6 +8976,7 @@ MonoBehaviour:
   - {fileID: 777926491}
   - {fileID: 1203215464}
   - {fileID: 1757683438}
+  Sequences: []
   StartStates:
   - position: {x: 0.113, y: 0, z: 0}
     offset: {x: 0, y: 0, z: 0}
@@ -8973,7 +9008,6 @@ MonoBehaviour:
     - position: {x: -0.4997921, y: 0, z: -0.27667758}
       offset: {x: 0, y: 0, z: 1080}
       scale: {x: 2.0738595, y: 1.9385104, z: 125.919044}
-    name: 
     duration: 2
     pauseAfter: 0.2
     curve:
@@ -9003,6 +9037,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: Split circle
     OnLerpStart:
       m_PersistentCalls:
@@ -9020,7 +9056,6 @@ MonoBehaviour:
     - position: {x: -0.4806, y: 0, z: -0.27667758}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.0738595, y: 1.9385104, z: 125.919044}
-    name: 
     duration: 0.05
     pauseAfter: 0.5
     curve:
@@ -9050,6 +9085,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: Open doors
     OnLerpStart:
       m_PersistentCalls:
@@ -9067,7 +9104,6 @@ MonoBehaviour:
     - position: {x: -0.4806, y: 0, z: -0.27667758}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.0738595, y: 1.9385104, z: 125.919044}
-    name: 
     duration: 3
     pauseAfter: 0
     curve:
@@ -9097,7 +9133,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: -1
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 010000
   ShowSegmentEvents: 000000
 --- !u!1 &662765931
@@ -9139,6 +9179,7 @@ MonoBehaviour:
   - {fileID: 1448211444}
   - {fileID: 458902576}
   - {fileID: 751115500}
+  Sequences: []
   StartStates:
   - position: {x: -56.522392, y: 13.222156, z: 11.555662}
     offset: {x: 0, y: 0, z: 0}
@@ -9170,7 +9211,6 @@ MonoBehaviour:
     - position: {x: -0.4668403, y: -0.5521579, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.11729657, y: 0, z: 1}
-    name: 
     duration: 2
     pauseAfter: 0
     curve:
@@ -9200,6 +9240,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -9217,7 +9259,6 @@ MonoBehaviour:
     - position: {x: -0.4668403, y: -0.5521579, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.11729657, y: 0, z: 1}
-    name: 
     duration: 1
     pauseAfter: 0
     curve:
@@ -9247,6 +9288,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -9264,7 +9307,6 @@ MonoBehaviour:
     - position: {x: -0.4668403, y: -0.5521579, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.11729657, y: 364.672, z: 1}
-    name: 
     duration: 1
     pauseAfter: 0
     curve:
@@ -9294,7 +9336,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: -1
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 00000001
   ShowSegmentEvents: 000000
 --- !u!23 &662765933
@@ -9767,6 +9813,7 @@ MonoBehaviour:
   TransformsToActOn:
   - {fileID: 171983737}
   - {fileID: 1310204973}
+  Sequences: []
   StartStates:
   - position: {x: 0.355, y: 0, z: 0}
     offset: {x: 0, y: 0, z: 0}
@@ -9786,7 +9833,6 @@ MonoBehaviour:
     - position: {x: -0.987, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.69582725, y: 1, z: 0.034391765}
-    name: 
     duration: 0.1
     pauseAfter: 0
     curve:
@@ -9816,7 +9862,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: -1
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 0000
   ShowSegmentEvents: 00
 --- !u!4 &719400601
@@ -9875,6 +9925,7 @@ MonoBehaviour:
   - {fileID: 1810550086}
   - {fileID: 1360533314}
   - {fileID: 812150988}
+  Sequences: []
   StartStates:
   - position: {x: 0, y: 0, z: 0}
     offset: {x: 0, y: 0, z: 0}
@@ -9912,7 +9963,6 @@ MonoBehaviour:
     - position: {x: 0, y: -3.5, z: 0}
       offset: {x: 1080, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 5
     pauseAfter: 2
     curve:
@@ -9942,6 +9992,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -9962,7 +10014,6 @@ MonoBehaviour:
     - position: {x: 0, y: -1, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 3
     pauseAfter: 2
     curve:
@@ -9992,7 +10043,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: -1
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 0000
   ShowSegmentEvents: 0000
 --- !u!4 &733693786
@@ -10417,6 +10472,7 @@ MonoBehaviour:
   - {fileID: 290090255}
   - {fileID: 255246889}
   - {fileID: 791704677}
+  Sequences: []
   StartStates:
   - position: {x: 20.16, y: 0, z: 0}
     offset: {x: 0.000010017912, y: 0, z: 0}
@@ -10466,7 +10522,6 @@ MonoBehaviour:
     - position: {x: 32.16, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 4.3559, z: 1}
-    name: 
     duration: 1
     pauseAfter: 0.5
     curve:
@@ -10496,6 +10551,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -10522,7 +10579,6 @@ MonoBehaviour:
     - position: {x: 32.16, y: 0, z: 0}
       offset: {x: 2520, y: 0, z: 0}
       scale: {x: 1, y: 4.3559, z: 1}
-    name: 
     duration: 5
     pauseAfter: 0.5
     curve:
@@ -10552,6 +10608,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -10578,7 +10636,6 @@ MonoBehaviour:
     - position: {x: 32.16, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 4.3559, z: 1}
-    name: 
     duration: 1
     pauseAfter: 0
     curve:
@@ -10608,7 +10665,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: -1
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 000000
   ShowSegmentEvents: 000000
 --- !u!1 &777926490
@@ -13799,6 +13860,7 @@ MonoBehaviour:
   TransformsToActOn:
   - {fileID: 1042919418}
   - {fileID: 1089222975}
+  Sequences: []
   StartStates:
   - position: {x: 3.458, y: 5.57, z: -1.113}
     offset: {x: 0, y: 0, z: 0}
@@ -13818,7 +13880,6 @@ MonoBehaviour:
     - position: {x: -5.519, y: 0.34, z: 0.041}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 0.5
     pauseAfter: 0
     curve:
@@ -13848,6 +13909,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -13859,7 +13922,6 @@ MonoBehaviour:
     - position: {x: -5.519, y: 0.34, z: 0.041}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 1
     pauseAfter: 0
     curve:
@@ -13889,7 +13951,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: 1
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 010101
   ShowSegmentEvents: 0000
 --- !u!1 &1056276434
@@ -14564,6 +14630,7 @@ MonoBehaviour:
   Loop: 0
   TransformsToActOn:
   - {fileID: 1135111340}
+  Sequences: []
   StartStates:
   - position: {x: 0, y: 0, z: -1.975}
     offset: {x: 0, y: 0, z: 0}
@@ -14577,7 +14644,6 @@ MonoBehaviour:
     - position: {x: 0, y: 0, z: -1.975}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 6
     pauseAfter: 0
     curve:
@@ -14607,7 +14673,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: 0
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 0101
   ShowSegmentEvents: 00
 --- !u!1 &1136859032
@@ -15985,6 +16055,7 @@ MonoBehaviour:
   Loop: 0
   TransformsToActOn:
   - {fileID: 1268895068}
+  Sequences: []
   StartStates:
   - position: {x: -138.67, y: 19.85, z: 1.89}
     offset: {x: 0.0000054659604, y: 269.99997, z: -0.0000027329859}
@@ -15998,7 +16069,6 @@ MonoBehaviour:
     - position: {x: -138.67, y: 19.85, z: 1.89}
       offset: {x: 1213, y: 0, z: 0}
       scale: {x: 2.1397004, y: 1, z: 6.579402}
-    name: 
     duration: 3
     pauseAfter: 0
     curve:
@@ -16028,6 +16098,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -16036,7 +16108,6 @@ MonoBehaviour:
     - position: {x: -138.67, y: 19.85, z: 1.89}
       offset: {x: 0, y: 1312, z: 0}
       scale: {x: 2.1397004, y: 1, z: 6.579402}
-    name: 
     duration: 3
     pauseAfter: 0
     curve:
@@ -16066,6 +16137,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -16074,7 +16147,6 @@ MonoBehaviour:
     - position: {x: -138.67, y: 19.85, z: 1.89}
       offset: {x: 0, y: 0, z: 1412}
       scale: {x: 2.1397004, y: 1, z: 6.579402}
-    name: 
     duration: 3
     pauseAfter: 0
     curve:
@@ -16104,7 +16176,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: 2
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 01010100
   ShowSegmentEvents: 000000
 --- !u!65 &1268895065
@@ -16219,6 +16295,7 @@ MonoBehaviour:
   - {fileID: 2055172343}
   - {fileID: 452076790}
   - {fileID: 1906642611}
+  Sequences: []
   StartStates:
   - position: {x: -5.5980015, y: 0.5000019, z: 0}
     offset: {x: -0, y: 0, z: 270}
@@ -16256,7 +16333,6 @@ MonoBehaviour:
     - position: {x: -9.598, y: 0.4999981, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 0.25048676, z: 1}
-    name: 
     duration: 3
     pauseAfter: 0
     curve:
@@ -16286,6 +16362,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -16306,7 +16384,6 @@ MonoBehaviour:
     - position: {x: -9.598, y: 0.4999981, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 0.25048676, z: 1}
-    name: 
     duration: 0.5
     pauseAfter: 0
     curve:
@@ -16336,6 +16413,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -16356,7 +16435,6 @@ MonoBehaviour:
     - position: {x: -9.598, y: 0.4999981, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 0.25048676, z: 1}
-    name: 
     duration: 0.5
     pauseAfter: 0
     curve:
@@ -16386,6 +16464,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -16406,7 +16486,6 @@ MonoBehaviour:
     - position: {x: -9.598, y: 0.4999981, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 0.25048676, z: 1}
-    name: 
     duration: 0.5
     pauseAfter: 0
     curve:
@@ -16436,6 +16515,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -16456,7 +16537,6 @@ MonoBehaviour:
     - position: {x: -9.598, y: 0.4999981, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 0.25048676, z: 1}
-    name: 
     duration: 0.5
     pauseAfter: 0
     curve:
@@ -16486,6 +16566,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -16506,7 +16588,6 @@ MonoBehaviour:
     - position: {x: -9.598, y: 0.4999981, z: 0}
       offset: {x: 0, y: 0, z: 90}
       scale: {x: 1, y: 0.25048676, z: 1}
-    name: 
     duration: 0.5
     pauseAfter: 0
     curve:
@@ -16536,6 +16617,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -16556,7 +16639,6 @@ MonoBehaviour:
     - position: {x: -9.598, y: 1.5, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 0.25048676, z: 1}
-    name: 
     duration: 1
     pauseAfter: 0
     curve:
@@ -16586,7 +16668,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: -1
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 0001010101010101
   ShowSegmentEvents: 00000000000000
 --- !u!4 &1269025458
@@ -16648,6 +16734,7 @@ MonoBehaviour:
   - {fileID: 227389709}
   - {fileID: 346309459}
   - {fileID: 2090649810}
+  Sequences: []
   StartStates:
   - position: {x: 0.601, y: 0, z: 0}
     offset: {x: 0, y: 0, z: 0}
@@ -16691,7 +16778,6 @@ MonoBehaviour:
     - position: {x: -1.187, y: 1.5, z: -0.11}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0, y: 0, z: 0}
-    name: 
     duration: 1
     pauseAfter: 3
     curve:
@@ -16741,6 +16827,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -16764,7 +16852,6 @@ MonoBehaviour:
     - position: {x: -1.187, y: 1.5, z: -0.11}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0, y: 0, z: 0}
-    name: 
     duration: 1
     pauseAfter: 3
     curve:
@@ -16814,6 +16901,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -16837,7 +16926,6 @@ MonoBehaviour:
     - position: {x: -1.187, y: 1.5, z: -0.11}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0, y: 0, z: 0}
-    name: 
     duration: 1
     pauseAfter: 3
     curve:
@@ -16887,6 +16975,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -16910,7 +17000,6 @@ MonoBehaviour:
     - position: {x: -1.187, y: 1.5, z: -0.11}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0, y: 0, z: 0}
-    name: 
     duration: 1
     pauseAfter: 3
     curve:
@@ -16960,6 +17049,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -16983,7 +17074,6 @@ MonoBehaviour:
     - position: {x: -1.187, y: 1.5, z: -0.11}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0, y: 0, z: 0}
-    name: 
     duration: 1
     pauseAfter: 3
     curve:
@@ -17033,6 +17123,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -17056,7 +17148,6 @@ MonoBehaviour:
     - position: {x: -1.187, y: 1.5, z: -0.11}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.56627, y: 0.56627, z: 0.56627}
-    name: 
     duration: 1
     pauseAfter: 0
     curve:
@@ -17095,7 +17186,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: -1
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 00000000000000
   ShowSegmentEvents: 000000000000
 --- !u!4 &1306014969
@@ -17280,6 +17375,7 @@ MonoBehaviour:
   Loop: 0
   TransformsToActOn:
   - {fileID: 1315697926}
+  Sequences: []
   StartStates:
   - position: {x: -135.21286, y: 24.03, z: 37.05}
     offset: {x: 6.962383, y: 5.3283763, z: 294.6451}
@@ -17293,7 +17389,6 @@ MonoBehaviour:
     - position: {x: -135.21286, y: 24.03, z: 37.05}
       offset: {x: 542.4, y: 0, z: 0}
       scale: {x: 2.1397004, y: 1, z: 12.988231}
-    name: 
     duration: 2
     pauseAfter: 0
     curve:
@@ -17323,6 +17418,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -17331,7 +17428,6 @@ MonoBehaviour:
     - position: {x: -135.21286, y: 24.03, z: 37.05}
       offset: {x: 0, y: 0, z: 350.56}
       scale: {x: 2.1397004, y: 1, z: 12.988231}
-    name: 
     duration: 2
     pauseAfter: 0
     curve:
@@ -17361,6 +17457,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -17369,7 +17467,6 @@ MonoBehaviour:
     - position: {x: -135.21286, y: 24.03, z: 37.05}
       offset: {x: 0, y: 960.4, z: 0}
       scale: {x: 2.1397004, y: 1, z: 12.988231}
-    name: 
     duration: 2
     pauseAfter: 0
     curve:
@@ -17399,7 +17496,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: 0
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 01010100
   ShowSegmentEvents: 000000
 --- !u!65 &1315697928
@@ -18104,6 +18205,7 @@ MonoBehaviour:
   - {fileID: 1924188498}
   - {fileID: 1608666643}
   - {fileID: 1370006864}
+  Sequences: []
   StartStates:
   - position: {x: -0.004, y: 0.986, z: -0.032}
     offset: {x: 0, y: 0, z: 0}
@@ -18141,7 +18243,6 @@ MonoBehaviour:
     - position: {x: 0.1475, y: 0.0001, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 1.5
     pauseAfter: 0.4
     curve:
@@ -18171,6 +18272,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -18191,7 +18294,6 @@ MonoBehaviour:
     - position: {x: 0.1475, y: 0.0001, z: 0}
       offset: {x: 0, y: 60, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 3
     pauseAfter: 0.5
     curve:
@@ -18221,6 +18323,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -18241,7 +18345,6 @@ MonoBehaviour:
     - position: {x: 0.1475, y: 0.0001, z: 0}
       offset: {x: 0, y: 130, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 3
     pauseAfter: 1
     curve:
@@ -18271,6 +18374,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -18291,7 +18396,6 @@ MonoBehaviour:
     - position: {x: 0.1475, y: 0.0001, z: 0}
       offset: {x: 0, y: -160, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 5
     pauseAfter: 0.8
     curve:
@@ -18321,6 +18425,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -18341,7 +18447,6 @@ MonoBehaviour:
     - position: {x: 0.1475, y: 0.0001, z: 0}
       offset: {x: 0, y: -50, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 3
     pauseAfter: 0
     curve:
@@ -18371,7 +18476,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: -1
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 000000000000
   ShowSegmentEvents: 0000000000
 --- !u!1 &1412783357
@@ -18661,6 +18770,7 @@ MonoBehaviour:
   - {fileID: 236425827}
   - {fileID: 462568994}
   - {fileID: 829331132}
+  Sequences: []
   StartStates:
   - position: {x: 0, y: -0.421, z: -2.225}
     offset: {x: 0, y: 0, z: 0}
@@ -18686,7 +18796,6 @@ MonoBehaviour:
     - position: {x: 0, y: 0.275, z: -2.225}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0, y: 1, z: 1}
-    name: 
     duration: 2
     pauseAfter: 0
     curve:
@@ -18716,6 +18825,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -18730,7 +18841,6 @@ MonoBehaviour:
     - position: {x: 0, y: 0.275, z: -2.225}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0, y: 1, z: 1}
-    name: 
     duration: 2
     pauseAfter: 0
     curve:
@@ -18760,6 +18870,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -18774,7 +18886,6 @@ MonoBehaviour:
     - position: {x: 0, y: 0.275, z: -2.225}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 12.863, y: 1, z: 1}
-    name: 
     duration: 2
     pauseAfter: 0
     curve:
@@ -18804,7 +18915,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: -1
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 01000000
   ShowSegmentEvents: 000000
 --- !u!1 &1440700277
@@ -20269,6 +20384,7 @@ MonoBehaviour:
   - {fileID: 431384489}
   - {fileID: 1981174841}
   - {fileID: 1696399753}
+  Sequences: []
   StartStates:
   - position: {x: -1.426, y: 0, z: 0}
     offset: {x: 0, y: 0, z: 0}
@@ -20300,7 +20416,6 @@ MonoBehaviour:
     - position: {x: -0, y: -0.28, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 3
     pauseAfter: 0
     curve:
@@ -20330,6 +20445,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -20347,7 +20464,6 @@ MonoBehaviour:
     - position: {x: -0, y: -0.28, z: 0}
       offset: {x: 0, y: 0, z: 45}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 0.6
     pauseAfter: 0
     curve:
@@ -20377,6 +20493,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -20394,7 +20512,6 @@ MonoBehaviour:
     - position: {x: -0, y: -0.28, z: 0}
       offset: {x: 0, y: 0, z: 45}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 0.6
     pauseAfter: 0
     curve:
@@ -20424,6 +20541,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -20441,7 +20560,6 @@ MonoBehaviour:
     - position: {x: -0, y: -0.28, z: 0}
       offset: {x: 0, y: 0, z: 45}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 0.6
     pauseAfter: 0
     curve:
@@ -20471,6 +20589,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -20488,7 +20608,6 @@ MonoBehaviour:
     - position: {x: -0, y: -0.28, z: 0}
       offset: {x: 0, y: 0, z: 45}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 0.6
     pauseAfter: 0
     curve:
@@ -20518,6 +20637,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -20535,7 +20656,6 @@ MonoBehaviour:
     - position: {x: -0, y: -0.28, z: 0}
       offset: {x: 0, y: 0, z: 45}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 0.6
     pauseAfter: 0
     curve:
@@ -20565,6 +20685,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -20582,7 +20704,6 @@ MonoBehaviour:
     - position: {x: -0, y: -0.28, z: 0}
       offset: {x: 0, y: 0, z: 45}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 0.6
     pauseAfter: 0
     curve:
@@ -20612,6 +20733,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -20629,7 +20752,6 @@ MonoBehaviour:
     - position: {x: -0, y: -0.28, z: 0}
       offset: {x: 0, y: 0, z: 45}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 0.6
     pauseAfter: 0
     curve:
@@ -20659,6 +20781,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -20676,7 +20800,6 @@ MonoBehaviour:
     - position: {x: -0, y: -0.28, z: 0}
       offset: {x: 0, y: 0, z: 45}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 0.6
     pauseAfter: 0
     curve:
@@ -20706,6 +20829,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -20723,7 +20848,6 @@ MonoBehaviour:
     - position: {x: -0, y: -0.28, z: 0}
       offset: {x: 0, y: 0, z: -190}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 1
     pauseAfter: 0
     curve:
@@ -20753,6 +20877,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -20770,7 +20896,6 @@ MonoBehaviour:
     - position: {x: -0, y: -0.28, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 1
     pauseAfter: 0
     curve:
@@ -20800,7 +20925,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: -1
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 010101010101010101010100
   ShowSegmentEvents: 0000000000000000000000
 --- !u!4 &1590262629
@@ -21289,194 +21418,278 @@ MonoBehaviour:
   - {fileID: 18602791}
   - {fileID: 1781160203}
   - {fileID: 1133932432}
-  StartStates:
-  - position: {x: -5.58, y: -32.8, z: 0}
-    offset: {x: 0, y: 0, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-  - position: {x: 3.21, y: -0.898, z: 0}
-    offset: {x: -0, y: 0, z: 90.00015}
-    scale: {x: 1, y: 1, z: 1}
-  - position: {x: -5.5, y: -0.9, z: 0}
-    offset: {x: -0.000002127093, y: 180.00005, z: 89.99982}
-    scale: {x: 1, y: 1, z: 1}
-  - position: {x: 3.21, y: 19.75, z: 0}
-    offset: {x: -0, y: -0, z: 90.00011}
-    scale: {x: 1, y: 1, z: 1}
-  - position: {x: -5.5, y: 19.748, z: 0}
-    offset: {x: -0.000002127093, y: 180.00005, z: 89.99982}
-    scale: {x: 1, y: 1, z: 1}
-  Segments:
-  - Name: 
-    OnLerpStart:
-      m_PersistentCalls:
-        m_Calls: []
-    toTransformData:
-    - position: {x: -5.58, y: 0, z: 0}
+  Sequences:
+  - Name: Bridge classic
+    StartOnPlay: 1
+    Loop: 0
+    StartStates:
+    - position: {x: -5.58, y: -32.8, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
     - position: {x: 3.21, y: -0.898, z: 0}
-      offset: {x: 0, y: 0, z: 0}
+      offset: {x: -0, y: 0, z: 90.00015}
       scale: {x: 1, y: 1, z: 1}
     - position: {x: -5.5, y: -0.9, z: 0}
-      offset: {x: 0, y: 0, z: 0}
+      offset: {x: -0.000002127093, y: 180.00005, z: 89.99982}
       scale: {x: 1, y: 1, z: 1}
     - position: {x: 3.21, y: 19.75, z: 0}
-      offset: {x: 0, y: 0, z: 0}
+      offset: {x: -0, y: -0, z: 90.00011}
       scale: {x: 1, y: 1, z: 1}
     - position: {x: -5.5, y: 19.748, z: 0}
-      offset: {x: 0, y: 0, z: 0}
+      offset: {x: -0.000002127093, y: 180.00005, z: 89.99982}
       scale: {x: 1, y: 1, z: 1}
-    name: 
-    duration: 5
-    pauseAfter: 0.5
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 2
-        outSlope: 2
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    OnLerpEnd:
-      m_PersistentCalls:
-        m_Calls: []
-  - Name: 
-    OnLerpStart:
-      m_PersistentCalls:
-        m_Calls: []
-    toTransformData:
-    - position: {x: -5.58, y: 0, z: 0}
+    Segments:
+    - Name: 
+      OnLerpStart:
+        m_PersistentCalls:
+          m_Calls: []
+      toTransformData:
+      - position: {x: -5.58, y: 0, z: 0}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 3.21, y: -0.898, z: 0}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: -5.5, y: -0.9, z: 0}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 3.21, y: 19.75, z: 0}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: -5.5, y: 19.748, z: 0}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      duration: 5
+      pauseAfter: 0.5
+      curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 2
+          outSlope: 2
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      OnLerpEnd:
+        m_PersistentCalls:
+          m_Calls: []
+      showEvents: 0
+      showRotationOffsets: 0
+    - Name: 
+      OnLerpStart:
+        m_PersistentCalls:
+          m_Calls: []
+      toTransformData:
+      - position: {x: -5.58, y: 0, z: 0}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 3.21, y: -0.898, z: 0}
+        offset: {x: 0, y: 0, z: -90}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: -5.5, y: -0.9, z: 0}
+        offset: {x: 0, y: 0, z: -90}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 3.21, y: 19.75, z: 0}
+        offset: {x: 0, y: 0, z: -90}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: -5.5, y: 19.748, z: 0}
+        offset: {x: 0, y: 0, z: -90}
+        scale: {x: 1, y: 1, z: 1}
+      duration: 1.5
+      pauseAfter: 0.7
+      curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.6446084
+          value: 0.10058916
+          inSlope: 0.63005793
+          outSlope: 0.63005793
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.8871709
+          value: 0.51739407
+          inSlope: 3.0911384
+          outSlope: 3.0911384
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.050526295
+          outWeight: 0.26795575
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 2
+          outSlope: 2
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      OnLerpEnd:
+        m_PersistentCalls:
+          m_Calls: []
+      showEvents: 0
+      showRotationOffsets: 0
+    - Name: 
+      OnLerpStart:
+        m_PersistentCalls:
+          m_Calls: []
+      toTransformData:
+      - position: {x: -5.58, y: 0, z: 0}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 3.21, y: -2.097997, z: 0}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: -5.5, y: -2.099997, z: 0}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 3.21, y: 18.55, z: 0}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: -5.5, y: 18.548002, z: 0}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      duration: 2
+      pauseAfter: 0
+      curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 1
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 1
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      OnLerpEnd:
+        m_PersistentCalls:
+          m_Calls: []
+      showEvents: 0
+      showRotationOffsets: 0
+    ShowSegments: 1
+  - Name: New
+    StartOnPlay: 0
+    Loop: 0
+    StartStates:
+    - position: {x: -5.58, y: -32.8, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
     - position: {x: 3.21, y: -0.898, z: 0}
-      offset: {x: 0, y: 0, z: -90}
+      offset: {x: -0, y: 0, z: 90.00015}
       scale: {x: 1, y: 1, z: 1}
     - position: {x: -5.5, y: -0.9, z: 0}
-      offset: {x: 0, y: 0, z: -90}
+      offset: {x: -0.000002127093, y: 180.00005, z: 89.99982}
       scale: {x: 1, y: 1, z: 1}
     - position: {x: 3.21, y: 19.75, z: 0}
-      offset: {x: 0, y: 0, z: -90}
+      offset: {x: -0, y: -0, z: 90.00011}
       scale: {x: 1, y: 1, z: 1}
     - position: {x: -5.5, y: 19.748, z: 0}
-      offset: {x: 0, y: 0, z: -90}
+      offset: {x: -0.000002127093, y: 180.00005, z: 89.99982}
       scale: {x: 1, y: 1, z: 1}
-    name: 
-    duration: 1.5
-    pauseAfter: 0.7
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 0.6446084
-        value: 0.10058916
-        inSlope: 0.63005793
-        outSlope: 0.63005793
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.8871709
-        value: 0.51739407
-        inSlope: 3.0911384
-        outSlope: 3.0911384
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.050526295
-        outWeight: 0.26795575
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 2
-        outSlope: 2
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    OnLerpEnd:
-      m_PersistentCalls:
-        m_Calls: []
-  - Name: 
-    OnLerpStart:
-      m_PersistentCalls:
-        m_Calls: []
-    toTransformData:
-    - position: {x: -5.58, y: 0, z: 0}
-      offset: {x: 0, y: 0, z: 0}
-      scale: {x: 1, y: 1, z: 1}
-    - position: {x: 3.21, y: -2.097997, z: 0}
-      offset: {x: 0, y: 0, z: 0}
-      scale: {x: 1, y: 1, z: 1}
-    - position: {x: -5.5, y: -2.099997, z: 0}
-      offset: {x: 0, y: 0, z: 0}
-      scale: {x: 1, y: 1, z: 1}
-    - position: {x: 3.21, y: 18.55, z: 0}
-      offset: {x: 0, y: 0, z: 0}
-      scale: {x: 1, y: 1, z: 1}
-    - position: {x: -5.5, y: 18.548002, z: 0}
-      offset: {x: 0, y: 0, z: 0}
-      scale: {x: 1, y: 1, z: 1}
-    name: 
-    duration: 2
-    pauseAfter: 0
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    OnLerpEnd:
-      m_PersistentCalls:
-        m_Calls: []
+    Segments:
+    - Name: 
+      OnLerpStart:
+        m_PersistentCalls:
+          m_Calls: []
+      toTransformData:
+      - position: {x: -17.8, y: -32.8, z: 0}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 3.21, y: -0.898, z: 0}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: -5.5, y: -0.9, z: 0}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 3.21, y: 19.75, z: 0}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: -5.5, y: 19.748, z: 0}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      duration: 1
+      pauseAfter: 0
+      curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 1
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 1
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      OnLerpEnd:
+        m_PersistentCalls:
+          m_Calls: []
+      showEvents: 0
+      showRotationOffsets: 0
+    ShowSegments: 1
+  StartStates: []
+  Segments: []
   lastSelectedState: -1
-  ShowRotations: 000000
-  ShowSegmentEvents: 000000
+  lastSelectedSequence: 1
+  lastSelectedSegment: -1
+  ShowRotations: 
+  ShowSegmentEvents: 
 --- !u!1 &1757683437
 GameObject:
   m_ObjectHideFlags: 0
@@ -23368,6 +23581,7 @@ MonoBehaviour:
   Loop: 0
   TransformsToActOn:
   - {fileID: 2000143537}
+  Sequences: []
   StartStates:
   - position: {x: -138.9, y: 13.265866, z: -6.51}
     offset: {x: 0, y: 0, z: 0}
@@ -23381,7 +23595,6 @@ MonoBehaviour:
     - position: {x: -138.9, y: 13.265866, z: -6.51}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.1397004, y: 1, z: 6.579402}
-    name: 
     duration: 5
     pauseAfter: 0
     curve:
@@ -23411,6 +23624,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -23419,7 +23634,6 @@ MonoBehaviour:
     - position: {x: -138.9, y: 13.265866, z: -6.51}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.1397004, y: 1, z: 6.579402}
-    name: 
     duration: 5
     pauseAfter: 0
     curve:
@@ -23449,6 +23663,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -23457,7 +23673,6 @@ MonoBehaviour:
     - position: {x: -138.9, y: 13.265866, z: -6.51}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 2.1397004, y: 1, z: 6.579402}
-    name: 
     duration: 5
     pauseAfter: 0
     curve:
@@ -23487,7 +23702,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: -1
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 01010100
   ShowSegmentEvents: 000000
 --- !u!65 &2000143534
@@ -34094,6 +34313,7 @@ MonoBehaviour:
   - {fileID: 753820364}
   - {fileID: 215495890}
   - {fileID: 1204204097}
+  Sequences: []
   StartStates:
   - position: {x: 0.965, y: 0.957, z: 0.911}
     offset: {x: 0, y: 0, z: 0}
@@ -34137,7 +34357,6 @@ MonoBehaviour:
     - position: {x: 0.012, y: 1.9052, z: -2.206}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 1
     pauseAfter: 0
     curve:
@@ -34167,6 +34386,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -34190,7 +34411,6 @@ MonoBehaviour:
     - position: {x: 0.012, y: 1.9052, z: -2.206}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 1
     pauseAfter: 0
     curve:
@@ -34220,6 +34440,8 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   - Name: 
     OnLerpStart:
       m_PersistentCalls:
@@ -34243,7 +34465,6 @@ MonoBehaviour:
     - position: {x: 0.012, y: 1.9052, z: -2.206}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    name: 
     duration: 1
     pauseAfter: 0
     curve:
@@ -34273,7 +34494,11 @@ MonoBehaviour:
     OnLerpEnd:
       m_PersistentCalls:
         m_Calls: []
+    showEvents: 0
+    showRotationOffsets: 0
   lastSelectedState: 2
+  lastSelectedSequence: 0
+  lastSelectedSegment: 0
   ShowRotations: 01010100
   ShowSegmentEvents: 000000
 --- !u!4 &8861944025197243593

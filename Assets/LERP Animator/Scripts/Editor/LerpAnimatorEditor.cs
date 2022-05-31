@@ -67,6 +67,9 @@ namespace SpheroidGames.LerpAnimator
 
         private GUIStyle labelStyle;
 
+        private GUIStyle AddRemoveSegmentsStyle;
+        private GUILayout AddRemoveSegmentsLayout;
+
 
         #region Events
 
@@ -131,6 +134,10 @@ namespace SpheroidGames.LerpAnimator
             }
             */
 
+            AddRemoveSegmentsStyle = new GUIStyle();
+            AddRemoveSegmentsLayout = new GUILayout();
+
+            AddRemoveSegmentsStyle.alignment = TextAnchor.MiddleCenter; 
             
 
             nextChangeCheck = EditorApplication.timeSinceStartup + 0.5f;
@@ -446,9 +453,9 @@ namespace SpheroidGames.LerpAnimator
             EditorGUILayout.PropertyField(serializedTransforms, true);
             GUI.enabled = true;
 
-            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            //EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-            EditorGUILayout.PropertyField(serializedSequenceName);
+            
 
             
 
@@ -458,11 +465,17 @@ namespace SpheroidGames.LerpAnimator
             {
                 for (int i = 0; i < serializedSequences.arraySize; i++)
                 {
+                    EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+                    GUILayout.Label("**Sequence**", labelStyle);
+                    EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+                    EditorGUILayout.PropertyField(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Name"));
+
 
                     //------START STATES FROM CURRENT SEQUENCE
                     GUILayout.Space(20);
 
-                    GUILayout.Label("START STATES", labelStyle);
+                    GUILayout.Label("Start states", labelStyle);
 
                     GUILayout.BeginHorizontal("Box");
 
@@ -651,22 +664,24 @@ namespace SpheroidGames.LerpAnimator
                             GUILayout.EndHorizontal();
                             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-                            GUILayout.Space(10);
+                            //GUILayout.Space(10);
                         }
 
-                        GUILayout.BeginHorizontal("Box");
+                        
+                        GUILayout.BeginHorizontal("Box", AddRemoveSegmentsStyle);
 
                         GUI.enabled = !EditorApplication.isPlaying && !editorPlaybackRunning && !playingPauseAfterSegment;
-                        if (GUILayout.Button("Add segment"))
+                        if (GUILayout.Button("Add segment", GUILayout.Width(140)))
                             AddSegment(i);
 
-                        if (GUILayout.Button("Remove segment"))
+                        if (GUILayout.Button("Remove segment", GUILayout.Width(140)))
                         {
                             if (serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Segments").arraySize < 1)
                                 return;
 
                             RemoveSegment(i);
                         }
+
                         GUI.enabled = true;
 
                         GUILayout.EndHorizontal();
@@ -679,6 +694,24 @@ namespace SpheroidGames.LerpAnimator
                 }
 
                 EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+                GUILayout.BeginHorizontal("Box", AddRemoveSegmentsStyle);
+
+                GUI.enabled = !EditorApplication.isPlaying && !editorPlaybackRunning && !playingPauseAfterSegment;
+                if (GUILayout.Button("Add Sequence"))
+                {
+                    AddSequence();
+                }
+
+
+                if (GUILayout.Button("Remove Sequence"))
+                {
+                    RemoveSequence();
+                }
+
+                GUI.enabled = true;
+
+                GUILayout.EndHorizontal();
 
                 //EditorGUILayout.PropertyField(serializedSequences);
 
@@ -1007,6 +1040,43 @@ namespace SpheroidGames.LerpAnimator
         #endregion
 
         #region User Operation
+
+        private void AddSequence()
+        {
+            serializedSequences.arraySize++;
+
+            SerializedProperty newSequence = serializedSequences.GetArrayElementAtIndex(serializedSequences.arraySize - 1);
+
+            lastSelectedSequence =
+                serializedObject.FindProperty("lastSelectedSequence").intValue = serializedSequences.arraySize - 1;
+
+            newSequence.FindPropertyRelative("Name").stringValue = "";
+            newSequence.FindPropertyRelative("StartOnPlay").boolValue =
+            newSequence.FindPropertyRelative("Loop").boolValue = false;
+
+            newSequence.FindPropertyRelative("Segments").ClearArray();
+
+            newSequence.FindPropertyRelative("ShowSegments").boolValue = true;
+
+            serializedObject.ApplyModifiedProperties();
+
+            SampleAllFromScene(lastSelectedSequence, -1);
+        }
+
+        private void RemoveSequence()
+        {
+            if (serializedSequences.arraySize < 1)
+                return;
+
+            serializedSequences.arraySize--;
+            
+            if (lastSelectedSequence > serializedSequences.arraySize - 1)
+                serializedObject.FindProperty("LastSelectedSequence").intValue = lastSelectedSequence = serializedSequences.arraySize - 1;
+
+            serializedObject.ApplyModifiedProperties();
+
+            CollectEditorSequences();
+        }
 
         private int undoGroupOnSegmentAdjusted;
 
