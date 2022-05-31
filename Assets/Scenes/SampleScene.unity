@@ -21616,10 +21616,10 @@ MonoBehaviour:
           m_Calls: []
       showEvents: 0
       showRotationOffsets: 0
-    ShowSegments: 1
+    ShowSegments: 0
   - Name: New
     StartOnPlay: 0
-    Loop: 0
+    Loop: 1
     StartStates:
     - position: {x: -5.58, y: -32.8, z: 0}
       offset: {x: 0, y: 0, z: 0}
@@ -21688,11 +21688,11 @@ MonoBehaviour:
           m_Calls: []
       showEvents: 0
       showRotationOffsets: 0
-    ShowSegments: 1
+    ShowSegments: 0
   StartStates: []
   Segments: []
   lastSelectedState: -1
-  lastSelectedSequence: 0
+  lastSelectedSequence: 1
   lastSelectedSegment: -1
   ShowRotations: 
   ShowSegmentEvents: 

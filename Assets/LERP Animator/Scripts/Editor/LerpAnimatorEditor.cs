@@ -463,7 +463,26 @@ namespace SpheroidGames.LerpAnimator
                     EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
                     EditorGUILayout.PropertyField(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Name"));
+
+                    EditorGUI.BeginChangeCheck();
                     EditorGUILayout.PropertyField(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("StartOnPlay"));
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        for (int j = 0; j < serializedSequences.arraySize; j++)
+                        {
+                            SerializedProperty checkedSerializedStartOnPlay = serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("StartOnPlay");
+                            SerializedProperty otherSerializedStartOnPlay = serializedSequences.GetArrayElementAtIndex(j).FindPropertyRelative("StartOnPlay");
+
+                            if (i != j && checkedSerializedStartOnPlay.boolValue && otherSerializedStartOnPlay.boolValue)
+                            {
+                                otherSerializedStartOnPlay.boolValue = false;
+                                serializedObject.ApplyModifiedPropertiesWithoutUndo();
+                            }
+                        }
+                    }
+                        
+
+
                     EditorGUILayout.PropertyField(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Loop"));
 
                     //------START STATES FROM CURRENT SEQUENCE
@@ -710,10 +729,6 @@ namespace SpheroidGames.LerpAnimator
                 GUI.enabled = true;
 
                 GUILayout.EndHorizontal();
-
-                //EditorGUILayout.PropertyField(serializedSequences);
-
-                //EditorGUILayout.PropertyField(serializedSegments);
 
                 serializedObject.ApplyModifiedProperties();
             }
