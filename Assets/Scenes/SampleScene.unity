@@ -2724,104 +2724,110 @@ MonoBehaviour:
   TransformsToActOn:
   - {fileID: 151651264}
   - {fileID: 775490876}
-  Sequences: []
-  StartStates:
-  - position: {x: 40.055447, y: 31.24466, z: 2.3307078}
-    offset: {x: 0, y: 0, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-  - position: {x: 40.055447, y: 31.24466, z: 2.3307078}
-    offset: {x: 0, y: 0, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-  Segments:
+  Sequences:
   - Name: 
-    OnLerpStart:
-      m_PersistentCalls:
-        m_Calls: []
-    toTransformData:
+    StartOnPlay: 0
+    Loop: 0
+    StartStates:
     - position: {x: 40.055447, y: 31.24466, z: 2.3307078}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
     - position: {x: 40.055447, y: 31.24466, z: 2.3307078}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 1, y: 1, z: 1}
-    duration: 1
-    pauseAfter: 0
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    OnLerpEnd:
-      m_PersistentCalls:
-        m_Calls: []
-    showEvents: 0
-    showRotationOffsets: 0
-  - Name: 
-    OnLerpStart:
-      m_PersistentCalls:
-        m_Calls: []
-    toTransformData:
-    - position: {x: 40.055447, y: 31.24466, z: 2.3307078}
-      offset: {x: 0, y: 0, z: 0}
-      scale: {x: 1, y: 1, z: 1}
-    - position: {x: 40.055447, y: 31.24466, z: 2.3307078}
-      offset: {x: 0, y: 0, z: 0}
-      scale: {x: 1, y: 1, z: 1}
-    duration: 1
-    pauseAfter: 0
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    OnLerpEnd:
-      m_PersistentCalls:
-        m_Calls: []
-    showEvents: 0
-    showRotationOffsets: 0
+    Segments:
+    - Name: 
+      OnLerpStart:
+        m_PersistentCalls:
+          m_Calls: []
+      toTransformData:
+      - position: {x: 40.055447, y: 31.24466, z: 2.3307078}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 40.055447, y: 31.24466, z: 2.3307078}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      duration: 1
+      pauseAfter: 0
+      curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 1
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 1
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      OnLerpEnd:
+        m_PersistentCalls:
+          m_Calls: []
+      showEvents: 1
+      showRotationOffsets: 1
+    - Name: 
+      OnLerpStart:
+        m_PersistentCalls:
+          m_Calls: []
+      toTransformData:
+      - position: {x: 40.055447, y: 31.24466, z: 2.3307078}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 40.055447, y: 31.24466, z: 2.3307078}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      duration: 1
+      pauseAfter: 0
+      curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 1
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 1
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      OnLerpEnd:
+        m_PersistentCalls:
+          m_Calls: []
+      showEvents: 0
+      showRotationOffsets: 1
+    ShowSegments: 0
+  StartStates: []
+  Segments: []
   lastSelectedState: -1
   lastSelectedSequence: 0
   lastSelectedSegment: 0
-  ShowRotations: 010100
-  ShowSegmentEvents: 0100
+  ShowRotations: 
+  ShowSegmentEvents: 
 --- !u!4 &151651264
 Transform:
   m_ObjectHideFlags: 0
@@ -21686,7 +21692,7 @@ MonoBehaviour:
   StartStates: []
   Segments: []
   lastSelectedState: -1
-  lastSelectedSequence: 1
+  lastSelectedSequence: 0
   lastSelectedSegment: -1
   ShowRotations: 
   ShowSegmentEvents: 

@@ -443,8 +443,7 @@ namespace SpheroidGames.LerpAnimator
             GUILayout.Space(10);
             
             
-            EditorGUILayout.PropertyField(serializedStartOnPlay);
-            EditorGUILayout.PropertyField(serializedLoop);
+            
             EditorGUILayout.EndVertical();
 
             
@@ -455,22 +454,17 @@ namespace SpheroidGames.LerpAnimator
 
             //EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-            
-
-            
-
-            
-
             if (!handlingUndoRedo)
             {
                 for (int i = 0; i < serializedSequences.arraySize; i++)
                 {
                     EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-                    GUILayout.Label("**Sequence**", labelStyle);
+                    GUILayout.Label("--------------  Sequence  --------------", labelStyle);
                     EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
                     EditorGUILayout.PropertyField(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Name"));
-
+                    EditorGUILayout.PropertyField(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("StartOnPlay"));
+                    EditorGUILayout.PropertyField(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Loop"));
 
                     //------START STATES FROM CURRENT SEQUENCE
                     GUILayout.Space(20);
@@ -528,6 +522,9 @@ namespace SpheroidGames.LerpAnimator
                     if (editorSequences[i].ShowSegments)
                     {
                         EditorGUI.indentLevel++;
+                        EditorGUI.indentLevel++;
+
+                        GUILayout.Space(10);
 
                         for (int j = 0; j < serializedSegmentsGUI.arraySize; j++)
                         {
@@ -546,7 +543,7 @@ namespace SpheroidGames.LerpAnimator
                             }
                             GUI.enabled = true;
 
-                            if (editorPlaybackRunning && j == toIndex)
+                            if (editorPlaybackRunning && j == toIndex && lastSelectedSequence == i)
                             {
                                 var rect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight);
                                 EditorGUI.ProgressBar(rect, lerpStep, progressBarName);
@@ -689,6 +686,7 @@ namespace SpheroidGames.LerpAnimator
 
                         EditorGUILayout.Space(20);
 
+                        EditorGUI.indentLevel--;
                         EditorGUI.indentLevel--;
                     }
                 }
