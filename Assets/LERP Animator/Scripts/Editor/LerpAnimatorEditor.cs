@@ -1069,7 +1069,7 @@ namespace SpheroidGames.LerpAnimator
             serializedSequences.arraySize--;
             
             if (lastSelectedSequence > serializedSequences.arraySize - 1)
-                serializedObject.FindProperty("LastSelectedSequence").intValue = lastSelectedSequence = serializedSequences.arraySize - 1;
+                serializedObject.FindProperty("lastSelectedSequence").intValue = lastSelectedSequence = serializedSequences.arraySize - 1;
 
             serializedObject.ApplyModifiedProperties();
 
