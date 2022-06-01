@@ -15,32 +15,21 @@ namespace SpheroidGames.LerpAnimator
         /// transforms references used to playback animation during edit mode. Saving a copy to avoid having find properties on serialized object in OnEditorUpdate() while animating
         /// </summary>
         private List<Transform> editorTransforms;
-        /// <summary>
-        /// Start states data used to playback animation during edit mode
-        /// </summary>
-        //private List<TransformData> editorStartStates;
-        /// <summary>
-        /// Segments data used to playback animation during edit mode
-        /// </summary>
-        //private List<Segment> editorSegments;
 
         private List<Sequence> editorSequences;
 
-
-        //private List<List<bool>> editorShowRotationOffsets;
-        //private List<List<bool>> editorShowSegmentEvents;
 
         //Properties for accessing parts of serializedObject
 
         private SerializedProperty serializedSequenceName;
 
         /// <summary>
-        /// whether sequence should start when play in scene starts
+        /// whether sequence should start when play in scene starts [Deprecated]
         /// </summary>
         private SerializedProperty serializedStartOnPlay;
 
         /// <summary>
-        /// whether sequence will loop in game play mode
+        /// whether sequence will loop in game play mode [Deprecated]
         /// </summary>
         private SerializedProperty serializedLoop;
 
@@ -66,6 +55,8 @@ namespace SpheroidGames.LerpAnimator
         private double nextChangeCheck;
 
         private GUIStyle labelStyle;
+
+        private GUIStyle sequenceLabelStyle;
 
         private GUIStyle AddRemoveSegmentsStyle;
         private GUILayout AddRemoveSegmentsLayout;
@@ -99,26 +90,20 @@ namespace SpheroidGames.LerpAnimator
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
 
             editorTransforms = new List<Transform>();
-            //editorStartStates = new List<TransformData>();
-            //editorSegments = new List<Segment>();
             editorSequences = new List<Sequence>();
 
-
-            //editorShowRotationOffsets = new List<bool>();
-            //editorShowSegmentEvents = new List<bool>();
 
             labelStyle = new GUIStyle();
             labelStyle.alignment = TextAnchor.UpperCenter;
             labelStyle.normal.textColor = Color.white;
 
-            //inputFieldLayoutOption = GUILayout.
+            sequenceLabelStyle = new GUIStyle();
+            sequenceLabelStyle.alignment = TextAnchor.UpperCenter;
+            sequenceLabelStyle.normal.textColor = Color.white;
+            sequenceLabelStyle.fontSize = 15;
+
 
             CollectEditorTransforms();
-            //CollectEditorStartStates();
-            //CollectEditorSegments();
-            //CollectEditorShowRotations();
-            //CollectEditorShowSegmentEvents();
-
             CollectEditorSequences();
 
 
@@ -145,8 +130,6 @@ namespace SpheroidGames.LerpAnimator
 
         private void MigrateToMultiSequenceSystem()
         {
-            Debug.Log("MigrateToMultiSequenceSystem called");
-
             //Add new sequence
             serializedSequences.arraySize++;
 
@@ -189,8 +172,6 @@ namespace SpheroidGames.LerpAnimator
 
             for (int i = 0; i < serializedSegments.arraySize; i++)
             {
-                Debug.Log("Segments iteration " + i);
-
                 newSegmentsArray.arraySize++;
 
                 SerializedProperty newSegment = newSegmentsArray.GetArrayElementAtIndex(newSegmentsArray.arraySize - 1);
@@ -199,19 +180,11 @@ namespace SpheroidGames.LerpAnimator
 
                 newSegmentTransformsDataArray.ClearArray();
 
-
-
                 SerializedProperty oldSegmentTransformsDataArray = serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData");
-
-                Debug.Log($"Old data array size: {oldSegmentTransformsDataArray.arraySize}");
 
                 for (int j = 0; j < oldSegmentTransformsDataArray.arraySize; j++)
                 {
-                    Debug.Log("Transform data iteration " + j);
-
                     newSegmentTransformsDataArray.arraySize++;
-
-                    Debug.Log($"new segment data array size: {newSegmentTransformsDataArray.arraySize}.");
 
                     SerializedProperty newSegmentToTransformsDataElement = newSegmentTransformsDataArray.GetArrayElementAtIndex(newSegmentTransformsDataArray.arraySize - 1);
 
@@ -290,53 +263,6 @@ namespace SpheroidGames.LerpAnimator
             }
         }
 
-        /*
-        private void CollectEditorStartStates()
-        {
-            editorStartStates.Clear();
-
-            for (int i = 0; i < serializedStartStates.arraySize; i++)
-            {
-                Vector3 position = serializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("position").vector3Value;
-                Vector3 rotation = serializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("offset").vector3Value;
-                Vector3 scale = serializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value;
-
-                editorStartStates.Add(new TransformData(position, rotation, scale));
-            }
-        }
-
-        private void CollectEditorSegments()
-        {
-            editorSegments.Clear();
-
-            int numberOfSegments = serializedSegments.arraySize;
-
-            for (int i = 0; i < numberOfSegments; i++)
-            {
-                Segment segment = new Segment();
-
-                int toTransformDataCount = serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").arraySize;
-
-                List<TransformData> toTransformData = new List<TransformData>();
-
-                for (int j = 0; j < toTransformDataCount; j++)
-                {
-                    Vector3 position = serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(j).FindPropertyRelative("position").vector3Value;
-                    Vector3 rotation = serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(j).FindPropertyRelative("offset").vector3Value;
-                    Vector3 scale = serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(j).FindPropertyRelative("scale").vector3Value;
-
-                    toTransformData.Add(new TransformData(position, rotation, scale));
-                }
-
-                segment.toTransformData = toTransformData;
-                segment.duration = serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("duration").floatValue;
-                segment.curve = serializedSegments.GetArrayElementAtIndex(i).FindPropertyRelative("curve").animationCurveValue;
-
-                editorSegments.Add(segment);
-            }
-        }
-        */
-
         private void CollectEditorSequences()
         {
             editorSequences.Clear();
@@ -365,7 +291,6 @@ namespace SpheroidGames.LerpAnimator
                                                                        serializedToTransformData.FindPropertyRelative("scale").vector3Value);
 
                     editorSequence.StartStates.Add(editorStartState);
-
                 }
 
                 editorSequence.Segments = new List<Segment>();
@@ -401,27 +326,6 @@ namespace SpheroidGames.LerpAnimator
             }
         }
 
-        /*
-        private void CollectEditorShowRotations()
-        {
-            editorShowRotationOffsets.Clear();
-
-            for (int i = 0; i < serializedShowRotations.arraySize; i++)
-            {
-                editorShowRotationOffsets.Add(serializedShowRotations.GetArrayElementAtIndex(i).boolValue);
-            }
-        }
-
-        private void CollectEditorShowSegmentEvents()
-        {
-            editorShowSegmentEvents.Clear();
-
-            for (int i = 0; i < serializedShowSegmentEvents.arraySize; i++)
-            {
-                editorShowSegmentEvents.Add(serializedShowSegmentEvents.GetArrayElementAtIndex(i).boolValue);
-            }
-        }
-        */
         #endregion
 
         #region GUI
@@ -438,28 +342,30 @@ namespace SpheroidGames.LerpAnimator
 
             GUI.enabled = !editorPlaybackRunning && !playingPauseAfterSegment && !EditorApplication.isPlaying;
 
-            GUILayout.BeginVertical();
-
-            GUILayout.Space(10);
-            
-            
-            
-            EditorGUILayout.EndVertical();
-
-            
-
-
             EditorGUILayout.PropertyField(serializedTransforms, true);
             GUI.enabled = true;
-
-            //EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
             if (!handlingUndoRedo)
             {
                 for (int i = 0; i < serializedSequences.arraySize; i++)
                 {
                     EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-                    GUILayout.Label("--------------  Sequence  --------------", labelStyle);
+                    EditorGUILayout.Space(-7);
+
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label("--------------  Sequence  --------------", sequenceLabelStyle);
+
+                    if (GUILayout.Button(new GUIContent("X", "Delete sequence"), GUILayout.Width(50)))
+                    {
+                        RemoveSequence(i);
+                        break;
+                    }
+                        
+
+                    GUILayout.EndHorizontal();
+
+
+                    EditorGUILayout.Space(-7);
                     EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
                     EditorGUILayout.PropertyField(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Name"));
@@ -480,15 +386,13 @@ namespace SpheroidGames.LerpAnimator
                             }
                         }
                     }
-                        
-
 
                     EditorGUILayout.PropertyField(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Loop"));
 
                     //------START STATES FROM CURRENT SEQUENCE
                     GUILayout.Space(20);
 
-                    GUILayout.Label("Start states", labelStyle);
+                    GUILayout.Label("LERP Start", labelStyle);
 
                     GUILayout.BeginHorizontal("Box");
 
@@ -547,6 +451,8 @@ namespace SpheroidGames.LerpAnimator
 
                         for (int j = 0; j < serializedSegmentsGUI.arraySize; j++)
                         {
+                            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
                             GUILayout.BeginHorizontal();
                             GUI.enabled = !EditorApplication.isPlaying;
                             if (GUILayout.Button(new GUIContent((j + 1).ToString() + " : Play", "Play from segment to end of sequence"), GUILayout.Width(90)))
@@ -678,12 +584,12 @@ namespace SpheroidGames.LerpAnimator
                             GUI.enabled = true;
 
                             GUILayout.EndHorizontal();
-                            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+                            
 
                             //GUILayout.Space(10);
                         }
 
-                        
+                        EditorGUILayout.Space(20);
                         GUILayout.BeginHorizontal("Box", AddRemoveSegmentsStyle);
 
                         GUI.enabled = !EditorApplication.isPlaying && !editorPlaybackRunning && !playingPauseAfterSegment;
@@ -701,7 +607,7 @@ namespace SpheroidGames.LerpAnimator
                         GUI.enabled = true;
 
                         GUILayout.EndHorizontal();
-                        EditorGUILayout.HelpBox("Adding segment auto samples from scene", MessageType.Info);
+                        //EditorGUILayout.HelpBox("Adding segment auto samples from scene", MessageType.Info);
 
                         EditorGUILayout.Space(20);
 
@@ -712,7 +618,6 @@ namespace SpheroidGames.LerpAnimator
 
                 EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-                GUILayout.BeginHorizontal("Box", AddRemoveSegmentsStyle);
 
                 GUI.enabled = !EditorApplication.isPlaying && !editorPlaybackRunning && !playingPauseAfterSegment;
                 if (GUILayout.Button("Add Sequence"))
@@ -720,15 +625,7 @@ namespace SpheroidGames.LerpAnimator
                     AddSequence();
                 }
 
-
-                if (GUILayout.Button("Remove Sequence"))
-                {
-                    RemoveSequence();
-                }
-
                 GUI.enabled = true;
-
-                GUILayout.EndHorizontal();
 
                 serializedObject.ApplyModifiedProperties();
             }
@@ -1076,12 +973,9 @@ namespace SpheroidGames.LerpAnimator
             SampleAllFromScene(lastSelectedSequence, -1);
         }
 
-        private void RemoveSequence()
+        private void RemoveSequence(int index)
         {
-            if (serializedSequences.arraySize < 1)
-                return;
-
-            serializedSequences.arraySize--;
+            serializedSequences.DeleteArrayElementAtIndex(index);
             
             if (lastSelectedSequence > serializedSequences.arraySize - 1)
                 serializedObject.FindProperty("lastSelectedSequence").intValue = lastSelectedSequence = serializedSequences.arraySize - 1;
@@ -1416,12 +1310,7 @@ namespace SpheroidGames.LerpAnimator
             if (handlingUndoRedo && EditorApplication.timeSinceStartup - delayedCollectTimerStart > delayAmount)
             {
                 CollectEditorTransforms();
-                //CollectEditorStartStates();
-                //CollectEditorSegments();
                 CollectEditorSequences();
-
-                //CollectEditorShowRotations();
-                //CollectEditorShowSegmentEvents();
 
                 handlingUndoRedo = false;
                 Repaint();

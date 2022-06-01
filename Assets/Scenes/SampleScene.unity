@@ -21616,83 +21616,11 @@ MonoBehaviour:
           m_Calls: []
       showEvents: 0
       showRotationOffsets: 0
-    ShowSegments: 0
-  - Name: New
-    StartOnPlay: 0
-    Loop: 1
-    StartStates:
-    - position: {x: -5.58, y: -32.8, z: 0}
-      offset: {x: 0, y: 0, z: 0}
-      scale: {x: 1, y: 1, z: 1}
-    - position: {x: 3.21, y: -0.898, z: 0}
-      offset: {x: -0, y: 0, z: 90.00015}
-      scale: {x: 1, y: 1, z: 1}
-    - position: {x: -5.5, y: -0.9, z: 0}
-      offset: {x: -0.000002127093, y: 180.00005, z: 89.99982}
-      scale: {x: 1, y: 1, z: 1}
-    - position: {x: 3.21, y: 19.75, z: 0}
-      offset: {x: -0, y: -0, z: 90.00011}
-      scale: {x: 1, y: 1, z: 1}
-    - position: {x: -5.5, y: 19.748, z: 0}
-      offset: {x: -0.000002127093, y: 180.00005, z: 89.99982}
-      scale: {x: 1, y: 1, z: 1}
-    Segments:
-    - Name: 
-      OnLerpStart:
-        m_PersistentCalls:
-          m_Calls: []
-      toTransformData:
-      - position: {x: -17.8, y: -32.8, z: 0}
-        offset: {x: 0, y: 0, z: 0}
-        scale: {x: 1, y: 1, z: 1}
-      - position: {x: 3.21, y: -0.898, z: 0}
-        offset: {x: 0, y: 0, z: 0}
-        scale: {x: 1, y: 1, z: 1}
-      - position: {x: -5.5, y: -0.9, z: 0}
-        offset: {x: 0, y: 0, z: 0}
-        scale: {x: 1, y: 1, z: 1}
-      - position: {x: 3.21, y: 19.75, z: 0}
-        offset: {x: 0, y: 0, z: 0}
-        scale: {x: 1, y: 1, z: 1}
-      - position: {x: -5.5, y: 19.748, z: 0}
-        offset: {x: 0, y: 0, z: 0}
-        scale: {x: 1, y: 1, z: 1}
-      duration: 1
-      pauseAfter: 0
-      curve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 1
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 1
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      OnLerpEnd:
-        m_PersistentCalls:
-          m_Calls: []
-      showEvents: 0
-      showRotationOffsets: 0
-    ShowSegments: 0
+    ShowSegments: 1
   StartStates: []
   Segments: []
   lastSelectedState: -1
-  lastSelectedSequence: 1
+  lastSelectedSequence: 0
   lastSelectedSegment: -1
   ShowRotations: 
   ShowSegmentEvents: 
