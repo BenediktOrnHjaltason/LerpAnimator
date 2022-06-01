@@ -353,6 +353,23 @@ namespace SpheroidGames.LerpAnimator
                     EditorGUILayout.Space(-7);
 
                     GUILayout.BeginHorizontal();
+
+                    if (GUILayout.Button(new GUIContent( "|>", "Play")))
+                    {
+                        StartEditorPlayback(i, -1);
+                    }
+
+                    if (GUILayout.Button(new GUIContent("[]", "Stop")))
+                    {
+                        lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = i;
+                        lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = -1;
+
+                        serializedObject.ApplyModifiedProperties();
+
+                        editorPlaybackRunning = false;
+                        playingPauseAfterSegment = false;
+                        ApplyFromDatastore(i, -1);
+                    }
                     GUILayout.Label("--------------  Sequence  --------------", sequenceLabelStyle);
 
                     if (GUILayout.Button(new GUIContent("X", "Delete sequence"), GUILayout.Width(50)))
