@@ -102,7 +102,6 @@ namespace SpheroidGames.LerpAnimator
             sequenceLabelStyle.normal.textColor = Color.white;
             sequenceLabelStyle.fontSize = 15;
 
-
             CollectEditorTransforms();
             CollectEditorSequences();
 
@@ -334,6 +333,12 @@ namespace SpheroidGames.LerpAnimator
 
         private SerializedProperty serializedSegmentsGUI = null;
 
+        
+        private List<float> incrementalTotals = new List<float>();
+        private List<float> totalsParts = new List<float>();
+
+        private float totalProgress = 0;
+
         public override void OnInspectorGUI()
         {
             GUILayout.Box(logo);
@@ -370,9 +375,9 @@ namespace SpheroidGames.LerpAnimator
                         playingPauseAfterSegment = false;
                         ApplyFromDatastore(i, -1);
                     }
-                    GUILayout.Label("--------------  Sequence  --------------", sequenceLabelStyle);
+                    GUILayout.Label("--------  Sequence  --------", sequenceLabelStyle);
 
-                    if (GUILayout.Button(new GUIContent("X", "Delete sequence"), GUILayout.Width(50)))
+                    if (GUILayout.Button(new GUIContent("X", "Delete"), GUILayout.Width(50)))
                     {
                         RemoveSequence(i);
                         break;
@@ -385,7 +390,24 @@ namespace SpheroidGames.LerpAnimator
                     EditorGUILayout.Space(-7);
                     EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-                    EditorGUILayout.PropertyField(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Name"));
+                    if ((editorPlaybackRunning || playingPauseAfterSegment) && lastSelectedSequence == i)
+                    {
+                        //If first segment
+                        if(toIndex == 0 && lerpStep != 0)
+                        {
+                            totalProgress = incrementalTotals[0] * lerpStep;
+                        }
+                        //If last segment
+                        else
+                        {
+                            totalProgress = incrementalTotals[toIndex -1] + (totalsParts[toIndex] * lerpStep);
+                        }
+
+                        var rect = EditorGUILayout.GetControlRect(false, EditorGUIUtility.singleLineHeight);
+                        EditorGUI.ProgressBar(rect, totalProgress, serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Name").stringValue);
+
+                    }
+                    else EditorGUILayout.PropertyField(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Name"));
 
                     EditorGUI.BeginChangeCheck();
                     EditorGUILayout.PropertyField(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("StartOnPlay"));
@@ -988,6 +1010,8 @@ namespace SpheroidGames.LerpAnimator
             serializedObject.ApplyModifiedProperties();
 
             SampleAllFromScene(lastSelectedSequence, -1);
+
+            CollectEditorSequences();
         }
 
         private void RemoveSequence(int index)
@@ -1177,6 +1201,30 @@ namespace SpheroidGames.LerpAnimator
             CollectEditorSequences();
         }
 
+        private void CalculateSequenceTotalDuration()
+        {
+            float sequenceTotalDuration = 0;
+
+            for(int i = 0; i < editorSequences[lastSelectedSequence].Segments.Count; i++)
+            {
+                sequenceTotalDuration += editorSequences[lastSelectedSequence].Segments[i].duration;
+            }
+
+            incrementalTotals.Clear();
+            totalsParts.Clear();
+
+            for(int i = 0; i < editorSequences[lastSelectedSequence].Segments.Count; i++)
+            {
+                if(i == 0)
+                    incrementalTotals.Add((1 / sequenceTotalDuration) * editorSequences[lastSelectedSequence].Segments[i].duration);
+
+                else
+                    incrementalTotals.Add(incrementalTotals[incrementalTotals.Count - 1] + (1 / sequenceTotalDuration) * editorSequences[lastSelectedSequence].Segments[i].duration);
+
+                totalsParts.Add((1 / sequenceTotalDuration) * editorSequences[lastSelectedSequence].Segments[i].duration);
+            }
+        }
+
         #endregion
 
         #region Playback
@@ -1208,6 +1256,8 @@ namespace SpheroidGames.LerpAnimator
             reciprocal = 1 / editorSequences[sequenceIndex].Segments[toIndex].duration;
 
             progressBarName = serializedSequences.GetArrayElementAtIndex(sequenceIndex).FindPropertyRelative("Segments").GetArrayElementAtIndex(toIndex).FindPropertyRelative("Name").stringValue;
+
+            CalculateSequenceTotalDuration();
 
             playingPauseAfterSegment = false;
             editorPlaybackRunning = true;
