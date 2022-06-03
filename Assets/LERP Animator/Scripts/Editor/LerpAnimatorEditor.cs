@@ -393,7 +393,7 @@ namespace SpheroidGames.LerpAnimator
                     if ((editorPlaybackRunning || playingPauseAfterSegment) && lastSelectedSequence == i)
                     {
                         //If first segment
-                        if(toIndex == 0 && lerpStep != 0)
+                        if(toIndex == 0)
                         {
                             totalProgress = incrementalTotals[0] * lerpStep;
                         }

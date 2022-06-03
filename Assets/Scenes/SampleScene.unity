@@ -21616,12 +21616,12 @@ MonoBehaviour:
           m_Calls: []
       showEvents: 0
       showRotationOffsets: 0
-    ShowSegments: 0
+    ShowSegments: 1
   StartStates: []
   Segments: []
   lastSelectedState: -1
   lastSelectedSequence: 0
-  lastSelectedSegment: 0
+  lastSelectedSegment: 2
   ShowRotations: 
   ShowSegmentEvents: 
 --- !u!1 &1757683437
@@ -22004,7 +22004,7 @@ PrefabInstance:
     - target: {fileID: 2348173950776487744, guid: e89d43108ea643041b998b3165af66e1,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.00000092723064
+      value: 0.0000009272307
       objectReference: {fileID: 0}
     - target: {fileID: 2348173950776487744, guid: e89d43108ea643041b998b3165af66e1,
         type: 3}
@@ -25738,7 +25738,7 @@ PrefabInstance:
     - target: {fileID: 2348173950776487744, guid: e89d43108ea643041b998b3165af66e1,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000013486991
+      value: 0.0000013486992
       objectReference: {fileID: 0}
     - target: {fileID: 2348173950776487744, guid: e89d43108ea643041b998b3165af66e1,
         type: 3}
