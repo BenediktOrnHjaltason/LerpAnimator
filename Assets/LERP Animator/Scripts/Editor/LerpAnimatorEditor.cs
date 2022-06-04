@@ -7,7 +7,11 @@ namespace SpheroidGames.LerpAnimator
     [CustomEditor(typeof(LerpAnimator))]
     public class LerpAnimatorEditor : Editor
     {
-        Texture logo;
+        Texture textureLogo;
+        Texture textureIconPlay;
+        Texture textureIconStop;
+        Texture textureSequence;
+        Texture textureDivider;
 
         Texture toolHandleReminder;
 
@@ -59,6 +63,8 @@ namespace SpheroidGames.LerpAnimator
         private GUIStyle sequenceLabelStyle;
 
         private GUIStyle AddRemoveSegmentsStyle;
+        private GUIStyle styleDivider;
+
         private GUILayout AddRemoveSegmentsLayout;
 
 
@@ -66,7 +72,12 @@ namespace SpheroidGames.LerpAnimator
 
         private void OnEnable()
         {
-            logo = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Textures/T_LerpAnimatorLogo.png", typeof(Texture));
+            textureLogo = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Textures/T_LerpAnimatorLogo.png", typeof(Texture));
+            textureIconPlay = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Textures/T_Icon_Play.png", typeof(Texture));
+
+            textureIconStop = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Textures/T_Icon_Stop.png", typeof(Texture));
+            textureSequence = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Textures/T_Sequence.png", typeof(Texture));
+            textureDivider = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Textures/T_Divider.png", typeof(Texture));
             toolHandleReminder = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Textures/T_ToolHandleReminder.png", typeof(Texture));
 
             serializedSequenceName = serializedObject.FindProperty("SequenceName");
@@ -94,13 +105,15 @@ namespace SpheroidGames.LerpAnimator
 
 
             labelStyle = new GUIStyle();
-            labelStyle.alignment = TextAnchor.UpperCenter;
+            //labelStyle.alignment = TextAnchor.UpperCenter;
             labelStyle.normal.textColor = Color.white;
 
             sequenceLabelStyle = new GUIStyle();
             sequenceLabelStyle.alignment = TextAnchor.UpperCenter;
             sequenceLabelStyle.normal.textColor = Color.white;
             sequenceLabelStyle.fontSize = 15;
+
+
 
             CollectEditorTransforms();
             CollectEditorSequences();
@@ -341,7 +354,7 @@ namespace SpheroidGames.LerpAnimator
 
         public override void OnInspectorGUI()
         {
-            GUILayout.Box(logo);
+            GUILayout.Box(textureLogo);
             GUILayout.Space(-20);
             GUILayout.Box(toolHandleReminder);
 
@@ -359,12 +372,12 @@ namespace SpheroidGames.LerpAnimator
 
                     GUILayout.BeginHorizontal();
 
-                    if (GUILayout.Button(new GUIContent( "|>", "Play")))
+                    if (GUILayout.Button(new GUIContent( textureIconPlay, "Play"), GUILayout.Height(30)))
                     {
                         StartEditorPlayback(i, -1);
                     }
 
-                    if (GUILayout.Button(new GUIContent("[]", "Stop")))
+                    if (GUILayout.Button(new GUIContent(textureIconStop, "Stop"), GUILayout.Height(30)))
                     {
                         lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = i;
                         lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = -1;
@@ -375,9 +388,10 @@ namespace SpheroidGames.LerpAnimator
                         playingPauseAfterSegment = false;
                         ApplyFromDatastore(i, -1);
                     }
-                    GUILayout.Label("--------  Sequence  --------", sequenceLabelStyle);
 
-                    if (GUILayout.Button(new GUIContent("X", "Delete"), GUILayout.Width(50)))
+                    GUILayout.Box(textureSequence, GUILayout.ExpandWidth(true), GUILayout.Height(30));
+
+                    if (GUILayout.Button(new GUIContent("X", "Delete"), GUILayout.Width(50), GUILayout.Height(30)))
                     {
                         RemoveSequence(i);
                         break;
@@ -438,7 +452,7 @@ namespace SpheroidGames.LerpAnimator
                     EditorGUILayout.LabelField(lastSelectedSequence == i && lastSelectedSegment == -1 ? "|>" : "", GUILayout.Width(20));
 
                     GUI.enabled = !EditorApplication.isPlaying;
-                    if (GUILayout.Button(new GUIContent("Preview", "Preview LERP starting point for this sequence")))
+                    if (GUILayout.Button(new GUIContent("Preview", "Preview starting point for this sequence")))
                     {
                         lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = i;
                         lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = -1;
@@ -465,13 +479,12 @@ namespace SpheroidGames.LerpAnimator
 
                     serializedSegmentsGUI = serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Segments");
 
-                    GUILayout.Space(20);
+                    GUILayout.Space(10);
 
-                    GUILayout.Space(5);
 
-                    EditorGUI.indentLevel++;
-                    bool showSegments = EditorGUILayout.Foldout(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("ShowSegments").boolValue, "Segments", true);
-                    EditorGUI.indentLevel--;
+                    //EditorGUI.indentLevel++;
+                    bool showSegments = EditorGUILayout.Foldout(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("ShowSegments").boolValue, "LERP Targets", true);
+                    //EditorGUI.indentLevel--;
 
                     if (showSegments != editorSequences[i].ShowSegments)
                     {
@@ -486,7 +499,7 @@ namespace SpheroidGames.LerpAnimator
                         EditorGUI.indentLevel++;
                         EditorGUI.indentLevel++;
 
-                        GUILayout.Space(10);
+                        //GUILayout.Space(5);
 
                         for (int j = 0; j < serializedSegmentsGUI.arraySize; j++)
                         {
@@ -593,13 +606,13 @@ namespace SpheroidGames.LerpAnimator
                             }
                             GUI.enabled = true;
 
-
-
                             GUILayout.BeginHorizontal("Box");
 
                             EditorGUI.indentLevel--;
+                            EditorGUI.indentLevel--;
                             if (!EditorApplication.isPlaying)
                                 EditorGUILayout.LabelField(lastSelectedSequence == i && lastSelectedSegment == j ? "|>" : "", GUILayout.Width(20));
+                            EditorGUI.indentLevel++;
                             EditorGUI.indentLevel++;
 
                             GUI.enabled = !EditorApplication.isPlaying;
@@ -614,7 +627,7 @@ namespace SpheroidGames.LerpAnimator
                             GUI.enabled = true;
 
                             GUI.enabled = !editorPlaybackRunning && !EditorApplication.isPlaying && !playingPauseAfterSegment;
-                            if (GUILayout.Button(new GUIContent("Sample scene", "Samples positions and scales (NOT rotations) from scene into segment")))
+                            if (GUILayout.Button(new GUIContent("Sample scene", "Samples positions and scales (NOT rotations) from scene into LERP target")))
                             {
                                 lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = i;
                                 lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue = j;
@@ -627,15 +640,16 @@ namespace SpheroidGames.LerpAnimator
 
                             //GUILayout.Space(10);
                         }
+                        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-                        EditorGUILayout.Space(20);
-                        GUILayout.BeginHorizontal("Box", AddRemoveSegmentsStyle);
+                        EditorGUILayout.Space(5);
+                        GUILayout.BeginHorizontal(AddRemoveSegmentsStyle);
 
                         GUI.enabled = !EditorApplication.isPlaying && !editorPlaybackRunning && !playingPauseAfterSegment;
-                        if (GUILayout.Button("Add segment", GUILayout.Width(140)))
+                        if (GUILayout.Button("Add target", GUILayout.Width(140)))
                             AddSegment(i);
 
-                        if (GUILayout.Button("Remove segment", GUILayout.Width(140)))
+                        if (GUILayout.Button("Remove target", GUILayout.Width(140)))
                         {
                             if (serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Segments").arraySize < 1)
                                 return;
