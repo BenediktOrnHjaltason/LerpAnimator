@@ -103,9 +103,7 @@ namespace SpheroidGames.LerpAnimator
             editorTransforms = new List<Transform>();
             editorSequences = new List<Sequence>();
 
-
             labelStyle = new GUIStyle();
-            //labelStyle.alignment = TextAnchor.UpperCenter;
             labelStyle.normal.textColor = Color.white;
 
             sequenceLabelStyle = new GUIStyle();
@@ -113,11 +111,8 @@ namespace SpheroidGames.LerpAnimator
             sequenceLabelStyle.normal.textColor = Color.white;
             sequenceLabelStyle.fontSize = 15;
 
-
-
             CollectEditorTransforms();
             CollectEditorSequences();
-
 
             lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue;
             lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue;
@@ -135,7 +130,6 @@ namespace SpheroidGames.LerpAnimator
             AddRemoveSegmentsLayout = new GUILayout();
 
             AddRemoveSegmentsStyle.alignment = TextAnchor.MiddleCenter; 
-            
 
             nextChangeCheck = EditorApplication.timeSinceStartup + 0.5f;
         }
@@ -355,8 +349,8 @@ namespace SpheroidGames.LerpAnimator
         public override void OnInspectorGUI()
         {
             GUILayout.Box(textureLogo);
-            GUILayout.Space(-20);
-            GUILayout.Box(toolHandleReminder);
+            //GUILayout.Space(-20);
+            //GUILayout.Box(toolHandleReminder);
 
             GUI.enabled = !editorPlaybackRunning && !playingPauseAfterSegment && !EditorApplication.isPlaying;
 
@@ -423,6 +417,8 @@ namespace SpheroidGames.LerpAnimator
                     }
                     else EditorGUILayout.PropertyField(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Name"));
 
+                    GUI.enabled = !editorPlaybackRunning && !playingPauseAfterSegment && !EditorApplication.isPlaying;
+
                     EditorGUI.BeginChangeCheck();
                     EditorGUILayout.PropertyField(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("StartOnPlay"));
                     if (EditorGUI.EndChangeCheck())
@@ -442,6 +438,8 @@ namespace SpheroidGames.LerpAnimator
 
                     EditorGUILayout.PropertyField(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Loop"));
 
+
+                    GUI.enabled = true;
                     //------START STATES FROM CURRENT SEQUENCE
                     GUILayout.Space(20);
 
