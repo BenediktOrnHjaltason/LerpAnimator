@@ -164,6 +164,22 @@ namespace SpheroidGames.LerpAnimator
             StartCoroutine(RunSegment());
         }
 
+        public void PlaySequence(string sequenceName)
+        {
+            for(int i = 0; i < Sequences.Count; i++)
+            {
+                if (Sequences[i].Name == sequenceName)
+                {
+                    lastSelectedSequence = i;
+                    StartSequence();
+
+                    return;
+                }
+            }
+
+            Debug.LogWarning($"LERP Animator: Did not find sequence named {sequenceName} on {name}");
+        }
+
         private IEnumerator RunSegment()
         {
             Sequences[lastSelectedSequence].Segments[toIndex].OnLerpStart?.Invoke();
@@ -280,7 +296,7 @@ namespace SpheroidGames.LerpAnimator
 
             else
             {
-                if (Loop)
+                if (Sequences[lastSelectedSequence].Loop)
                 {
                     if (Sequences[lastSelectedSequence].Segments[toIndex].pauseAfter > 0)
                     {
@@ -310,7 +326,7 @@ namespace SpheroidGames.LerpAnimator
             while (Time.time < timeOnPauseEnd)
                 yield return null;
 
-            if (Loop)
+            if (Sequences[lastSelectedSequence].Loop)
                 StartSequence();
         }
 
