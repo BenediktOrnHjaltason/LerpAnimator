@@ -423,8 +423,6 @@ namespace SpheroidGames.LerpAnimator
                     }
                     else EditorGUILayout.PropertyField(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Name"));
 
-                    GUI.enabled = !editorPlaybackRunning && !playingPauseAfterSegment && !EditorApplication.isPlaying;
-
                     EditorGUI.BeginChangeCheck();
                     EditorGUILayout.PropertyField(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("StartOnPlay"));
                     if (EditorGUI.EndChangeCheck())
@@ -443,8 +441,6 @@ namespace SpheroidGames.LerpAnimator
                     }
 
                     EditorGUILayout.PropertyField(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Loop"));
-
-                    GUI.enabled = true;
 
                     //------START STATES FROM CURRENT SEQUENCE
                     GUILayout.Space(20);
@@ -1259,11 +1255,7 @@ namespace SpheroidGames.LerpAnimator
         
         public void StartEditorPlayback(int sequenceIndex, int fromIndex)
         {
-            if (serializedSequences.GetArrayElementAtIndex(sequenceIndex).FindPropertyRelative("Segments").arraySize == 0) 
-                return;
-
-            lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = sequenceIndex;
-            serializedObject.ApplyModifiedPropertiesWithoutUndo();
+            if (serializedSequences.GetArrayElementAtIndex(sequenceIndex).FindPropertyRelative("Segments").arraySize == 0) return;
 
             ApplyFromDatastore(sequenceIndex, fromIndex);
 
