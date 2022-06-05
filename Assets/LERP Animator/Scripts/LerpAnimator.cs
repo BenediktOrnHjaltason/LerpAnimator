@@ -78,16 +78,17 @@ namespace SpheroidGames.LerpAnimator
 
         [SerializeField] List<Sequence> Sequences;
 
-        [Tooltip("The start states for this sequence")]
-        [SerializeField] List<TransformData> StartStates;
-
-        [SerializeField] List<Segment> Segments;
-
         [SerializeField] int lastSelectedState;
 
         [SerializeField] int lastSelectedSequence;
         [SerializeField] int lastSelectedSegment;
 
+        //Deprecated
+
+        [Tooltip("The start states for this sequence")]
+        [SerializeField] List<TransformData> StartStates;
+
+        [SerializeField] List<Segment> Segments;
 
         [SerializeField] List<bool> ShowRotations;
 
@@ -95,8 +96,14 @@ namespace SpheroidGames.LerpAnimator
 
         private void Start()
         {
-            if (StartOnPlay)
-                StartSequence();
+            for (int i = 0; i < Sequences.Count; i++)
+            {
+                if (Sequences[i].StartOnPlay)
+                {
+                    lastSelectedSequence = i;
+                    StartSequence();
+                }
+            }
         }
 
         private int fromIndex;
@@ -108,7 +115,7 @@ namespace SpheroidGames.LerpAnimator
 
         public void StartSequence()
         {
-            if (Segments.Count < 1 || TransformsToActOn.Count < 1)
+            if (Sequences[lastSelectedSequence].Segments.Count < 1 || TransformsToActOn.Count < 1)
                 return;
 
             StopAllCoroutines();
@@ -122,7 +129,7 @@ namespace SpheroidGames.LerpAnimator
 
             SampleInterSegmentRotations();
 
-            reciprocal = 1 / Segments[toIndex].duration;
+            reciprocal = 1 / Sequences[lastSelectedSequence].Segments[toIndex].duration;
 
             StartCoroutine(RunSegment());
         }
@@ -136,7 +143,7 @@ namespace SpheroidGames.LerpAnimator
         /// <param name="segmentNumber"></param>
         public void PlaySingleSegment(int segmentNumber)
         { 
-            if (segmentNumber > Segments.Count || segmentNumber < 1)
+            if (segmentNumber > Sequences[lastSelectedSequence].Segments.Count || segmentNumber < 1)
             {
                 Debug.LogWarning($"LERP Animator: PlaySingleSegment() called with segment number out of bounds. There is no segment number {segmentNumber} on LERP Animator instance attached to {name}");
                 return;
@@ -147,7 +154,7 @@ namespace SpheroidGames.LerpAnimator
             fromIndex = segmentNumber == 1 ? -1 : segmentNumber - 2;
             toIndex = fromIndex == -1 ? 0 : fromIndex + 1;
 
-            reciprocal = 1 / Segments[toIndex].duration;
+            reciprocal = 1 / Sequences[lastSelectedSequence].Segments[toIndex].duration;
 
             ApplyFromDatastore(fromIndex);
             SampleInterSegmentRotations();
@@ -159,7 +166,7 @@ namespace SpheroidGames.LerpAnimator
 
         private IEnumerator RunSegment()
         {
-            Segments[toIndex].OnLerpStart?.Invoke();
+            Sequences[lastSelectedSequence].Segments[toIndex].OnLerpStart?.Invoke();
 
             while (CalculatingInterpolationStep(out lerpStep))
             {
@@ -169,24 +176,24 @@ namespace SpheroidGames.LerpAnimator
                     {
                         if (TransformsToActOn[i] != null)
                         {
-                            if (StartStates[i].position != Segments[toIndex].toTransformData[i].position)
+                            if (Sequences[lastSelectedSequence].StartStates[i].position != Sequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].position)
                             {
-                                TransformsToActOn[i].localPosition = Vector3.LerpUnclamped(StartStates[i].position,
-                                                                                  Segments[toIndex].toTransformData[i].position,
-                                                                                  Segments[toIndex].curve.Evaluate(lerpStep));
+                                TransformsToActOn[i].localPosition = Vector3.LerpUnclamped(Sequences[lastSelectedSequence].StartStates[i].position,
+                                                                                  Sequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].position,
+                                                                                  Sequences[lastSelectedSequence].Segments[toIndex].curve.Evaluate(lerpStep));
                             }
 
-                            if (Segments[toIndex].toTransformData[i].offset != Vector3.zero)
+                            if (Sequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].offset != Vector3.zero)
                             {
-                                TransformsToActOn[i].localRotation = Quaternion.Euler(StartStates[i].offset) *
-                                        Quaternion.Euler(Vector3.LerpUnclamped(Vector3.zero, Segments[toIndex].toTransformData[i].offset, Segments[toIndex].curve.Evaluate(lerpStep)));
+                                TransformsToActOn[i].localRotation = Quaternion.Euler(Sequences[lastSelectedSequence].StartStates[i].offset) *
+                                        Quaternion.Euler(Vector3.LerpUnclamped(Vector3.zero, Sequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].offset, Sequences[lastSelectedSequence].Segments[toIndex].curve.Evaluate(lerpStep)));
                             }
 
-                            if (StartStates[i].scale != Segments[toIndex].toTransformData[i].scale)
+                            if (Sequences[lastSelectedSequence].StartStates[i].scale != Sequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].scale)
                             {
-                                TransformsToActOn[i].localScale = Vector3.LerpUnclamped(StartStates[i].scale,
-                                                                           Segments[toIndex].toTransformData[i].scale,
-                                                                           Segments[toIndex].curve.Evaluate(lerpStep));
+                                TransformsToActOn[i].localScale = Vector3.LerpUnclamped(Sequences[lastSelectedSequence].StartStates[i].scale,
+                                                                           Sequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].scale,
+                                                                           Sequences[lastSelectedSequence].Segments[toIndex].curve.Evaluate(lerpStep));
                             }
                         }
                     }
@@ -198,24 +205,24 @@ namespace SpheroidGames.LerpAnimator
                     {
                         if (TransformsToActOn[i] != null)
                         {
-                            if (Segments[fromIndex].toTransformData[i].position != Segments[toIndex].toTransformData[i].position)
+                            if (Sequences[lastSelectedSequence].Segments[fromIndex].toTransformData[i].position != Sequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].position)
                             {
-                                TransformsToActOn[i].localPosition = Vector3.LerpUnclamped(Segments[fromIndex].toTransformData[i].position,
-                                                                                  Segments[toIndex].toTransformData[i].position,
-                                                                                  Segments[toIndex].curve.Evaluate(lerpStep));
+                                TransformsToActOn[i].localPosition = Vector3.LerpUnclamped(Sequences[lastSelectedSequence].Segments[fromIndex].toTransformData[i].position,
+                                                                                  Sequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].position,
+                                                                                  Sequences[lastSelectedSequence].Segments[toIndex].curve.Evaluate(lerpStep));
                             }
 
-                            if (Segments[toIndex].toTransformData[i].offset != Vector3.zero)
+                            if (Sequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].offset != Vector3.zero)
                             {
                                 TransformsToActOn[i].localRotation = interSegmentRotations[i] *
-                                        Quaternion.Euler(Vector3.LerpUnclamped(Vector3.zero, Segments[toIndex].toTransformData[i].offset, Segments[toIndex].curve.Evaluate(lerpStep)));
+                                        Quaternion.Euler(Vector3.LerpUnclamped(Vector3.zero, Sequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].offset, Sequences[lastSelectedSequence].Segments[toIndex].curve.Evaluate(lerpStep)));
                             }
 
-                            if (Segments[fromIndex].toTransformData[i].scale != Segments[toIndex].toTransformData[i].scale)
+                            if (Sequences[lastSelectedSequence].Segments[fromIndex].toTransformData[i].scale != Sequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].scale)
                             {
-                                TransformsToActOn[i].localScale = Vector3.LerpUnclamped(Segments[fromIndex].toTransformData[i].scale,
-                                                                               Segments[toIndex].toTransformData[i].scale,
-                                                                               Segments[toIndex].curve.Evaluate(lerpStep));
+                                TransformsToActOn[i].localScale = Vector3.LerpUnclamped(Sequences[lastSelectedSequence].Segments[fromIndex].toTransformData[i].scale,
+                                                                               Sequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].scale,
+                                                                               Sequences[lastSelectedSequence].Segments[toIndex].curve.Evaluate(lerpStep));
                             }
                         }
                     }
@@ -229,19 +236,19 @@ namespace SpheroidGames.LerpAnimator
             {
                 if (TransformsToActOn[i] != null)
                 {
-                    TransformsToActOn[i].localPosition = Segments[toIndex].toTransformData[i].position;
+                    TransformsToActOn[i].localPosition = Sequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].position;
 
-                    if (Segments[toIndex].toTransformData[i].offset != Vector3.zero)
+                    if (Sequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].offset != Vector3.zero)
                     {
                         TransformsToActOn[i].localRotation = interSegmentRotations[i] *
-                                        Quaternion.Euler(Vector3.Lerp(Vector3.zero, Segments[toIndex].toTransformData[i].offset, Segments[toIndex].curve.Evaluate(lerpStep)));
+                                        Quaternion.Euler(Vector3.Lerp(Vector3.zero, Sequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].offset, Sequences[lastSelectedSequence].Segments[toIndex].curve.Evaluate(lerpStep)));
                     }
 
-                    TransformsToActOn[i].localScale = Segments[toIndex].toTransformData[i].scale;
+                    TransformsToActOn[i].localScale = Sequences[lastSelectedSequence].Segments[toIndex].toTransformData[i].scale;
                 }
             }
 
-            Segments[toIndex].OnLerpEnd?.Invoke();
+            Sequences[lastSelectedSequence].Segments[toIndex].OnLerpEnd?.Invoke();
 
             if (playingSingleSegment)
             {
@@ -250,20 +257,20 @@ namespace SpheroidGames.LerpAnimator
             }
 
             //Start next segment
-            if (toIndex < Segments.Count - 1)
+            if (toIndex < Sequences[lastSelectedSequence].Segments.Count - 1)
             {
                 fromIndex = fromIndex == -1 ? 0 : ++fromIndex;
                 toIndex++;
                 timeOnStart = Time.time;
 
-                reciprocal = 1 / Segments[toIndex].duration;
+                reciprocal = 1 / Sequences[lastSelectedSequence].Segments[toIndex].duration;
 
                 SampleInterSegmentRotations();
 
-                if (Segments[toIndex - 1].pauseAfter > 0)
+                if (Sequences[lastSelectedSequence].Segments[toIndex - 1].pauseAfter > 0)
                 {
                     timeOnStart = Time.time;
-                    timeOnPauseEnd = Time.time + Segments[toIndex - 1].pauseAfter;
+                    timeOnPauseEnd = Time.time + Sequences[lastSelectedSequence].Segments[toIndex - 1].pauseAfter;
 
                     StartCoroutine(RunPauseAfterSegment());
                 }
@@ -275,10 +282,10 @@ namespace SpheroidGames.LerpAnimator
             {
                 if (Loop)
                 {
-                    if (Segments[toIndex].pauseAfter > 0)
+                    if (Sequences[lastSelectedSequence].Segments[toIndex].pauseAfter > 0)
                     {
                         timeOnStart = Time.time;
-                        timeOnPauseEnd = Time.time + Segments[toIndex].pauseAfter;
+                        timeOnPauseEnd = Time.time + Sequences[lastSelectedSequence].Segments[toIndex].pauseAfter;
 
                         StartCoroutine(RunLastSegmentPause());
                     }
@@ -320,9 +327,9 @@ namespace SpheroidGames.LerpAnimator
             {
                 if (TransformsToActOn[i] != null)
                 {
-                    TransformsToActOn[i].localPosition = StartStates[i].position;
-                    TransformsToActOn[i].localRotation = Quaternion.Euler(StartStates[i].offset);
-                    TransformsToActOn[i].localScale = StartStates[i].scale;
+                    TransformsToActOn[i].localPosition = Sequences[lastSelectedSequence].StartStates[i].position;
+                    TransformsToActOn[i].localRotation = Quaternion.Euler(Sequences[lastSelectedSequence].StartStates[i].offset);
+                    TransformsToActOn[i].localScale = Sequences[lastSelectedSequence].StartStates[i].scale;
                 }
             }
         }
@@ -335,12 +342,12 @@ namespace SpheroidGames.LerpAnimator
                 {
                     if (TransformsToActOn[i] != null)
                     {
-                        TransformsToActOn[i].localPosition = StartStates[i].position;
+                        TransformsToActOn[i].localPosition = Sequences[lastSelectedSequence].StartStates[i].position;
 
-                        TransformsToActOn[i].localRotation = Quaternion.Euler(StartStates[i].offset);
+                        TransformsToActOn[i].localRotation = Quaternion.Euler(Sequences[lastSelectedSequence].StartStates[i].offset);
 
 
-                        TransformsToActOn[i].localScale =  StartStates[i].scale;
+                        TransformsToActOn[i].localScale = Sequences[lastSelectedSequence].StartStates[i].scale;
                     }
                 }
             }
@@ -352,17 +359,17 @@ namespace SpheroidGames.LerpAnimator
                     if (TransformsToActOn[i] != null)
                     {
                         TransformsToActOn[i].localPosition =
-                        Segments[segmentIndex].toTransformData[i].position;
+                        Sequences[lastSelectedSequence].Segments[segmentIndex].toTransformData[i].position;
 
-                        Quaternion acculumatedRotationOffsett = Quaternion.Euler(StartStates[i].offset);
+                        Quaternion acculumatedRotationOffsett = Quaternion.Euler(Sequences[lastSelectedSequence].StartStates[i].offset);
 
                         for (int j = 0; j <= segmentIndex; j++)
-                            acculumatedRotationOffsett *= Quaternion.Euler(Segments[j].toTransformData[i].offset);
+                            acculumatedRotationOffsett *= Quaternion.Euler(Sequences[lastSelectedSequence].Segments[j].toTransformData[i].offset);
 
                         TransformsToActOn[i].localRotation = acculumatedRotationOffsett;
 
                         TransformsToActOn[i].localScale =
-                        Segments[segmentIndex].toTransformData[i].scale;
+                        Sequences[lastSelectedSequence].Segments[segmentIndex].toTransformData[i].scale;
                     }
                 }
             }

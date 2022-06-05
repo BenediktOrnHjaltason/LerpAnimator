@@ -1257,6 +1257,9 @@ namespace SpheroidGames.LerpAnimator
         {
             if (serializedSequences.GetArrayElementAtIndex(sequenceIndex).FindPropertyRelative("Segments").arraySize == 0) return;
 
+            lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = sequenceIndex;
+            serializedObject.ApplyModifiedPropertiesWithoutUndo();
+
             ApplyFromDatastore(sequenceIndex, fromIndex);
 
             startTime = (float)EditorApplication.timeSinceStartup;
