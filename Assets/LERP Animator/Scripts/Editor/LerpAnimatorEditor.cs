@@ -636,7 +636,6 @@ namespace SpheroidGames.LerpAnimator
                             GUI.enabled = true;
 
                             GUILayout.EndHorizontal();
-                            
 
                             //GUILayout.Space(10);
                         }
@@ -667,6 +666,9 @@ namespace SpheroidGames.LerpAnimator
                         EditorGUI.indentLevel--;
                         EditorGUI.indentLevel--;
                     }
+                        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+                        EditorGUILayout.Space(-12);                      
                 }
 
                 EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
