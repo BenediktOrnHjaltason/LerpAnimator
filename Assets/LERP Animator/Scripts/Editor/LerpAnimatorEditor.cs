@@ -357,6 +357,9 @@ namespace SpheroidGames.LerpAnimator
             EditorGUILayout.PropertyField(serializedTransforms, true);
             GUI.enabled = true;
 
+            if (serializedTransforms.arraySize == 0)
+                EditorGUILayout.HelpBox("No transforms to act on", MessageType.Warning);
+
             if (!handlingUndoRedo)
             {
                 for (int i = 0; i < serializedSequences.arraySize; i++)
@@ -1020,6 +1023,13 @@ namespace SpheroidGames.LerpAnimator
             newSequence.FindPropertyRelative("Segments").ClearArray();
 
             newSequence.FindPropertyRelative("ShowSegments").boolValue = true;
+
+            //If first sequence added, StartStates array is empty. Otherwise, new element is always a copy of previous element
+            if (serializedSequences.arraySize == 1)
+            {
+                foreach (var transforms in editorTransforms)
+                    newSequence.FindPropertyRelative("StartStates").arraySize++;
+            }
 
             serializedObject.ApplyModifiedProperties();
 
