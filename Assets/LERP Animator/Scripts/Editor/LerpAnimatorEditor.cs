@@ -508,7 +508,7 @@ namespace SpheroidGames.LerpAnimator
 
                             GUILayout.BeginHorizontal();
                             GUI.enabled = !EditorApplication.isPlaying;
-                            if (GUILayout.Button(new GUIContent((j + 1).ToString() + " : Play", "Play from segment to end of sequence"), GUILayout.Width(90)))
+                            if (GUILayout.Button(new GUIContent((j + 1).ToString() + " : Play", "Play from " + (j == 0 ? "start state " : "previous target ") + " to end of sequence"), GUILayout.Width(90)))
                             {
                                 CollectEditorSequences();
 
