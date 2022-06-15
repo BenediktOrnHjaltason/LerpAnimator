@@ -1446,6 +1446,8 @@ namespace SpheroidGames.LerpAnimator
         {
             SampleInterSegmentRotations();
 
+            lerpStep = 0;
+
             //Was it the last segment?
             if (toIndex + 1 > editorSequences[lastSelectedSequence].Segments.Count - 1)
             {
