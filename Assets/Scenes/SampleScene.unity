@@ -603,11 +603,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9253475}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.659, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.65893555, y: 0, z: 0}
   m_LocalScale: {x: 1.149765, y: 0.51586, z: 0.054102242}
   m_Children: []
-  m_Father: {fileID: 661233151}
+  m_Father: {fileID: 310953637}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &9253477
@@ -5482,6 +5482,40 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1 &310953636
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 310953637}
+  m_Layer: 0
+  m_Name: Doors&Walls
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &310953637
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 310953636}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 9253476}
+  - {fileID: 2024508625}
+  - {fileID: 2146297158}
+  - {fileID: 954208111}
+  m_Father: {fileID: 661233151}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &316526944
 GameObject:
   m_ObjectHideFlags: 0
@@ -9732,12 +9766,9 @@ Transform:
   m_LocalPosition: {x: 2290.0042, y: 344.18268, z: -90.80571}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 9253476}
-  - {fileID: 2024508625}
-  - {fileID: 2146297158}
-  - {fileID: 954208111}
   - {fileID: 1008237290}
   - {fileID: 1203215464}
+  - {fileID: 310953637}
   m_Father: {fileID: 1101287862}
   m_RootOrder: 26
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9753,7 +9784,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eefb4c63eaf94f41a70a97adcf74538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SequenceName: Open
+  SequenceName: 
   StartOnPlay: 0
   Loop: 0
   TransformsToActOn:
@@ -9763,23 +9794,23 @@ MonoBehaviour:
   - {fileID: 1757683438}
   Sequences:
   - Name: Open door
-    StartOnPlay: 0
+    StartOnPlay: 1
     Loop: 0
     StartStates:
     - position: {x: 0.113, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.48219278, y: 0.51586, z: 0.00794161}
     - position: {x: 0.49980822, y: 0, z: -0.27667758}
-      offset: {x: 0, y: 0, z: 0}
+      offset: {x: -0, y: 0, z: 0.0000027329813}
       scale: {x: 2.0738595, y: 1.9385104, z: 125.919044}
     - position: {x: 0.595, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.48219278, y: 0.51586, z: 0.00794161}
     - position: {x: -0.4997921, y: 0, z: -0.27667758}
-      offset: {x: 0, y: 0, z: 0}
+      offset: {x: -0, y: 0, z: 0.0000027329813}
       scale: {x: 2.0738595, y: 1.9385104, z: 125.919044}
     Segments:
-    - Name: Rotate circle
+    - Name: 
       OnLerpStart:
         m_PersistentCalls:
           m_Calls: []
@@ -9796,103 +9827,7 @@ MonoBehaviour:
       - position: {x: -0.4997921, y: 0, z: -0.27667758}
         offset: {x: 0, y: 0, z: 1080}
         scale: {x: 2.0738595, y: 1.9385104, z: 125.919044}
-      duration: 2
-      pauseAfter: 0.2
-      curve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      OnLerpEnd:
-        m_PersistentCalls:
-          m_Calls: []
-      showEvents: 0
-      showRotationOffsets: 0
-    - Name: Split circle
-      OnLerpStart:
-        m_PersistentCalls:
-          m_Calls: []
-      toTransformData:
-      - position: {x: 0.113, y: 0, z: 0}
-        offset: {x: 0, y: 0, z: 0}
-        scale: {x: 0.48219278, y: 0.51586, z: 0.00794161}
-      - position: {x: 0.4791, y: 0, z: -0.27667758}
-        offset: {x: 0, y: 0, z: 0}
-        scale: {x: 2.0738595, y: 1.9385104, z: 125.919044}
-      - position: {x: 0.595, y: 0, z: 0}
-        offset: {x: 0, y: 0, z: 0}
-        scale: {x: 0.48219278, y: 0.51586, z: 0.00794161}
-      - position: {x: -0.4806, y: 0, z: -0.27667758}
-        offset: {x: 0, y: 0, z: 0}
-        scale: {x: 2.0738595, y: 1.9385104, z: 125.919044}
-      duration: 0.05
-      pauseAfter: 0.5
-      curve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 1
-          outSlope: 1
-          tangentMode: 34
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 1
-          outSlope: 1
-          tangentMode: 34
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      OnLerpEnd:
-        m_PersistentCalls:
-          m_Calls: []
-      showEvents: 0
-      showRotationOffsets: 0
-    - Name: Open doors
-      OnLerpStart:
-        m_PersistentCalls:
-          m_Calls: []
-      toTransformData:
-      - position: {x: -0.2547, y: 0, z: 0}
-        offset: {x: 0, y: 0, z: 0}
-        scale: {x: 0.48219278, y: 0.51586, z: 0.00794161}
-      - position: {x: 0.4791, y: 0, z: -0.27667758}
-        offset: {x: 0, y: 0, z: 0}
-        scale: {x: 2.0738595, y: 1.9385104, z: 125.919044}
-      - position: {x: 0.9701, y: 0, z: 0}
-        offset: {x: 0, y: 0, z: 0}
-        scale: {x: 0.48219278, y: 0.51586, z: 0.00794161}
-      - position: {x: -0.4806, y: 0, z: -0.27667758}
-        offset: {x: 0, y: 0, z: 0}
-        scale: {x: 2.0738595, y: 1.9385104, z: 125.919044}
-      duration: 3
+      duration: 1
       pauseAfter: 0
       curve:
         serializedVersion: 2
@@ -9923,22 +9858,118 @@ MonoBehaviour:
           m_Calls: []
       showEvents: 0
       showRotationOffsets: 0
-    ShowSegments: 0
-  - Name: Close door
+    - Name: 
+      OnLerpStart:
+        m_PersistentCalls:
+          m_Calls: []
+      toTransformData:
+      - position: {x: 0.113, y: 0, z: 0}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 0.48219278, y: 0.51586, z: 0.00794161}
+      - position: {x: 0.476, y: 0, z: -0.27667758}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 2.0738595, y: 1.9385104, z: 125.919044}
+      - position: {x: 0.595, y: 0, z: 0}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 0.48219278, y: 0.51586, z: 0.00794161}
+      - position: {x: -0.472, y: 0, z: -0.27667758}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 2.0738595, y: 1.9385104, z: 125.919044}
+      duration: 0.1
+      pauseAfter: 0
+      curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 1
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 1
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      OnLerpEnd:
+        m_PersistentCalls:
+          m_Calls: []
+      showEvents: 0
+      showRotationOffsets: 0
+    - Name: 
+      OnLerpStart:
+        m_PersistentCalls:
+          m_Calls: []
+      toTransformData:
+      - position: {x: -0.241, y: 0, z: 0}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 0.48219278, y: 0.51586, z: 0.00794161}
+      - position: {x: 0.476, y: 0, z: -0.27667758}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 2.0738595, y: 1.9385104, z: 125.919044}
+      - position: {x: 0.948, y: 0, z: 0}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 0.48219278, y: 0.51586, z: 0.00794161}
+      - position: {x: -0.472, y: 0, z: -0.27667758}
+        offset: {x: 0, y: 0, z: 0}
+        scale: {x: 2.0738595, y: 1.9385104, z: 125.919044}
+      duration: 2
+      pauseAfter: 0
+      curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 2
+          outSlope: 2
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      OnLerpEnd:
+        m_PersistentCalls:
+          m_Calls: []
+      showEvents: 0
+      showRotationOffsets: 0
+    ShowSegments: 1
+  - Name: Closing
     StartOnPlay: 0
     Loop: 0
     StartStates:
-    - position: {x: -0.2547, y: 0, z: 0}
+    - position: {x: -0.241, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.48219278, y: 0.51586, z: 0.00794161}
-    - position: {x: 0.4791, y: 0, z: -0.27667758}
-      offset: {x: -0, y: -0, z: 0.0000027329813}
+    - position: {x: 0.476, y: 0, z: -0.27667758}
+      offset: {x: -0, y: -0, z: 0.0000054659627}
       scale: {x: 2.0738595, y: 1.9385104, z: 125.919044}
-    - position: {x: 0.9701, y: 0, z: 0}
+    - position: {x: 0.948, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
       scale: {x: 0.48219278, y: 0.51586, z: 0.00794161}
-    - position: {x: -0.4806, y: 0, z: -0.27667758}
-      offset: {x: -0, y: -0, z: 0.0000027329813}
+    - position: {x: -0.472, y: 0, z: -0.27667758}
+      offset: {x: -0, y: -0, z: 0.0000054659627}
       scale: {x: 2.0738595, y: 1.9385104, z: 125.919044}
     Segments:
     - Name: 
@@ -9949,16 +9980,16 @@ MonoBehaviour:
       - position: {x: 0.113, y: 0, z: 0}
         offset: {x: 0, y: 0, z: 0}
         scale: {x: 0.48219278, y: 0.51586, z: 0.00794161}
-      - position: {x: 0.4791, y: 0, z: -0.27667758}
+      - position: {x: 0.476, y: 0, z: -0.27667758}
         offset: {x: 0, y: 0, z: 0}
         scale: {x: 2.0738595, y: 1.9385104, z: 125.919044}
       - position: {x: 0.595, y: 0, z: 0}
         offset: {x: 0, y: 0, z: 0}
         scale: {x: 0.48219278, y: 0.51586, z: 0.00794161}
-      - position: {x: -0.4806, y: 0, z: -0.27667758}
+      - position: {x: -0.472, y: 0, z: -0.27667758}
         offset: {x: 0, y: 0, z: 0}
         scale: {x: 2.0738595, y: 1.9385104, z: 125.919044}
-      duration: 1
+      duration: 2
       pauseAfter: 0
       curve:
         serializedVersion: 2
@@ -10037,10 +10068,10 @@ MonoBehaviour:
           m_Calls: []
       showEvents: 0
       showRotationOffsets: 0
-    ShowSegments: 0
-  lastSelectedState: -1
+    ShowSegments: 1
+  lastSelectedState: 0
   lastSelectedSequence: 1
-  lastSelectedSegment: 1
+  lastSelectedSegment: -1
   StartStates: []
   Segments: []
   ShowRotations: 
@@ -11654,7 +11685,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 777926490}
-  m_LocalRotation: {x: 0, y: 0, z: 0.000000023849761, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.000000047699523, w: 1}
   m_LocalPosition: {x: 0.49980822, y: 0, z: -0.27667758}
   m_LocalScale: {x: 2.0738595, y: 1.9385104, z: 125.919044}
   m_Children:
@@ -14133,10 +14164,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 954208110}
   m_LocalRotation: {x: 0.7071064, y: -0, z: -0, w: 0.7071072}
-  m_LocalPosition: {x: 0.313, y: 0.292, z: 0.683}
+  m_LocalPosition: {x: 0.31298828, y: 0.2919922, z: 0.68299866}
   m_LocalScale: {x: 3.4752579, y: 3.972144, z: 0.054102242}
   m_Children: []
-  m_Father: {fileID: 661233151}
+  m_Father: {fileID: 310953637}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 90.00001, y: 0, z: 0}
 --- !u!65 &954208112
@@ -15058,7 +15089,7 @@ Transform:
   m_Children:
   - {fileID: 777926491}
   m_Father: {fileID: 661233151}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1008237291
 BoxCollider:
@@ -17307,7 +17338,7 @@ Transform:
   m_Children:
   - {fileID: 1757683438}
   m_Father: {fileID: 661233151}
-  m_RootOrder: 5
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1203215465
 BoxCollider:
@@ -19193,7 +19224,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1290016105}
-  m_LocalRotation: {x: -0.000000030908623, y: 0.7071068, z: -0.7071068, w: -0.000000030908623}
+  m_LocalRotation: {x: 0.00000009272586, y: 0.7071068, z: -0.7071068, w: 0.00000009272586}
   m_LocalPosition: {x: 0.69, y: -6.8, z: 0}
   m_LocalScale: {x: 1.470688, y: 0.42684323, z: 0.42684323}
   m_Children: []
@@ -21011,7 +21042,7 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
       showEvents: 0
-      showRotationOffsets: 1
+      showRotationOffsets: 0
     ShowSegments: 0
   - Name: Disperce
     StartOnPlay: 0
@@ -21140,7 +21171,7 @@ MonoBehaviour:
       showRotationOffsets: 0
     ShowSegments: 1
   lastSelectedState: 0
-  lastSelectedSequence: 1
+  lastSelectedSequence: 0
   lastSelectedSegment: -1
   StartStates: []
   Segments: []
@@ -25764,7 +25795,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1757683437}
-  m_LocalRotation: {x: 0, y: 0, z: 0.000000023849761, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.000000047699523, w: 1}
   m_LocalPosition: {x: -0.4997921, y: 0, z: -0.27667758}
   m_LocalScale: {x: 2.0738595, y: 1.9385104, z: 125.919044}
   m_Children:
@@ -28323,11 +28354,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2024508624}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.373, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.3730469, y: 0, z: 0}
   m_LocalScale: {x: 1.149765, y: 0.51586, z: 0.054102242}
   m_Children: []
-  m_Father: {fileID: 661233151}
+  m_Father: {fileID: 310953637}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &2024508626
@@ -29588,10 +29619,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2146297157}
   m_LocalRotation: {x: 0.7071064, y: -0, z: -0, w: 0.7071072}
-  m_LocalPosition: {x: 0.313, y: -0.278, z: 0.683}
+  m_LocalPosition: {x: 0.31298828, y: -0.27801514, z: 0.68299866}
   m_LocalScale: {x: 3.4752579, y: 3.972144, z: 0.054102242}
   m_Children: []
-  m_Father: {fileID: 661233151}
+  m_Father: {fileID: 310953637}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 90.00001, y: 0, z: 0}
 --- !u!65 &2146297159
