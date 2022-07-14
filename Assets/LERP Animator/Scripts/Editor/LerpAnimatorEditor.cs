@@ -592,6 +592,7 @@ namespace SpheroidGames.LerpAnimator
 
                                     EditorGUI.BeginChangeCheck();
                                     EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(k).FindPropertyRelative("offset"));
+                                    EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(k).FindPropertyRelative("offset"));
                                     if (EditorGUI.EndChangeCheck())
                                     {
                                         CollectEditorSequences();
@@ -1264,6 +1265,8 @@ namespace SpheroidGames.LerpAnimator
         public void StartEditorPlayback(int sequenceIndex, int fromIndex)
         {
             if (serializedSequences.GetArrayElementAtIndex(sequenceIndex).FindPropertyRelative("Segments").arraySize == 0) return;
+
+            CollectEditorSequences();
 
             lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue = sequenceIndex;
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
