@@ -119,7 +119,6 @@ namespace SpheroidGames.LerpAnimator
                 return;
 
             StopAllCoroutines();
-            playingSingleSegment = false;
 
             fromIndex = -1;
             toIndex = 0;
@@ -135,34 +134,6 @@ namespace SpheroidGames.LerpAnimator
         }
 
         private List<Quaternion> interSegmentRotations = new List<Quaternion>();
-
-        private bool playingSingleSegment = false;
-        /// <summary>
-        /// Plays a single segment number (as displayed in inspector (#:Play))
-        /// </summary>
-        /// <param name="segmentNumber"></param>
-        public void PlaySingleSegment(int segmentNumber)
-        { 
-            if (segmentNumber > Sequences[lastSelectedSequence].Segments.Count || segmentNumber < 1)
-            {
-                Debug.LogWarning($"LERP Animator: PlaySingleSegment() called with segment number out of bounds. There is no segment number {segmentNumber} on LERP Animator instance attached to {name}");
-                return;
-            }
-
-            StopAllCoroutines();
-
-            fromIndex = segmentNumber == 1 ? -1 : segmentNumber - 2;
-            toIndex = fromIndex == -1 ? 0 : fromIndex + 1;
-
-            reciprocal = 1 / Sequences[lastSelectedSequence].Segments[toIndex].duration;
-
-            ApplyFromDatastore(fromIndex);
-            SampleInterSegmentRotations();
-
-            playingSingleSegment = true;
-
-            StartCoroutine(RunSegment());
-        }
 
         public void PlaySequence(string sequenceName)
         {
@@ -267,12 +238,6 @@ namespace SpheroidGames.LerpAnimator
             }
 
             Sequences[lastSelectedSequence].Segments[toIndex].OnLerpEnd?.Invoke();
-
-            if (playingSingleSegment)
-            {
-                playingSingleSegment = false;
-                yield break;
-            }
 
             //Start next segment
             if (toIndex < Sequences[lastSelectedSequence].Segments.Count - 1)
