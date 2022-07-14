@@ -62,9 +62,6 @@ namespace SpheroidGames.LerpAnimator
         private GUIStyle sequenceLabelStyle;
 
         private GUIStyle AddRemoveSegmentsStyle;
-        private GUIStyle styleDivider;
-
-        private GUILayout AddRemoveSegmentsLayout;
 
 
         #region Events
@@ -116,7 +113,6 @@ namespace SpheroidGames.LerpAnimator
             lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue;
 
             AddRemoveSegmentsStyle = new GUIStyle();
-            AddRemoveSegmentsLayout = new GUILayout();
 
             AddRemoveSegmentsStyle.alignment = TextAnchor.MiddleCenter; 
 
