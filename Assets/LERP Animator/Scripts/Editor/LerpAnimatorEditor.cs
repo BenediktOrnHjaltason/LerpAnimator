@@ -11,7 +11,6 @@ namespace SpheroidGames.LerpAnimator
         Texture textureIconPlay;
         Texture textureIconStop;
         Texture textureSequence;
-        Texture textureDivider;
 
         Texture toolHandleReminder;
 
@@ -77,7 +76,6 @@ namespace SpheroidGames.LerpAnimator
 
             textureIconStop = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Textures/T_Icon_Stop.png", typeof(Texture));
             textureSequence = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Textures/T_Sequence.png", typeof(Texture));
-            textureDivider = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Textures/T_Divider.png", typeof(Texture));
             toolHandleReminder = (Texture)AssetDatabase.LoadAssetAtPath("Assets/LERP Animator/Textures/T_ToolHandleReminder.png", typeof(Texture));
 
             serializedSequenceName = serializedObject.FindProperty("SequenceName");
@@ -116,15 +114,6 @@ namespace SpheroidGames.LerpAnimator
 
             lastSelectedSequence = serializedObject.FindProperty("lastSelectedSequence").intValue;
             lastSelectedSegment = serializedObject.FindProperty("lastSelectedSegment").intValue;
-
-            //TODO: What to do about this?
-            /*
-            if (serializedSegments.arraySize < 1)
-            {
-                serializedObject.FindProperty("lastSelectedState").intValue = -1;
-                serializedObject.ApplyModifiedProperties();
-            }
-            */
 
             AddRemoveSegmentsStyle = new GUIStyle();
             AddRemoveSegmentsLayout = new GUILayout();
@@ -172,7 +161,7 @@ namespace SpheroidGames.LerpAnimator
                     serializedStartStates.GetArrayElementAtIndex(i).FindPropertyRelative("scale").vector3Value;
             }
 
-            //Add segments
+            //Add LERP Targets / Segments
 
             SerializedProperty newSegmentsArray = serializedSequence.FindPropertyRelative("Segments");
 
@@ -301,7 +290,7 @@ namespace SpheroidGames.LerpAnimator
 
                 editorSequence.Segments = new List<Segment>();
 
-                //Segments
+                // LERP Targets / Segments
                 for (int j = 0; j < serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Segments").arraySize; j++)
                 {
                     SerializedProperty serializedSegment = serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("Segments").GetArrayElementAtIndex(j);
@@ -349,8 +338,8 @@ namespace SpheroidGames.LerpAnimator
         public override void OnInspectorGUI()
         {
             GUILayout.Box(textureLogo);
-            //GUILayout.Space(-20);
-            //GUILayout.Box(toolHandleReminder);
+            GUILayout.Space(-20);
+            GUILayout.Box(toolHandleReminder);
 
             GUI.enabled = !editorPlaybackRunning && !playingPauseAfterSegment && !EditorApplication.isPlaying;
 
@@ -482,10 +471,7 @@ namespace SpheroidGames.LerpAnimator
 
                     GUILayout.Space(10);
 
-
-                    //EditorGUI.indentLevel++;
                     bool showSegments = EditorGUILayout.Foldout(serializedSequences.GetArrayElementAtIndex(i).FindPropertyRelative("ShowSegments").boolValue, "LERP Targets", true);
-                    //EditorGUI.indentLevel--;
 
                     if (showSegments != editorSequences[i].ShowSegments)
                     {
@@ -499,8 +485,6 @@ namespace SpheroidGames.LerpAnimator
                     {
                         EditorGUI.indentLevel++;
                         EditorGUI.indentLevel++;
-
-                        //GUILayout.Space(5);
 
                         for (int j = 0; j < serializedSegmentsGUI.arraySize; j++)
                         {
@@ -592,7 +576,7 @@ namespace SpheroidGames.LerpAnimator
 
                                     EditorGUI.BeginChangeCheck();
                                     EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(k).FindPropertyRelative("offset"));
-                                    //EditorGUILayout.PropertyField(serializedSegmentsGUI.GetArrayElementAtIndex(j).FindPropertyRelative("toTransformData").GetArrayElementAtIndex(k).FindPropertyRelative("offset"));
+                                    
                                     if (EditorGUI.EndChangeCheck())
                                     {
                                         CollectEditorSequences();
@@ -612,8 +596,10 @@ namespace SpheroidGames.LerpAnimator
 
                             EditorGUI.indentLevel--;
                             EditorGUI.indentLevel--;
+
                             if (!EditorApplication.isPlaying)
                                 EditorGUILayout.LabelField(lastSelectedSequence == i && lastSelectedSegment == j ? "|>" : "", GUILayout.Width(20));
+
                             EditorGUI.indentLevel++;
                             EditorGUI.indentLevel++;
 
@@ -638,8 +624,6 @@ namespace SpheroidGames.LerpAnimator
                             GUI.enabled = true;
 
                             GUILayout.EndHorizontal();
-
-                            //GUILayout.Space(10);
                         }
                         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
@@ -661,7 +645,6 @@ namespace SpheroidGames.LerpAnimator
                         GUI.enabled = true;
 
                         GUILayout.EndHorizontal();
-                        //EditorGUILayout.HelpBox("Adding segment auto samples from scene", MessageType.Info);
 
                         EditorGUILayout.Space(20);
 
@@ -981,7 +964,7 @@ namespace SpheroidGames.LerpAnimator
 
                     SerializedProperty segments = serializedSequences.GetArrayElementAtIndex(j).FindPropertyRelative("Segments");
 
-                    //Segments
+                    //LERP Targets
                     for (int k = 0; k < segments.arraySize; k++)
                     {
                         SerializedProperty segment = segments.GetArrayElementAtIndex(k);
@@ -1062,8 +1045,6 @@ namespace SpheroidGames.LerpAnimator
             
             SerializedProperty newSegment = segments.GetArrayElementAtIndex(segments.arraySize -1);
 
-            //serializedSegments.arraySize++;
-
             for (int i = 0; i < serializedTransforms.arraySize; i++)
             {
                 if (i > newSegment.FindPropertyRelative("toTransformData").arraySize - 1)
@@ -1090,7 +1071,6 @@ namespace SpheroidGames.LerpAnimator
 
             //Sample to new segment from current scene
             SampleAllFromScene(sequenceIndex, newSegmentIndex);
-
 
             CollectEditorSequences();
 

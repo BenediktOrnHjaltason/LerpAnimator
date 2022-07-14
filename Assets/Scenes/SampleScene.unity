@@ -9793,7 +9793,7 @@ MonoBehaviour:
   - {fileID: 1203215464}
   - {fileID: 1757683438}
   Sequences:
-  - Name: Open door
+  - Name: Open
     StartOnPlay: 1
     Loop: 0
     StartStates:
@@ -9954,8 +9954,8 @@ MonoBehaviour:
           m_Calls: []
       showEvents: 0
       showRotationOffsets: 0
-    ShowSegments: 1
-  - Name: Closing
+    ShowSegments: 0
+  - Name: Close
     StartOnPlay: 0
     Loop: 0
     StartStates:
@@ -10068,7 +10068,7 @@ MonoBehaviour:
           m_Calls: []
       showEvents: 0
       showRotationOffsets: 0
-    ShowSegments: 1
+    ShowSegments: 0
   lastSelectedState: 0
   lastSelectedSequence: 1
   lastSelectedSegment: -1
