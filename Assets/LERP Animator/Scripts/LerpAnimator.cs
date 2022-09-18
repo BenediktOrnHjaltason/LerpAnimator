@@ -113,7 +113,25 @@ namespace SpheroidGames.LerpAnimator
         private float timeOnPauseEnd;
         private float reciprocal;
 
-        public void StartSequence()
+        public void PlaySequence(string sequenceName)
+        {
+            for (int i = 0; i < Sequences.Count; i++)
+            {
+                if (Sequences[i].Name != string.Empty && Sequences[i].Name == sequenceName)
+                {
+                    lastSelectedSequence = i;
+                    StartSequence();
+
+                    return;
+                }
+            }
+            if (sequenceName == string.Empty)
+                Debug.LogWarning($"LERP Animator: Empty sequence name passed to PlaySequence function. Please provide a valid sequence name");
+
+            else Debug.LogWarning($"LERP Animator: Did not find sequence named {sequenceName} on LERP Animator instance on GameObject {name}");
+        }
+
+        private void StartSequence()
         {
             if (Sequences[lastSelectedSequence].Segments.Count < 1 || TransformsToActOn.Count < 1)
                 return;
